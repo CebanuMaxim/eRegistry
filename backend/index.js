@@ -4,17 +4,12 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv').config()
 const registries = require('./routes/registries')
 const acts = require('./routes/acts')
-// const cors = require('cors')
 
 mongoose.connect('mongodb://127.0.0.1:27017/registryapi')
     .then(() => console.log('Connected to registryapi...'))
     .catch(err => console.error('connection error...', err)
     )
 
-// app.use(cors({
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "PUT", "POST", "DELETE"]
-// }))
 app.use(express.json())
 app.use('/api/registries', registries)
 app.use('/api/acts', acts)
