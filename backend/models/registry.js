@@ -23,12 +23,12 @@ const Registry = mongoose.model('Registry', new mongoose.Schema({
         }
     },
     startDate: {
-        type: Date,
-        required: true,
-        default: Date.now
+        type: String,
+        required: true
     },
     endDate: {
-        type: Date
+        type: String,
+        required: true
     },
     acts: [{
         type: mongoose.Schema.Types.ObjectId,

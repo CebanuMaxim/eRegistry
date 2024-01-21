@@ -8,6 +8,7 @@ const { Act } = require('../models/act')
 router.get('/', async (req, res) => {
     const foundRegistries = await Registry.find().sort({ registryId: -1 })
     if (!foundRegistries || foundRegistries.length === 0) return res.status(400).send('No registries')
+
     res.status(200).send(foundRegistries)
 })
 
@@ -22,14 +23,16 @@ router.get('/:id', async (req, res) => {
 // @desc      Create registry
 // @route     POST /api/registries
 router.post('/', async (req, res) => {
+    console.log(req.body.typographyId)
     const { error } = validateRegistry(req.body)
     if (error) return res.status(400).send(error.details[0].message)
-    const { typographyId, registryId } = req.body
-
+    const { typographyId, registryId, startDate, endDate } = req.body
     try {
         const registry = new Registry({
             typographyId,
-            registryId
+            registryId,
+            startDate,
+            endDate
         })
 
         const createdRegistry = await registry.save()

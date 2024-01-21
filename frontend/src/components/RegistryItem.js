@@ -3,7 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 const RegistryItem = ({
-    registry: { typographyId, registryId, startDate },
+    registry: { typographyId, registryId, startDate, endDate },
     editRegistry,
     deleteRegistry
 }) => {
@@ -31,6 +31,7 @@ const RegistryItem = ({
         <tr key={ registryId } className='border-bottom p-3'>
             <td>{ typographyId } / { registryId }</td>
             <td>{ startDate }</td>
+            <td>{ endDate }</td>
             <td>
                 <Button variant="link" size='sm' >
                     <Link to={ `/regisrtry/${registryId}` }>Open</Link>
@@ -82,6 +83,9 @@ const RegistryItem = ({
                         </Form>
                     </Modal.Body>
                 </Modal>
+            </td>
+            <td>
+                <Button variant='outline-danger' size='sm' onClick={ () => deleteRegistry() } >delete</Button>
             </td>
         </tr>
 

@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Table } from 'react-bootstrap'
+import { Table, Alert } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
-import { AddRegistry } from '../components/AddRegistry'
+import AddRegistry from '../components/AddRegistry'
 
 const Registries = () => {
     const [registries, setRegistries] = useState([])
+    const [alert, setAlert] = useState({
+        show: false,
+        message: '',
+        variant: 'success'
+    })
 
 
     useEffect(() => {
         async function getRegistries() {
             try {
-                let registries = await axios.get('http://localhost:5000/api/registries/')
+                let registries = await axios.get('http://localhost:5000/api/registries')
                 registries = registries.data
                 setRegistries(registries)
             } catch (error) {
@@ -21,16 +26,42 @@ const Registries = () => {
         getRegistries()
     }, [])
 
-    const addRegistry = () => {
-        const registry = {}
-
-        // Problematique
-        registry.typographyId = parseInt(registries[registries.length - 1].typographyId) + 1
-
-        const nr = parseInt(registries[registries.length - 1].nr) + 1
-        registry.nr = nr.toString()
-
+    const addRegistry = async (registry) => {
+        if (
+            registry.typographyId === '' ||
+            registry.registryId === '' ||
+            registry.startDate === '' ||
+            registry.endDate === ''
+        ) {
+            showAlert('Please fill all the fields', 'danger')
+            return
+        }
         setRegistries([...registries, registry])
+        console.log(registry)
+        await axios.post('http://localhost:5000/api/registries', { registry })
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+
+    }
+
+    function showAlert(message, variant = 'success', seconds = 1000) {
+        setAlert({
+            show: true,
+            message,
+            variant
+        })
+
+        setTimeout(() => {
+            setAlert({
+                show: false,
+                message: '',
+                variant: 'success'
+            })
+        }, seconds)
     }
 
     function editRegistry(id, newId, newStart, newEnd) {
@@ -50,6 +81,8 @@ const Registries = () => {
             alert('Wrong id')
         }
     }
+
+
     return (
         <>
             <Table striped>
@@ -77,6 +110,7 @@ const Registries = () => {
                 </tbody>
             </Table>
             <AddRegistry addRegistry={ addRegistry } />
+            { alert.show && <Alert variant={ alert.variant }>{ alert.message }</Alert> }
         </>
     )
 }
