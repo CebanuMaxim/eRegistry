@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import moment from 'moment/moment'
 import { Table } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
@@ -58,14 +57,14 @@ const Acts = () => {
         },
     ])
 
-    const addAct = (firstname, lastname, idnp, actName, stateFee, notaryFee) => {
+    const addAct = (date, firstname, lastname, idnp, actName, stateFee, notaryFee) => {
         const act = {}
 
         const lastActId = (acts[acts.length - 1].id).slice(2)
         const id = parseInt(lastActId) + 1
         act.id = '2-' + id.toString()
 
-        act.date = moment().format("DD.MM.YYYY")
+        act.date = date
         act.firstname = firstname
         act.lastname = lastname
         act.idnp = idnp

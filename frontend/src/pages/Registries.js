@@ -1,37 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Table } from 'react-bootstrap'
-import moment from 'moment/moment'
 import RegistryItem from '../components/RegistryItem'
 import { AddRegistry } from '../components/AddRegistry'
 
 const Registries = () => {
-    const [registries, setRegistries] = useState([
-        // {
-        //     id: '0002152',
-        //     nr: '4734',
-        //     start: '01.01.2023',
-        //     end: '31.03.2023'
-        // },
-        // {
-        //     id: '0002153',
-        //     nr: '4735',
-        //     start: '01.04.2023',
-        //     end: '31.06.2023'
-        // },
-        // {
-        //     id: '0002154',
-        //     nr: '4736',
-        //     start: '01.07.2023',
-        //     end: '31.09.2023'
-        // },
-        // {
-        //     id: '0002155',
-        //     nr: '4737',
-        //     start: '01.10.2023',
-        //     end: '...'
-        // },
-    ])
+    const [registries, setRegistries] = useState([])
 
 
     useEffect(() => {
@@ -50,18 +24,11 @@ const Registries = () => {
     const addRegistry = () => {
         const registry = {}
 
-        if (registries[registries.length - 1].end === '...') {
-            registries[registries.length - 1].end = moment().format("DD.MM.YYYY")
-        }
-
         // Problematique
         registry.typographyId = parseInt(registries[registries.length - 1].typographyId) + 1
 
         const nr = parseInt(registries[registries.length - 1].nr) + 1
         registry.nr = nr.toString()
-
-        registry.startDate = moment().format("DD.MM.YYYY")
-        registry.endDate = '...'
 
         setRegistries([...registries, registry])
     }

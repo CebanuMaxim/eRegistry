@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import Registries from './pages/Registries'
 import Acts from './pages/Acts'
-// import NavScroll from './components/NavScroll'
+
 const App = () => {
 
   return (
