@@ -1,49 +1,55 @@
-const mongoose = require('mongoose')
-const Joi = require('joi')
+const mongoose = require("mongoose")
+const Joi = require("joi")
 
-const Registry = mongoose.model('Registry', new mongoose.Schema({
+const Registry = mongoose.model(
+  "Registry",
+  new mongoose.Schema({
     typographyId: {
-        type: String,
-        required: true,
-        validate: {
-            validator: function (val) {
-                return val.length === 7
-            },
-            message: val => `${val.value} has to be 7 digits`
-        }
+      type: String,
+      required: true,
+      validate: {
+        validator: function (val) {
+          return val.length === 7
+        },
+        message: (val) => `${val.value} has to be 7 digits`,
+      },
     },
     registryId: {
-        type: String,
-        required: true,
-        validate: {
-            validator: function (val) {
-                return val.length === 4
-            },
-            message: val => `${val.value} has to be 4 digits`
-        }
+      type: String,
+      required: true,
+      validate: {
+        validator: function (val) {
+          return val.length === 4
+        },
+        message: (val) => `${val.value} has to be 4 digits`,
+      },
     },
     startDate: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     endDate: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    acts: [{
+    acts: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Act"
-    }]
-})
+        ref: "Act",
+      },
+    ],
+  })
 )
 
 function validateRegistry(registry) {
-    const schema = Joi.object({
-        typographyId: Joi.string().required(),
-        registryId: Joi.string().required()
-    })
+  const schema = Joi.object({
+    typographyId: Joi.string().required(),
+    registryId: Joi.string().required(),
+    startDate: Joi.string().required(),
+    endDate: Joi.string(),
+  })
 
-    return schema.validate(registry)
+  return schema.validate(registry)
 }
 
 exports.Registry = Registry
