@@ -64,12 +64,19 @@ const Registries = () => {
     }, seconds)
   }
 
-  function editRegistry(id, newId, newStart, newEnd) {
-    const registry = registries.find((registry) => registry.id === id)
+  function editRegistry(
+    _id,
+    newTypographyId,
+    newRegistryId,
+    newStartDate,
+    newEndDate
+  ) {
+    const registry = registries.find((registry) => registry._id === _id)
 
-    if (newId) registry.id = "0000" + newId.toString()
-    if (newStart) registry.start = newStart.toString()
-    if (newEnd) registry.end = newEnd.toString()
+    if (newTypographyId) registry.typographyId = newTypographyId
+    if (newRegistryId) registry.registryId = newRegistryId
+    if (newStartDate) registry.startDate = newStartDate
+    if (newEndDate) registry.endDate = newEndDate
   }
 
   function deleteRegistry(_id, registryId) {
