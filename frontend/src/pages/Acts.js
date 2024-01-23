@@ -1,134 +1,151 @@
-import React, { useState } from 'react'
-import { Table } from 'react-bootstrap'
-import ActItem from '../components/ActItem'
-import AddAct from '../components/AddAct'
+import React, { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import { Table, Alert } from "react-bootstrap"
+import ActItem from "../components/ActItem"
+import AddAct from "../components/AddAct"
+import axios from "axios"
 
 const Acts = () => {
-    const [acts, setActs] = useState([
-        {
-            id: '2-889',
-            date: '18.03.2023',
-            firstname: 'John',
-            lastname: 'Doe',
-            idnp: '2004003001820',
-            act_name: 'Procura',
-            state_fee: '10',
-            notary_fee: '350',
-        },
-        {
-            id: '2-890',
-            date: '18.03.2023',
-            firstname: 'John',
-            lastname: 'Doe',
-            idnp: '2004003001820',
-            act_name: 'Procura',
-            state_fee: '10',
-            notary_fee: '350',
-        },
-        {
-            id: '2-891',
-            date: '18.03.2023',
-            firstname: 'John',
-            lastname: 'Doe',
-            idnp: '2004003001820',
-            act_name: 'Procura',
-            state_fee: '10',
-            notary_fee: '350',
-        },
-        {
-            id: '2-892',
-            date: '19.03.2023',
-            firstname: 'John',
-            lastname: 'Doe',
-            idnp: '2004003001820',
-            act_name: 'Procura',
-            state_fee: '10',
-            notary_fee: '350',
-        },
-        {
-            id: '2-893',
-            date: '19.03.2023',
-            firstname: 'John',
-            lastname: 'Doe',
-            idnp: '2004003001820',
-            act_name: 'Procura',
-            state_fee: '10',
-            notary_fee: '350',
-        },
-    ])
+  const [acts, setActs] = useState([])
+  const [regAlert, setAlert] = useState({
+    show: false,
+    message: "",
+    variant: "success",
+  })
+  const { id } = useParams()
 
-    const addAct = (date, firstname, lastname, idnp, actName, stateFee, notaryFee) => {
-        const act = {}
+  useEffect(() => {
+    async function getActs() {
+      try {
+        let acts = await axios.get(`http://localhost:5000/api/registries/${id}`)
+        acts = acts.data.acts
+        setActs(acts)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getActs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-        const lastActId = (acts[acts.length - 1].id).slice(2)
-        const id = parseInt(lastActId) + 1
-        act.id = '2-' + id.toString()
-
-        act.date = date
-        act.firstname = firstname
-        act.lastname = lastname
-        act.idnp = idnp
-        act.act_name = actName
-        act.state_fee = stateFee
-        act.notary_fee = notaryFee
-
-        setActs([...acts, act])
+  const addAct = (
+    actId,
+    date,
+    firstname,
+    lastname,
+    idnp,
+    actName,
+    stateFee,
+    notaryFee
+  ) => {
+    if (
+      actId === "" ||
+      date === "" ||
+      firstname === "" ||
+      lastname === "" ||
+      idnp === "" ||
+      actName === "" ||
+      stateFee === "" ||
+      notaryFee === ""
+    ) {
+      showAlert("Please fill all the fields", "danger")
+      return
     }
 
-    function editAct(id, newFirstname, newLastname, newIdnp, newActName, newStateFee, newNotaryFee) {
-        const act = acts.find((act) => act.id === id)
+    const act = {}
 
-        if (newFirstname) act.firstname = newFirstname
-        if (newLastname) act.lastname = newLastname
-        if (newIdnp) act.end = newIdnp
-        if (newActName) act.act_name = newActName
-        if (newStateFee) act.state_fee = newStateFee
-        if (newNotaryFee) act.notary_fee = newNotaryFee
+    act.actId = actId
+    act.date = date
+    act.firstname = firstname
+    act.lastname = lastname
+    act.idnp = idnp
+    act.act_name = actName
+    act.state_fee = stateFee
+    act.notary_fee = notaryFee
+
+    setActs([...acts, act])
+  }
+
+  function showAlert(message, variant = "success", seconds = 1000) {
+    setAlert({
+      show: true,
+      message,
+      variant,
+    })
+
+    setTimeout(() => {
+      setAlert({
+        show: false,
+        message: "",
+        variant: "success",
+      })
+    }, seconds)
+  }
+
+  const editAct = (
+    id,
+    newFirstname,
+    newLastname,
+    newIdnp,
+    newActName,
+    newStateFee,
+    newNotaryFee
+  ) => {
+    const act = acts.find((act) => act.id === id)
+
+    if (newFirstname) act.firstname = newFirstname
+    if (newLastname) act.lastname = newLastname
+    if (newIdnp) act.end = newIdnp
+    if (newActName) act.act_name = newActName
+    if (newStateFee) act.state_fee = newStateFee
+    if (newNotaryFee) act.notary_fee = newNotaryFee
+  }
+
+  const deleteAct = (id) => {
+    const check = prompt("Please enter act id:")
+
+    if (check === id) {
+      setActs(acts.filter((item) => item.id !== id))
+    } else {
+      alert("Wrong id")
     }
+  }
 
-    function deleteAct(id) {
-        const check = prompt("Please enter act id:")
-
-        if (check === id) {
-            setActs(acts.filter((item) => item.id !== id))
-        } else {
-            alert('Wrong id')
-        }
-    }
-
-    return (
-        <>
-            <Table striped>
-                <thead>
-                    <tr className='border-bottom p-3 fw-bolder'>
-                        <td>Act number</td>
-                        <td>Date</td>
-                        <td>Firstname</td>
-                        <td>Lastname</td>
-                        <td>IDNP</td>
-                        <td>Act name</td>
-                        <td>State fee</td>
-                        <td>Notary fee</td>
-                        <td></td>
-                    </tr></thead>
-                <tbody>
-                    {
-                        acts.map((act) => {
-                            return (
-                                <ActItem
-                                    key={ act.id }
-                                    act={ act }
-                                    editAct={ editAct }
-                                    deleteAct={ deleteAct }
-                                />
-                            )
-                        })
-                    }
-                </tbody>
-            </Table>
-            <AddAct addAct={ addAct } />
-        </>
-    )
+  return (
+    <>
+      <Table striped>
+        <thead>
+          <tr className="border-bottom p-3 fw-bolder">
+            <td>Act number</td>
+            <td>Date</td>
+            <td>Firstname</td>
+            <td>Lastname</td>
+            <td>IDNP</td>
+            <td>Act name</td>
+            <td>State fee</td>
+            <td>Notary fee</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {acts.map((act) => {
+            return (
+              <ActItem
+                key={act._id}
+                act={act}
+                editAct={editAct}
+                deleteAct={deleteAct}
+              />
+            )
+          })}
+        </tbody>
+      </Table>
+      <AddAct addAct={addAct} />
+      {regAlert.show && (
+        <Alert variant={regAlert.variant}>{regAlert.message}</Alert>
+      )}
+    </>
+  )
 }
 
 export default Acts

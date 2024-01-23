@@ -25,21 +25,29 @@ const Registries = () => {
     getRegistries()
   }, [])
 
-  const addRegistry = async (registry) => {
-    if (
-      registry.typographyId === "" ||
-      registry.registryId === "" ||
-      registry.startDate === ""
-    ) {
+  const addRegistry = async (typographyId, registryId, startDate, endDate) => {
+    if (typographyId === "" || registryId === "" || startDate === "") {
       showAlert("Please fill all the fields", "danger")
       return
     }
-    if (registry.endDate === "") {
-      registry.endDate = "--.--.----"
+    if (endDate === "") {
+      endDate = "--.--.----"
     }
+    const registry = {}
+    registry.typographyId = typographyId
+    registry.registryId = registryId
+    registry.startDate = startDate
+    registry.endDate = endDate
+
     setRegistries([...registries, registry])
+
     await axios
-      .post("http://localhost:5000/api/registries", { registry })
+      .post("http://localhost:5000/api/registries", {
+        typographyId,
+        registryId,
+        startDate,
+        endDate,
+      })
       .then(function (response) {
         console.log(response)
       })
@@ -64,19 +72,35 @@ const Registries = () => {
     }, seconds)
   }
 
-  function editRegistry(
+  const editRegistry = async (
     _id,
     newTypographyId,
     newRegistryId,
     newStartDate,
     newEndDate
-  ) {
+  ) => {
     const registry = registries.find((registry) => registry._id === _id)
 
     if (newTypographyId) registry.typographyId = newTypographyId
     if (newRegistryId) registry.registryId = newRegistryId
     if (newStartDate) registry.startDate = newStartDate
     if (newEndDate) registry.endDate = newEndDate
+
+    const { typographyId, registryId, startDate, endDate } = registry
+
+    await axios
+      .put(`http://localhost:5000/api/registries/${_id}`, {
+        typographyId,
+        registryId,
+        startDate,
+        endDate,
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
   }
 
   function deleteRegistry(_id, registryId) {

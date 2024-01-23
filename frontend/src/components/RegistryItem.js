@@ -37,7 +37,7 @@ const RegistryItem = ({
       <td>{endDate}</td>
       <td>
         <Button variant="link" size="sm">
-          <Link to={`/regisrtry/${registryId}`}>Open</Link>
+          <Link to={`/regisrtry/${_id}`}>Open</Link>
         </Button>
       </td>
       <td>

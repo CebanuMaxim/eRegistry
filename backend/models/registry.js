@@ -43,9 +43,9 @@ const Registry = mongoose.model(
 
 function validateRegistry(registry) {
   const schema = Joi.object({
-    typographyId: Joi.string().required(),
-    registryId: Joi.string().required(),
-    startDate: Joi.string().required(),
+    typographyId: Joi.string(),
+    registryId: Joi.string(),
+    startDate: Joi.string(),
     endDate: Joi.string(),
   })
 

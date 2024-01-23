@@ -27,9 +27,9 @@ router.get("/:id", async (req, res) => {
 // @desc      Create registry
 // @route     POST /api/registries
 router.post("/", async (req, res) => {
-  const { error } = validateRegistry(req.body.registry)
+  const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
-  const { typographyId, registryId, startDate, endDate } = req.body.registry
+  const { typographyId, registryId, startDate, endDate } = req.body
   try {
     const registry = new Registry({
       typographyId,
@@ -37,7 +37,6 @@ router.post("/", async (req, res) => {
       startDate,
       endDate,
     })
-    console.log(registry)
 
     const createdRegistry = await registry.save()
     res.status(201).send(createdRegistry)
@@ -53,10 +52,10 @@ router.put("/:id", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message)
   if (req.params.id.length !== 24) return res.status(400).send("Invalid id.")
 
-  const { typographyId, registryId, acts } = req.body
+  const { typographyId, registryId, startDate, endDate, acts } = req.body
   const registry = await Registry.findByIdAndUpdate(
     req.params.id,
-    { typographyId, registryId, acts },
+    { typographyId, registryId, startDate, endDate, acts },
     { new: true }
   )
 
