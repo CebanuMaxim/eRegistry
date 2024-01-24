@@ -8,12 +8,11 @@ const Act = mongoose.model(
       type: Number,
       required: true,
     },
-    registry: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Registry",
-    },
     date: {
+      type: String,
+      required: true,
+    },
+    actName: {
       type: String,
       required: true,
     },
@@ -30,7 +29,7 @@ const Act = mongoose.model(
       required: true,
       validate: {
         validator: function (val) {
-          return val.length === 13
+          return val.toString().length === 13
         },
         message: (val) => `${val.value} has to be 13 digits`,
       },
@@ -45,18 +44,25 @@ const Act = mongoose.model(
       required: true,
       enum: [0, 395, 445, 399, 400],
     },
+    registry: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "Registry",
+    },
   })
 )
 
 function validateAct(registry) {
   const schema = Joi.object({
     actId: Joi.number().required(),
-    registryId: Joi.number().required(),
+    date: Joi.string().required(),
+    actName: Joi.string().required(),
     firstname: Joi.string().required().min(2),
     lastname: Joi.string().required().min(2),
     idnp: Joi.number().required(),
     stateFee: Joi.number().required(),
     notaryFee: Joi.number().required(),
+    registryId: Joi.number(),
   })
 
   return schema.validate(registry)

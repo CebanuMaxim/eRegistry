@@ -19,7 +19,7 @@ const Acts = () => {
       try {
         let acts = await axios.get(`http://localhost:5000/api/registries/${id}`)
         acts = acts.data.acts
-        setActs(acts)
+        setActs(acts.reverse())
       } catch (error) {
         console.error(error)
       }
@@ -28,7 +28,7 @@ const Acts = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const addAct = (
+  const addAct = async (
     actId,
     date,
     firstname,
@@ -56,14 +56,24 @@ const Acts = () => {
 
     act.actId = actId
     act.date = date
+    act.actName = actName
     act.firstname = firstname
     act.lastname = lastname
     act.idnp = idnp
-    act.act_name = actName
-    act.state_fee = stateFee
-    act.notary_fee = notaryFee
+    act.stateFee = stateFee
+    act.notaryFee = notaryFee
 
     setActs([...acts, act])
+    await axios
+      .post(`http://localhost:5000/api/acts/${id}`, act)
+      .then((res) => {
+        console.log(res.data)
+        showAlert(res.data.message, "success")
+      })
+      .catch((err) => {
+        console.log(err)
+        showAlert(err.response.data.message, "danger")
+      })
   }
 
   function showAlert(message, variant = "success", seconds = 1000) {
@@ -82,8 +92,10 @@ const Acts = () => {
     }, seconds)
   }
 
-  const editAct = (
-    id,
+  const editAct = async (
+    _id,
+    newActId,
+    newDate,
     newFirstname,
     newLastname,
     newIdnp,
@@ -91,24 +103,56 @@ const Acts = () => {
     newStateFee,
     newNotaryFee
   ) => {
-    const act = acts.find((act) => act.id === id)
+    const act = acts.find((act) => act._id === _id)
 
+    if (newActId) act.actId = newActId
+    if (newDate) act.date = newDate
     if (newFirstname) act.firstname = newFirstname
     if (newLastname) act.lastname = newLastname
-    if (newIdnp) act.end = newIdnp
-    if (newActName) act.act_name = newActName
-    if (newStateFee) act.state_fee = newStateFee
-    if (newNotaryFee) act.notary_fee = newNotaryFee
+    if (newIdnp) act.idnp = newIdnp
+    if (newActName) act.actName = newActName
+    if (newStateFee) act.stateFee = newStateFee
+    if (newNotaryFee) act.notaryFee = newNotaryFee
+
+    const {
+      actId,
+      date,
+      firstname,
+      lastname,
+      idnp,
+      actName,
+      stateFee,
+      notaryFee,
+    } = act
+
+    await axios
+      .put(`http://localhost:5000/api/acts/${_id}`, {
+        actId,
+        date,
+        firstname,
+        lastname,
+        idnp,
+        actName,
+        stateFee,
+        notaryFee,
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
   }
 
-  const deleteAct = (id) => {
+  const deleteAct = async (_id, actId) => {
     const check = prompt("Please enter act id:")
 
-    if (check === id) {
-      setActs(acts.filter((item) => item.id !== id))
+    if (check === actId.toString()) {
+      setActs(acts.filter((item) => item._id !== _id))
     } else {
       alert("Wrong id")
     }
+    await axios.delete(`http://localhost:5000/api/acts/${_id}`)
   }
 
   return (
@@ -131,7 +175,7 @@ const Acts = () => {
           {acts.map((act) => {
             return (
               <ActItem
-                key={act._id}
+                key={act.actId}
                 act={act}
                 editAct={editAct}
                 deleteAct={deleteAct}

@@ -16,9 +16,10 @@ router.get("/", async (req, res) => {
 // @desc      Get registry by id
 // @route     POST /api/registries/:id
 router.get("/:id", async (req, res) => {
-  const registry = await Registry.findById({ _id: req.params.id }).populate(
-    "acts"
-  )
+  const registry = await Registry.findById({ _id: req.params.id })
+    .populate("acts")
+    .sort({ actId: -1 })
+
   if (!registry)
     return res.status(404).send("The registry with the given ID was not found.")
   res.send(registry)

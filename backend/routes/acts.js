@@ -27,24 +27,32 @@ router.get("/:actId", async (req, res) => {
 // @desc      Create new act
 // @route     GET /api/acts/:registryId
 router.post("/:registryId", async (req, res) => {
-  console.log(req.body)
-  const { actId, date, firstname, lastname, idnp, stateFee, notaryFee } =
-    req.body
+  const {
+    actId,
+    date,
+    actName,
+    firstname,
+    lastname,
+    idnp,
+    stateFee,
+    notaryFee,
+  } = req.body
 
   try {
     const act = new Act({
       actId,
       date,
-      registry: req.params.registryId,
       firstname,
       lastname,
       idnp,
+      actName,
       stateFee,
       notaryFee,
+      registry: req.params.registryId,
     })
 
     const createdAct = await act.save()
-    const foundRegistry = await Registry.updateOne(
+    await Registry.updateOne(
       { _id: req.params.registryId },
       { $push: { acts: createdAct._id } }
     )
@@ -57,23 +65,36 @@ router.post("/:registryId", async (req, res) => {
 // @desc      Update act
 // @route     PUT /api/acts/
 router.put("/:id", async (req, res) => {
-  try {
-    const _id = req.params.id
-    if (!_id || _id.length !== 24)
-      res.status(404).send("The act with the given ID was not found.")
+  const { error } = validateAct(req.body)
+  if (error) return res.status(400).send(error.details[0].message)
+  if (req.params.id.length !== 24) return res.status(400).send("Invalid id.")
 
-    const act = await Act.updateOne({ _id: req.params.id }, req.body)
-    console.log("act ", act)
-    res.status(200).send({ success: true })
-  } catch (error) {
-    console.error(error)
-  }
+  const {
+    actId,
+    date,
+    firstname,
+    lastname,
+    idnp,
+    actName,
+    stateFee,
+    notaryFee,
+  } = req.body
+
+  const act = await Act.findByIdAndUpdate(
+    req.params.id,
+    { actId, date, firstname, lastname, idnp, actName, stateFee, notaryFee },
+    { new: true }
+  )
+
+  if (!act)
+    return res.status(404).send("The act with the given ID was not found.")
+  res.status(200).send(act)
 })
 
 // @desc      Delete last act from registry
-// @route     DELETE /api/acts/:registryId/:actId
-router.delete("/:actId", async (req, res) => {
-  const foundAct = await Act.findById({ _id: req.params.actId })
+// @route     DELETE /api/acts/:actId
+router.delete("/:id", async (req, res) => {
+  const foundAct = await Act.findById(req.params.id)
   if (!foundAct)
     return res.status(404).send("The act with the given ID was not found.")
 
@@ -82,7 +103,7 @@ router.delete("/:actId", async (req, res) => {
     { $pop: { acts: 1 } }
   )
 
-  await Act.findByIdAndDelete({ _id: req.params.actId })
+  await Act.findByIdAndDelete({ _id: req.params.id })
 
   res.send({ success: true })
 })

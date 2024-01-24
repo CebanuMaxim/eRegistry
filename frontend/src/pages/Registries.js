@@ -42,12 +42,7 @@ const Registries = () => {
     setRegistries([...registries, registry])
 
     await axios
-      .post("http://localhost:5000/api/registries", {
-        typographyId,
-        registryId,
-        startDate,
-        endDate,
-      })
+      .post("http://localhost:5000/api/registries", registry)
       .then(function (response) {
         console.log(response)
       })
