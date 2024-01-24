@@ -60,7 +60,7 @@ function validateAct(registry) {
     firstname: Joi.string().required().min(2),
     lastname: Joi.string().required().min(2),
     idnp: Joi.number().required(),
-    stateFee: Joi.number().required(),
+    stateFee: Joi.number().required().valid("n/p", 0.5, 1, 5),
     notaryFee: Joi.number().required(),
     registryId: Joi.number(),
   })
