@@ -9,7 +9,7 @@ const Act = mongoose.model(
       required: true,
     },
     date: {
-      type: String,
+      type: Date,
       required: true,
     },
     actName: {
@@ -42,7 +42,7 @@ const Act = mongoose.model(
     notaryFee: {
       type: Number,
       required: true,
-      enum: [0, 395, 445, 399, 400],
+      enum: [0, 395, 399, 400, 445],
     },
     registry: {
       type: mongoose.Schema.Types.ObjectId,
@@ -55,10 +55,10 @@ const Act = mongoose.model(
 function validateAct(registry) {
   const schema = Joi.object({
     actId: Joi.number().required(),
-    date: Joi.string().required(),
+    date: Joi.date().required(),
     actName: Joi.string().required(),
-    firstname: Joi.string().required().min(2),
-    lastname: Joi.string().required().min(2),
+    firstname: Joi.string().required().min(2).max(20),
+    lastname: Joi.string().required().min(2).max(20),
     idnp: Joi.number().required(),
     stateFee: Joi.number().required().valid("n/p", 0.5, 1, 5),
     notaryFee: Joi.number().required(),
