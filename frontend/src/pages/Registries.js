@@ -17,6 +17,7 @@ const Registries = () => {
       try {
         let registries = await axios.get("http://localhost:5000/api/registries")
         registries = registries.data
+        console.log(registries)
         setRegistries(registries)
       } catch (error) {
         console.error(error)

@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
 // @desc      Update registry
 // @route     POST /api/registries/:id
 router.put("/:id", async (req, res) => {
-  const { error } = validateRegistry(req.body)
+  const { error } = validateRegistry(req.body, (editing = true))
   if (error) return res.status(400).send(error.details[0].message)
   if (req.params.id.length !== 24) return res.status(400).send("Invalid id.")
 

@@ -81,10 +81,7 @@ const ActItem = ({
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Act Id</Form.Label>
-                <Form.Control
-                  onChange={(e) => setNewActId(e.target.value)}
-                  value={actId}
-                />
+                <Form.Control onChange={(e) => setNewActId(e.target.value)} />
               </Form.Group>
 
               <Form.Group
@@ -92,10 +89,7 @@ const ActItem = ({
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>Date</Form.Label>
-                <Form.Control
-                  onChange={(e) => setNewDate(e.target.value)}
-                  value={date}
-                />
+                <Form.Control onChange={(e) => setNewDate(e.target.value)} />
               </Form.Group>
 
               <Form.Group
@@ -105,7 +99,6 @@ const ActItem = ({
                 <Form.Label>firstname</Form.Label>
                 <Form.Control
                   onChange={(e) => setNewFirstname(e.target.value)}
-                  value={firstname}
                 />
               </Form.Group>
               <Form.Group
@@ -116,7 +109,6 @@ const ActItem = ({
                 <Form.Control
                   placeholder="lastname"
                   onChange={(e) => setNewLastname(e.target.value)}
-                  value={lastname}
                 />
               </Form.Group>
               <Form.Group
@@ -127,7 +119,6 @@ const ActItem = ({
                 <Form.Control
                   placeholder="idnp"
                   onChange={(e) => setNewIdnp(e.target.value)}
-                  value={idnp}
                 />
               </Form.Group>
               <Form.Group
@@ -135,10 +126,7 @@ const ActItem = ({
                 controlId="exampleForm.ControlInput1"
               >
                 <Form.Label>act name</Form.Label>
-                <Form.Control
-                  onChange={(e) => setNewActName(e.target.value)}
-                  value={actName}
-                />
+                <Form.Control onChange={(e) => setNewActName(e.target.value)} />
               </Form.Group>
               <Form.Group
                 className="mb-3"
@@ -147,7 +135,6 @@ const ActItem = ({
                 <Form.Label>state fee</Form.Label>
                 <Form.Control
                   onChange={(e) => setNewStateFee(e.target.value)}
-                  value={stateFee}
                 />
               </Form.Group>
               <Form.Group
@@ -157,7 +144,6 @@ const ActItem = ({
                 <Form.Label>notary fee</Form.Label>
                 <Form.Control
                   onChange={(e) => setNewNotaryFee(e.target.value)}
-                  value={notaryFee}
                 />
               </Form.Group>
               <div className="d-flex justify-content-between">

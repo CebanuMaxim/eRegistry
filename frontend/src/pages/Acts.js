@@ -63,6 +63,8 @@ const Acts = () => {
     act.stateFee = stateFee
     act.notaryFee = notaryFee
 
+    console.log(act)
+
     setActs([...acts, act])
     await axios
       .post(`http://localhost:5000/api/acts/${id}`, act)

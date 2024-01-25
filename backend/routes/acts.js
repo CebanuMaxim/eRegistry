@@ -27,6 +27,7 @@ router.get("/:actId", async (req, res) => {
 // @desc      Create new act
 // @route     GET /api/acts/:registryId
 router.post("/:registryId", async (req, res) => {
+  console.log(req.body)
   const { error } = validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
@@ -68,7 +69,7 @@ router.post("/:registryId", async (req, res) => {
 // @desc      Update act
 // @route     PUT /api/acts/
 router.put("/:id", async (req, res) => {
-  const { error } = validateAct(req.body)
+  const { error } = validateAct(req.body, { editing: true })
   if (error) return res.status(400).send(error.details[0].message)
   if (req.params.id.length !== 24) return res.status(400).send("Invalid id.")
 

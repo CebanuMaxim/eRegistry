@@ -9,7 +9,7 @@ const Act = mongoose.model(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     actName: {
@@ -52,20 +52,33 @@ const Act = mongoose.model(
   })
 )
 
-function validateAct(registry) {
-  const schema = Joi.object({
-    actId: Joi.number().required(),
-    date: Joi.date().required(),
-    actName: Joi.string().required(),
-    firstname: Joi.string().required().min(2).max(20),
-    lastname: Joi.string().required().min(2).max(20),
-    idnp: Joi.number().required(),
-    stateFee: Joi.number().required().valid("n/p", 0.5, 1, 5),
-    notaryFee: Joi.number().required(),
-    registryId: Joi.number(),
-  })
+function validateAct(act, editing = false) {
+  let schema = {}
 
-  return schema.validate(registry)
+  !editing
+    ? (schema = Joi.object({
+        actId: Joi.number().required(),
+        date: Joi.string().required(),
+        actName: Joi.string().required(),
+        firstname: Joi.string().required().min(2).max(20),
+        lastname: Joi.string().required().min(2).max(20),
+        idnp: Joi.number().required(),
+        stateFee: Joi.number().required().valid("n/p", 0.5, 1, 5),
+        notaryFee: Joi.number().required(),
+      }))
+    : (schema = Joi.object({
+        actId: Joi.number(),
+        date: Joi.string(),
+        actName: Joi.string(),
+        firstname: Joi.string().min(2).max(20),
+        lastname: Joi.string().min(2).max(20),
+        idnp: Joi.number(),
+        stateFee: Joi.number().valid("n/p", 0.5, 1, 5),
+        notaryFee: Joi.number(),
+        registryId: Joi.number(),
+      }))
+
+  return schema.validate(act)
 }
 
 exports.Act = Act

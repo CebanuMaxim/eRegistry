@@ -30,7 +30,6 @@ const Registry = mongoose.model(
     },
     endDate: {
       type: String,
-      required: true,
     },
     acts: [
       {
@@ -41,14 +40,22 @@ const Registry = mongoose.model(
   })
 )
 
-function validateRegistry(registry) {
-  const schema = Joi.object({
-    typographyId: Joi.string(),
-    registryId: Joi.string(),
-    startDate: Joi.string(),
-    endDate: Joi.string(),
-  })
+function validateRegistry(registry, editing = false) {
+  let schema = {}
 
+  !editing
+    ? (schema = Joi.object({
+        typographyId: Joi.number().required(),
+        registryId: Joi.number().required(),
+        startDate: Joi.date().required(),
+        endDate: Joi.string(),
+      }))
+    : (schema = Joi.object({
+        typographyId: Joi.number(),
+        registryId: Joi.number(),
+        startDate: Joi.date(),
+        endDate: Joi.string(),
+      }))
   return schema.validate(registry)
 }
 
