@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "65b36e539682f6351d74fd43",
+    "typographyId": "0003333",
+    "registryId": "3333",
+    "startDate": "01.03.2024",
+    "endDate": "--.--.----",
+    "acts": [
+      "65b36f559682f6351d74fd71",
+      "65b36f719682f6351d74fd74",
+      "65b36f9b9682f6351d74fd77",
+      "65b36fb79682f6351d74fd7a"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "65b36e429682f6351d74fd41",
+    "typographyId": "0002222",
+    "registryId": "2222",
+    "startDate": "01.02.2024",
+    "endDate": "29.02.2024",
+    "acts": [
+      "65b36ecb9682f6351d74fd53",
+      "65b36ee89682f6351d74fd56",
+      "65b36f049682f6351d74fd59",
+      "65b36f299682f6351d74fd5c"
+    ],
+    "__v": 0
+  },
+  {
+    "_id": "65b25896d0f7e12e857faaba",
+    "typographyId": "0001111",
+    "registryId": "1111",
+    "startDate": "01.01.2024",
+    "endDate": "31.01.2024",
+    "acts": [
+      "65b25975e896b2c06f9a4c47",
+      "65b2599de896b2c06f9a4c4a",
+      "65b25a41e896b2c06f9a4c51",
+      "65b25b9c305c79d1f897fdba"
+    ],
+    "__v": 0
+  }
+]

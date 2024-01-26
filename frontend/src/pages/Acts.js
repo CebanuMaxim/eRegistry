@@ -17,7 +17,9 @@ const Acts = () => {
   useEffect(() => {
     async function getActs() {
       try {
-        let acts = await axios.get(`http://localhost:5000/api/registries/${id}`)
+        let acts = await axios.get(
+          `${process.env.REACT_APP_API_URL}/registries/${id}`
+        )
         acts = acts.data.acts
         setActs(acts.reverse())
       } catch (error) {
@@ -67,7 +69,7 @@ const Acts = () => {
 
     setActs([...acts, act])
     await axios
-      .post(`http://localhost:5000/api/acts/${id}`, act)
+      .post(`${process.env.REACT_APP_API_URL}/acts/${id}`, act)
       .then((res) => {
         console.log(res.data)
         showAlert(res.data.message, "success")
@@ -128,7 +130,7 @@ const Acts = () => {
     } = act
 
     await axios
-      .put(`http://localhost:5000/api/acts/${_id}`, {
+      .put(`${process.env.REACT_APP_API_URL}/acts/${_id}`, {
         actId,
         date,
         firstname,
@@ -146,15 +148,18 @@ const Acts = () => {
       })
   }
 
-  const deleteAct = async (_id, actId) => {
-    const check = prompt("Please enter act id:")
+  const deleteAct = async (actId, actNumber, registryId) => {
+    const checkActNumber = prompt("Please enter act number:")
+    console.log("registryId: ", registryId)
 
-    if (check === actId.toString()) {
-      setActs(acts.filter((item) => item._id !== _id))
+    if (checkActNumber === actNumber.toString()) {
+      setActs(acts.filter((item) => item._id !== actId))
     } else {
       alert("Wrong id")
     }
-    await axios.delete(`http://localhost:5000/api/acts/${_id}`)
+    await axios.delete(
+      `${process.env.REACT_APP_API_URL}/acts/${registryId}/${actId}`
+    )
   }
 
   return (

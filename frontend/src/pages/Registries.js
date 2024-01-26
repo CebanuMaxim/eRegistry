@@ -15,9 +15,11 @@ const Registries = () => {
   useEffect(() => {
     async function getRegistries() {
       try {
-        let registries = await axios.get("http://localhost:5000/api/registries")
+        let registries = await axios.get(
+          `${process.env.REACT_APP_API_URL}/registries`
+        )
         registries = registries.data
-        console.log(registries)
+
         setRegistries(registries)
       } catch (error) {
         console.error(error)
@@ -43,7 +45,7 @@ const Registries = () => {
     setRegistries([...registries, registry])
 
     await axios
-      .post("http://localhost:5000/api/registries", registry)
+      .post(`${process.env.REACT_APP_API_URL}/registries`, registry)
       .then(function (response) {
         console.log(response)
       })
@@ -85,7 +87,7 @@ const Registries = () => {
     const { typographyId, registryId, startDate, endDate } = registry
 
     await axios
-      .put(`http://localhost:5000/api/registries/${_id}`, {
+      .put(`${process.env.REACT_APP_API_URL}/registries/${_id}`, {
         typographyId,
         registryId,
         startDate,
@@ -103,7 +105,7 @@ const Registries = () => {
     const check = prompt("Please enter registry id:")
     if (check === registryId) {
       axios
-        .delete(`http://localhost:5000/api/registries/${_id}`)
+        .delete(`${process.env.REACT_APP_API_URL}/registries/${_id}`)
         .then(function (response) {
           console.log(response)
         })

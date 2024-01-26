@@ -12,6 +12,7 @@ const ActItem = ({
     actName,
     notaryFee,
     stateFee,
+    registry,
   },
   editAct,
   deleteAct,
@@ -150,7 +151,10 @@ const ActItem = ({
                 <Button variant="secondary" onClick={handleClose}>
                   Close
                 </Button>
-                <Button variant="danger" onClick={() => deleteAct(_id, actId)}>
+                <Button
+                  variant="danger"
+                  onClick={() => deleteAct(_id, actId, registry)}
+                >
                   Delete
                 </Button>
                 <Button type="submit" variant="primary" onClick={handleClose}>

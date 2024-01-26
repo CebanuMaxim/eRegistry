@@ -1,5 +1,4 @@
-const express = require("express")
-const router = express.Router()
+const router = require("express").Router()
 const { Registry, validateRegistry } = require("../models/registry")
 const { Act } = require("../models/act")
 
@@ -8,20 +7,21 @@ const { Act } = require("../models/act")
 router.get("/", async (req, res) => {
   const foundRegistries = await Registry.find().sort({ registryId: -1 })
   if (!foundRegistries || foundRegistries.length === 0)
-    return res.status(400).send("No registries")
+    return res.status(404).send("No registries")
 
   res.status(200).send(foundRegistries)
 })
 
 // @desc      Get registry by id
-// @route     POST /api/registries/:id
+// @route     GET /api/registries/:id
 router.get("/:id", async (req, res) => {
-  const registry = await Registry.findById({ _id: req.params.id })
+  const registry = await Registry.findById(req.params.id)
     .populate("acts")
     .sort({ actId: -1 })
 
   if (!registry)
     return res.status(404).send("The registry with the given ID was not found.")
+
   res.send(registry)
 })
 
@@ -30,7 +30,9 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
+
   const { typographyId, registryId, startDate, endDate } = req.body
+
   try {
     const registry = new Registry({
       typographyId,
@@ -40,6 +42,7 @@ router.post("/", async (req, res) => {
     })
 
     const createdRegistry = await registry.save()
+
     res.status(201).send(createdRegistry)
   } catch (err) {
     console.log(err)
@@ -51,17 +54,18 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { error } = validateRegistry(req.body, (editing = true))
   if (error) return res.status(400).send(error.details[0].message)
-  if (req.params.id.length !== 24) return res.status(400).send("Invalid id.")
 
-  const { typographyId, registryId, startDate, endDate, acts } = req.body
+  const { typographyId, registryId, startDate, endDate } = req.body
+
   const registry = await Registry.findByIdAndUpdate(
     req.params.id,
-    { typographyId, registryId, startDate, endDate, acts },
+    { typographyId, registryId, startDate, endDate },
     { new: true }
   )
 
   if (!registry)
     return res.status(404).send("The registry with the given ID was not found.")
+
   res.status(200).send(registry)
 })
 
@@ -69,10 +73,11 @@ router.put("/:id", async (req, res) => {
 // @route     POST /api/registries/:registryId/acts
 router.delete("/:id", async (req, res) => {
   const registry = await Registry.findByIdAndDelete(req.params.id)
-  const deletedActs = await Act.deleteMany({ registry: req.params.id })
+  await Act.deleteMany({ registry: req.params.id })
 
   if (!registry)
     return res.status(404).send("The registry with the given ID was not found.")
+
   res.send(registry)
 })
 
