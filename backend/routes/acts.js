@@ -84,7 +84,7 @@ router.delete("/:registryId/:actId", async (req, res) => {
   await Registry.updateOne(
     { _id: req.params.registryId },
     {
-      $pop: { acts: 1 },
+      $pullAll: { acts: [req.params.actId] },
     }
   )
 

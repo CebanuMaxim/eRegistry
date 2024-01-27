@@ -42,7 +42,7 @@ const Registries = () => {
     registry.startDate = startDate
     registry.endDate = endDate
 
-    setRegistries([...registries, registry])
+    setRegistries([registry, ...registries])
 
     await axios
       .post(`${process.env.REACT_APP_API_URL}/registries`, registry)

@@ -63,7 +63,7 @@ function validateAct(act, editing = false) {
         firstname: Joi.string().required().min(2).max(20),
         lastname: Joi.string().required().min(2).max(20),
         idnp: Joi.number().required(),
-        stateFee: Joi.number().required().valid("n/p", 0.5, 1, 5),
+        stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
         notaryFee: Joi.number().required(),
       }))
     : (schema = Joi.object({
@@ -73,7 +73,7 @@ function validateAct(act, editing = false) {
         firstname: Joi.string().min(2).max(20),
         lastname: Joi.string().min(2).max(20),
         idnp: Joi.number(),
-        stateFee: Joi.number().valid("n/p", 0.5, 1, 5),
+        stateFee: Joi.number().valid(0, 0.5, 1, 5),
         notaryFee: Joi.number(),
         registryId: Joi.number(),
       }))

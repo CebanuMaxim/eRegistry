@@ -65,9 +65,7 @@ const Acts = () => {
     act.stateFee = stateFee
     act.notaryFee = notaryFee
 
-    console.log(act)
-
-    setActs([...acts, act])
+    setActs([act, ...acts])
     await axios
       .post(`${process.env.REACT_APP_API_URL}/acts/${id}`, act)
       .then((res) => {
@@ -150,16 +148,15 @@ const Acts = () => {
 
   const deleteAct = async (actId, actNumber, registryId) => {
     const checkActNumber = prompt("Please enter act number:")
-    console.log("registryId: ", registryId)
 
     if (checkActNumber === actNumber.toString()) {
       setActs(acts.filter((item) => item._id !== actId))
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/acts/${registryId}/${actId}`
+      )
     } else {
       alert("Wrong id")
     }
-    await axios.delete(
-      `${process.env.REACT_APP_API_URL}/acts/${registryId}/${actId}`
-    )
   }
 
   return (
