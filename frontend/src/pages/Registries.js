@@ -46,9 +46,6 @@ const Registries = () => {
 
     await axios
       .post(`${process.env.REACT_APP_API_URL}/registries`, registry)
-      .then(function (response) {
-        console.log(response)
-      })
       .catch(function (error) {
         console.log(error)
       })

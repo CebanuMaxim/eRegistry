@@ -138,9 +138,6 @@ const Acts = () => {
         stateFee,
         notaryFee,
       })
-      .then(function (response) {
-        console.log(response)
-      })
       .catch(function (error) {
         console.log(error)
       })
