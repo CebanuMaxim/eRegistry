@@ -3,6 +3,7 @@ import axios from "axios"
 import { Table, Alert } from "react-bootstrap"
 import RegistryItem from "../components/RegistryItem"
 import AddRegistry from "../components/AddRegistry"
+import Message from "../components/Message"
 
 const Registries = () => {
   const [registries, setRegistries] = useState([])
@@ -11,7 +12,6 @@ const Registries = () => {
     message: "",
     variant: "success",
   })
-
   useEffect(() => {
     async function getRegistries() {
       try {
@@ -118,6 +118,8 @@ const Registries = () => {
     }
   }
 
+  localStorage.clear()
+
   return (
     <>
       <Table striped>
@@ -147,6 +149,8 @@ const Registries = () => {
       {regAlert.show && (
         <Alert variant={regAlert.variant}>{regAlert.message}</Alert>
       )}
+
+      {regAlert.show && <Message />}
     </>
   )
 }

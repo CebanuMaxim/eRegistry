@@ -81,5 +81,4 @@ function validateAct(act, editing = false) {
   return schema.validate(act)
 }
 
-exports.Act = Act
-exports.validateAct = validateAct
+module.exports = { Act, validateAct }

@@ -59,5 +59,4 @@ function validateRegistry(registry, editing = false) {
   return schema.validate(registry)
 }
 
-exports.Registry = Registry
-exports.validateRegistry = validateRegistry
+module.exports = { Registry, validateRegistry }

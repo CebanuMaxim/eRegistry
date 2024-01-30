@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Table, Alert } from "react-bootstrap"
 import ActItem from "../components/ActItem"
 import AddAct from "../components/AddAct"
@@ -20,6 +20,7 @@ const Acts = () => {
         let acts = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries/${id}`
         )
+
         acts = acts.data.acts
         setActs(acts.reverse())
       } catch (error) {
@@ -78,7 +79,7 @@ const Acts = () => {
       })
   }
 
-  function showAlert(message, variant = "success", seconds = 1000) {
+  const showAlert = (message, variant = "success", seconds = 1000) => {
     setAlert({
       show: true,
       message,
@@ -158,6 +159,9 @@ const Acts = () => {
 
   return (
     <>
+      <Link className="btn btn-light my-3" to="/">
+        {`< Go back`}
+      </Link>
       <Table striped>
         <thead>
           <tr className="border-bottom p-3 fw-bolder">

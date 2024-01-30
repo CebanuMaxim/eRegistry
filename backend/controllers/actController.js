@@ -1,6 +1,8 @@
-const { Act, validateAct } = require("../models/act")
-const { Registry } = require("../models/registry")
+const { Act, validateAct } = require("../models/actModel")
+const { Registry } = require("../models/registryModel")
 
+// @desc      Fetch all acts
+// @route     GET /api/acts/
 const getAllActs = async (req, res) => {
   const foundActs = await Act.find()
 
@@ -10,6 +12,8 @@ const getAllActs = async (req, res) => {
   res.status(200).send(foundActs)
 }
 
+// @desc      Fetch an act
+// @route     GET /api/acts/:actId
 const getAct = async (req, res) => {
   const foundAct = await Act.findById(req.params.actId).populate({
     path: "registry",
@@ -22,6 +26,8 @@ const getAct = async (req, res) => {
   res.status(200).send(foundAct)
 }
 
+// @desc      Create new act
+// @route     POST /api/acts/:registryId
 const createAct = async (req, res) => {
   const { error } = validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
@@ -42,11 +48,13 @@ const createAct = async (req, res) => {
   }
 }
 
+// @desc      Edit act
+// @route     PUT /api/acts/:actId
 const editAct = async (req, res) => {
   const { error } = validateAct(req.body, { editing: true })
   if (error) return res.status(400).send(error.details[0].message)
 
-  const act = await Act.findByIdAndUpdate(req.params.id, req.body, {
+  const act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
     new: true,
   })
 
@@ -55,6 +63,8 @@ const editAct = async (req, res) => {
   res.status(200).send(act)
 }
 
+// @desc      Delete last act from registry
+// @route     DELETE /api/acts/:actId
 const deleteAct = async (req, res) => {
   await Registry.updateOne(
     { _id: req.params.registryId },

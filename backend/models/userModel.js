@@ -1,0 +1,46 @@
+const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
+const Joi = require("joi")
+
+const userSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+})
+
+// Match user entered password to hashed password in database
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password)
+}
+
+// Encrypt password using bcrypt
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next()
+  }
+
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
+})
+
+const User = mongoose.model("User", userSchema)
+function validateUser(user, editing = false) {
+  let schema = {}
+
+  !editing
+    ? (schema = Joi.object({
+        name: Joi.string().required(),
+        password: Joi.string().required(),
+      }))
+    : (schema = Joi.object({
+        name: Joi.string(),
+        password: Joi.string(),
+      }))
+  return schema.validate(user)
+}
+module.exports = { User, validateUser }

@@ -1,6 +1,8 @@
-const { Registry, validateRegistry } = require("../models/registry")
-const { Act } = require("../models/act")
+const { Registry, validateRegistry } = require("../models/registryModel")
+const { Act } = require("../models/actModel")
 
+// @desc      Fetch all registries
+// @route     GET /api/registries/
 const getRegistries = async (req, res) => {
   const foundRegistries = await Registry.find().sort({ registryId: -1 })
   if (!foundRegistries || foundRegistries.length === 0)
@@ -9,6 +11,8 @@ const getRegistries = async (req, res) => {
   res.status(200).send(foundRegistries)
 }
 
+// @desc      Fetch registry by id
+// @route     GET /api/registries/:id
 const getRegistryById = async (req, res) => {
   const registry = await Registry.findById(req.params.id)
     .populate("acts")
@@ -20,6 +24,8 @@ const getRegistryById = async (req, res) => {
   res.send(registry)
 }
 
+// @desc      Create registry
+// @route     POST /api/registries
 const createRegistry = async (req, res) => {
   const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
@@ -34,6 +40,8 @@ const createRegistry = async (req, res) => {
   }
 }
 
+// @desc      Edit registry
+// @route     POST /api/registries/:id
 const editRegistry = async (req, res) => {
   const { error } = validateRegistry(req.body, (editing = true))
   if (error) return res.status(400).send(error.details[0].message)
@@ -48,6 +56,8 @@ const editRegistry = async (req, res) => {
   res.status(200).send(registry)
 }
 
+// @desc      Delete registry
+// @route     POST /api/registries/:id
 const deleteRegistry = async (req, res) => {
   const registry = await Registry.findByIdAndDelete(req.params.id)
   await Act.deleteMany({ registry: req.params.id })

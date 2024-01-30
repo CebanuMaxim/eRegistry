@@ -1,16 +1,19 @@
 const express = require("express")
 const app = express()
-const mongoose = require("mongoose")
 const dotenv = require("dotenv").config()
 const { connectDB } = require("./config/db.js")
 const cors = require("cors")
-const registries = require("./routes/registries")
-const acts = require("./routes/acts")
+const cookieParser = require("cookie-parser")
+const registries = require("./routes/registryRoutes.js")
+const acts = require("./routes/actRoutes.js")
+const users = require("./routes/userRoutes.js")
 
 connectDB()
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
+app.use("/api/users", users)
 app.use("/api/registries", registries)
 app.use("/api/acts", acts)
 
