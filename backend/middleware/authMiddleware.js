@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken")
-const asyncHandler = require("./asyncHandler.js")
-const { User } = require("../models/userModel.js")
+const jwt = require('jsonwebtoken')
+const asyncHandler = require('./asyncHandler.js')
+const { User } = require('../models/userModel.js')
 
 // User must be authenticated
 const protect = asyncHandler(async (req, res, next) => {
@@ -13,18 +13,17 @@ const protect = asyncHandler(async (req, res, next) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-      req.user = await User.findById(decoded.userId).select("-password")
+      req.user = await User.findById(decoded.userId).select('-password')
 
       next()
     } catch (error) {
       console.error(error)
       res.status(401)
-      throw new Error("Not authorized, token failed")
+      throw new Error('Not authorized, token failed')
     }
   } else {
-    res.json({ message: "Not authorized, no token" })
+    res.json({ message: 'Not authorized, no token' })
     res.status(401)
-    // throw new Error("Not authorized, no token")
   }
 })
 

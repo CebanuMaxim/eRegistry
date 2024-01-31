@@ -6,7 +6,6 @@ const {
   editRegistry,
   deleteRegistry,
 } = require("../controllers/registryController")
-const { protect } = require("../middleware/authMiddleware.js")
 
 router.route("/").get(getRegistries).post(createRegistry)
 

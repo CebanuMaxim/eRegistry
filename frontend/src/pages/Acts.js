@@ -1,22 +1,29 @@
-import React, { useState, useEffect } from "react"
-import { Link, useParams } from "react-router-dom"
-import { Table, Alert } from "react-bootstrap"
-import ActItem from "../components/ActItem"
-import AddAct from "../components/AddAct"
-import axios from "axios"
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
+import ActItem from '../components/ActItem'
+import AddAct from '../components/AddAct'
+import Header from '../components/Header'
+import axios from 'axios'
+import Loader from '../components/Loader'
+import { toast } from 'react-toastify'
 
 const Acts = () => {
+  const [loading, setLoading] = useState(false)
   const [acts, setActs] = useState([])
-  const [regAlert, setAlert] = useState({
-    show: false,
-    message: "",
-    variant: "success",
-  })
+
+  const navigate = useNavigate()
+  const userInfo = localStorage.getItem('userInfo')
+  if (!userInfo) {
+    navigate('/')
+  }
+
   const { id } = useParams()
 
   useEffect(() => {
     async function getActs() {
       try {
+        setLoading(true)
         let acts = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries/${id}`
         )
@@ -25,6 +32,8 @@ const Acts = () => {
         setActs(acts.reverse())
       } catch (error) {
         console.error(error)
+      } finally {
+        setLoading(false)
       }
     }
     getActs()
@@ -42,16 +51,16 @@ const Acts = () => {
     notaryFee
   ) => {
     if (
-      actId === "" ||
-      date === "" ||
-      firstname === "" ||
-      lastname === "" ||
-      idnp === "" ||
-      actName === "" ||
-      stateFee === "" ||
-      notaryFee === ""
+      actId === '' ||
+      date === '' ||
+      firstname === '' ||
+      lastname === '' ||
+      idnp === '' ||
+      actName === '' ||
+      stateFee === '' ||
+      notaryFee === ''
     ) {
-      showAlert("Please fill all the fields", "danger")
+      toast.error('Please fill all the fields', 'danger')
       return
     }
 
@@ -71,28 +80,12 @@ const Acts = () => {
       .post(`${process.env.REACT_APP_API_URL}/acts/${id}`, act)
       .then((res) => {
         console.log(res.data)
-        showAlert(res.data.message, "success")
+        toast.success(res.data.message, 'success')
       })
       .catch((err) => {
         console.log(err)
-        showAlert(err.response.data.message, "danger")
+        toast.error(err.response.data.message, 'danger')
       })
-  }
-
-  const showAlert = (message, variant = "success", seconds = 1000) => {
-    setAlert({
-      show: true,
-      message,
-      variant,
-    })
-
-    setTimeout(() => {
-      setAlert({
-        show: false,
-        message: "",
-        variant: "success",
-      })
-    }, seconds)
   }
 
   const editAct = async (
@@ -145,7 +138,7 @@ const Acts = () => {
   }
 
   const deleteAct = async (actId, actNumber, registryId) => {
-    const checkActNumber = prompt("Please enter act number:")
+    const checkActNumber = prompt('Please enter act number:')
 
     if (checkActNumber === actNumber.toString()) {
       setActs(acts.filter((item) => item._id !== actId))
@@ -153,45 +146,46 @@ const Acts = () => {
         `${process.env.REACT_APP_API_URL}/acts/${registryId}/${actId}`
       )
     } else {
-      alert("Wrong id")
+      alert('Wrong id')
     }
   }
 
   return (
     <>
-      <Link className="btn btn-light my-3" to="/">
-        {`< Go back`}
-      </Link>
-      <Table striped>
-        <thead>
-          <tr className="border-bottom p-3 fw-bolder">
-            <td>Act number</td>
-            <td>Date</td>
-            <td>Firstname</td>
-            <td>Lastname</td>
-            <td>IDNP</td>
-            <td>Act name</td>
-            <td>State fee</td>
-            <td>Notary fee</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {acts.map((act) => {
-            return (
-              <ActItem
-                key={act.actId}
-                act={act}
-                editAct={editAct}
-                deleteAct={deleteAct}
-              />
-            )
-          })}
-        </tbody>
-      </Table>
-      <AddAct addAct={addAct} />
-      {regAlert.show && (
-        <Alert variant={regAlert.variant}>{regAlert.message}</Alert>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Header />
+          <Table striped>
+            <thead>
+              <tr className='border-bottom p-3 fw-bolder'>
+                <td>Act number</td>
+                <td>Date</td>
+                <td>Firstname</td>
+                <td>Lastname</td>
+                <td>IDNP</td>
+                <td>Act name</td>
+                <td>State fee</td>
+                <td>Notary fee</td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {acts.map((act) => {
+                return (
+                  <ActItem
+                    key={act.actId}
+                    act={act}
+                    editAct={editAct}
+                    deleteAct={deleteAct}
+                  />
+                )
+              })}
+            </tbody>
+          </Table>
+          <AddAct addAct={addAct} />
+        </>
       )}
     </>
   )

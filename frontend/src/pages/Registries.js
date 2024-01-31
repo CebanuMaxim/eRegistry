@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from "react"
-import axios from "axios"
-import { Table, Alert } from "react-bootstrap"
-import RegistryItem from "../components/RegistryItem"
-import AddRegistry from "../components/AddRegistry"
-import Message from "../components/Message"
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { Table } from 'react-bootstrap'
+import RegistryItem from '../components/RegistryItem'
+import AddRegistry from '../components/AddRegistry'
+import Header from '../components/Header'
+import { toast } from 'react-toastify'
+import Loader from '../components/Loader'
+import { useNavigate } from 'react-router-dom'
 
 const Registries = () => {
+  const [loading, setLoading] = useState(false)
   const [registries, setRegistries] = useState([])
-  const [regAlert, setAlert] = useState({
-    show: false,
-    message: "",
-    variant: "success",
-  })
+
+  const navigate = useNavigate()
+  const userInfo = localStorage.getItem('userInfo')
+  if (!userInfo) {
+    navigate('/')
+  }
+
   useEffect(() => {
     async function getRegistries() {
       try {
+        setLoading(true)
         let registries = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries`
         )
@@ -23,18 +30,20 @@ const Registries = () => {
         setRegistries(registries)
       } catch (error) {
         console.error(error)
+      } finally {
+        setLoading(false)
       }
     }
     getRegistries()
   }, [])
 
   const addRegistry = async (typographyId, registryId, startDate, endDate) => {
-    if (typographyId === "" || registryId === "" || startDate === "") {
-      showAlert("Please fill all the fields", "danger")
+    if (typographyId === '' || registryId === '' || startDate === '') {
+      toast.error('Please fill all the fields')
       return
     }
-    if (endDate === "") {
-      endDate = "--.--.----"
+    if (endDate === '') {
+      endDate = '--.--.----'
     }
     const registry = {}
     registry.typographyId = typographyId
@@ -49,22 +58,6 @@ const Registries = () => {
       .catch(function (error) {
         console.log(error)
       })
-  }
-
-  function showAlert(message, variant = "success", seconds = 1000) {
-    setAlert({
-      show: true,
-      message,
-      variant,
-    })
-
-    setTimeout(() => {
-      setAlert({
-        show: false,
-        message: "",
-        variant: "success",
-      })
-    }, seconds)
   }
 
   const editRegistry = async (
@@ -99,7 +92,7 @@ const Registries = () => {
   }
 
   function deleteRegistry(_id, registryId) {
-    const check = prompt("Please enter registry id:")
+    const check = prompt('Please enter registry id:')
     if (check === registryId) {
       axios
         .delete(`${process.env.REACT_APP_API_URL}/registries/${_id}`)
@@ -114,43 +107,43 @@ const Registries = () => {
         prevRegistries.filter((item) => item._id !== _id)
       )
     } else {
-      alert("Wrong id")
+      alert('Wrong id')
     }
   }
 
-  localStorage.clear()
-
   return (
     <>
-      <Table striped>
-        <thead>
-          <tr className="border-bottom p-3 fw-bolder">
-            <td>Registry Number</td>
-            <td>Start date</td>
-            <td>End date</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {registries.map((registry) => {
-            return (
-              <RegistryItem
-                key={registry.registryId}
-                registry={registry}
-                editRegistry={editRegistry}
-                deleteRegistry={deleteRegistry}
-              />
-            )
-          })}
-        </tbody>
-      </Table>
-      <AddRegistry addRegistry={addRegistry} />
-      {regAlert.show && (
-        <Alert variant={regAlert.variant}>{regAlert.message}</Alert>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Header />
+          <Table striped>
+            <thead>
+              <tr className='border-bottom p-3 fw-bolder'>
+                <td>Registry Number</td>
+                <td>Start date</td>
+                <td>End date</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </thead>
+            <tbody>
+              {registries.map((registry) => {
+                return (
+                  <RegistryItem
+                    key={registry.registryId}
+                    registry={registry}
+                    editRegistry={editRegistry}
+                    deleteRegistry={deleteRegistry}
+                  />
+                )
+              })}
+            </tbody>
+          </Table>
+          <AddRegistry addRegistry={addRegistry} />
+        </>
       )}
-
-      {regAlert.show && <Message />}
     </>
   )
 }

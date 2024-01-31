@@ -1,6 +1,6 @@
-const asyncHandler = require("../middleware/asyncHandler.js")
-const generateToken = require("../utils/generateToken.js")
-const { User, validateUser } = require("../models/userModel.js")
+const asyncHandler = require('../middleware/asyncHandler.js')
+const generateToken = require('../utils/generateToken.js')
+const { User, validateUser } = require('../models/userModel.js')
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -11,7 +11,7 @@ const getUsers = asyncHandler(async (req, res) => {
 })
 
 // @desc    Login user & get token
-// @route   POST /api/users/auth
+// @route   POST /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
   const { name, password } = req.body
 
@@ -25,8 +25,8 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
     })
   } else {
-    res.status(401)
-    throw new Error("Invalid name or password")
+    res.status(401).json({ message: 'Invalid name or password' })
+    throw new Error('Invalid name or password')
   }
 })
 
@@ -44,7 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json({ success: true })
   } else {
     res.status(400)
-    throw new Error("Invalid user data.")
+    throw new Error('Invalid user data.')
   }
 })
 
@@ -64,15 +64,16 @@ const updateUser = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(404)
-    throw new Error("User not found")
+    throw new Error('User not found')
   }
 })
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 const logoutUser = (req, res) => {
-  res.clearCookie("jwt")
-  res.status(200).json({ message: "Logged out successfully" })
+  // localStorage.removeItem('userInfo')
+  res.clearCookie('jwt')
+  res.status(200).json({ message: 'Logged out successfully' })
 }
 
 // @desc    Delete user
@@ -82,10 +83,10 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   if (user) {
     await User.deleteOne({ _id: user._id })
-    res.json({ message: "User removed" })
+    res.json({ message: 'User removed' })
   } else {
     res.status(404)
-    throw new Error("User not found")
+    throw new Error('User not found')
   }
 })
 
