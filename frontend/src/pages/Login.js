@@ -31,6 +31,7 @@ const Login = () => {
       localStorage.setItem('userInfo', JSON.stringify(res.data.name))
       navigate('/registries')
     } catch (err) {
+      console.log(err)
       toast.error(err.response.data.message || err.error)
     }
   }
