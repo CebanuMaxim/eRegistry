@@ -61,7 +61,7 @@ const Login = () => {
           ></Form.Control>
         </Form.Group>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button type='submit' variant='primary'>
+          <Button type='submit' variant='link'>
             Sign In
           </Button>
           <Button variant='link' onClick={() => navigate('/register')}>
