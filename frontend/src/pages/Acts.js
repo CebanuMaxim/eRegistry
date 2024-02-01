@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
@@ -12,24 +12,16 @@ const Acts = () => {
   const [loading, setLoading] = useState(false)
   const [acts, setActs] = useState([])
 
-  const navigate = useNavigate()
-  const userInfo = localStorage.getItem('userInfo')
-  if (!userInfo) {
-    navigate('/')
-  }
-
   const { id } = useParams()
 
   useEffect(() => {
     async function getActs() {
       try {
         setLoading(true)
-        let acts = await axios.get(
+        let res = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries/${id}`
         )
-
-        acts = acts.data.acts
-        setActs(acts.reverse())
+        setActs(res.data.acts.reverse())
       } catch (error) {
         console.error(error)
       } finally {
@@ -79,7 +71,6 @@ const Acts = () => {
     await axios
       .post(`${process.env.REACT_APP_API_URL}/acts/${id}`, act)
       .then((res) => {
-        console.log(res.data)
         toast.success(res.data.message, 'success')
       })
       .catch((err) => {

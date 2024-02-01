@@ -71,7 +71,6 @@ const updateUser = asyncHandler(async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 const logoutUser = (req, res) => {
-  // localStorage.removeItem('userInfo')
   res.clearCookie('jwt')
   res.status(200).json({ message: 'Logged out successfully' })
 }

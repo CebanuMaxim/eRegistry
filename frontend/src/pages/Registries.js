@@ -6,17 +6,10 @@ import AddRegistry from '../components/AddRegistry'
 import Header from '../components/Header'
 import { toast } from 'react-toastify'
 import Loader from '../components/Loader'
-import { useNavigate } from 'react-router-dom'
 
 const Registries = () => {
   const [loading, setLoading] = useState(false)
   const [registries, setRegistries] = useState([])
-
-  const navigate = useNavigate()
-  const userInfo = localStorage.getItem('userInfo')
-  if (!userInfo) {
-    navigate('/')
-  }
 
   useEffect(() => {
     async function getRegistries() {
@@ -25,9 +18,8 @@ const Registries = () => {
         let registries = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries`
         )
-        registries = registries.data
 
-        setRegistries(registries)
+        setRegistries(registries.data)
       } catch (error) {
         console.error(error)
       } finally {
@@ -35,6 +27,7 @@ const Registries = () => {
       }
     }
     getRegistries()
+    // eslint-disable-next-line
   }, [])
 
   const addRegistry = async (typographyId, registryId, startDate, endDate) => {
@@ -83,9 +76,6 @@ const Registries = () => {
         startDate,
         endDate,
       })
-      .then(function (response) {
-        console.log(response)
-      })
       .catch(function (error) {
         console.log(error)
       })
@@ -96,9 +86,6 @@ const Registries = () => {
     if (check === registryId) {
       axios
         .delete(`${process.env.REACT_APP_API_URL}/registries/${_id}`)
-        .then(function (response) {
-          console.log(response)
-        })
         .catch(function (error) {
           console.log(error)
         })
