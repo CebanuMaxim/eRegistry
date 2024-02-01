@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap'
 import Registries from './pages/Registries'
 import Acts from './pages/Acts'
 import Login from './pages/Login'
+import Register from './pages/Register'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import { ToastContainer } from 'react-toastify'
@@ -16,6 +17,7 @@ const App = () => {
       <Container fluid='lg'>
         <Routes>
           <Route path='/' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route
             path='/registries'
             element={

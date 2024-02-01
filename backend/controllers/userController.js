@@ -41,7 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     generateToken(res, user._id)
 
-    res.status(201).json({ success: true })
+    res.status(201).json(user)
   } else {
     res.status(400)
     throw new Error('Invalid user data.')
@@ -82,7 +82,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   if (user) {
     await User.deleteOne({ _id: user._id })
-    res.json({ message: 'User removed' })
+    res.json({ message: `User ${user.name} removed` })
   } else {
     res.status(404)
     throw new Error('User not found')
