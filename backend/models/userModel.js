@@ -1,17 +1,27 @@
-const mongoose = require("mongoose")
-const bcrypt = require("bcryptjs")
-const Joi = require("joi")
+const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs')
+const Joi = require('joi')
 
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-})
+  {
+    timestamps: true,
+  }
+)
 
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
@@ -19,8 +29,8 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 }
 
 // Encrypt password using bcrypt
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
     next()
   }
 
@@ -28,7 +38,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt)
 })
 
-const User = mongoose.model("User", userSchema)
+const User = mongoose.model('User', userSchema)
 function validateUser(user, editing = false) {
   let schema = {}
 
@@ -36,10 +46,12 @@ function validateUser(user, editing = false) {
     ? (schema = Joi.object({
         name: Joi.string().required(),
         password: Joi.string().required(),
+        isAdmin: Joi.boolean(),
       }))
     : (schema = Joi.object({
         name: Joi.string(),
         password: Joi.string(),
+        isAdmin: Joi.boolean(),
       }))
   return schema.validate(user)
 }

@@ -42,20 +42,18 @@ const Login = () => {
 
       <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='name'>
-          <Form.Label>Name</Form.Label>
           <Form.Control
             type='text'
-            placeholder='Enter email'
+            placeholder='username'
             value={name}
             onChange={(e) => setName(e.target.value)}
           ></Form.Control>
         </Form.Group>
 
         <Form.Group className='my-2' controlId='password'>
-          <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
-            placeholder='Enter password'
+            placeholder='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></Form.Control>

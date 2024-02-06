@@ -33,11 +33,10 @@ const Register = () => {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1>Sign Up</h1>
 
       <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='name'>
-          <Form.Label>Name</Form.Label>
           <Form.Control
             type='text'
             placeholder='username'
@@ -47,7 +46,6 @@ const Register = () => {
         </Form.Group>
 
         <Form.Group className='my-2' controlId='password'>
-          <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
             placeholder='password'
@@ -57,7 +55,6 @@ const Register = () => {
         </Form.Group>
 
         <Form.Group className='my-2' controlId='confirmPassword'>
-          <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type='password'
             placeholder='confirm password'

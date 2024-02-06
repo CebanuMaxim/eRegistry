@@ -10,6 +10,15 @@ const getUsers = asyncHandler(async (req, res) => {
   res.json(users)
 })
 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private/Admin
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.find({ _id: req.params.id })
+  console.log(req.params.id)
+  res.json(user)
+})
+
 // @desc    Login user & get token
 // @route   POST /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
@@ -25,7 +34,7 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
     })
   } else {
-    res.status(401).json({ message: 'Invalid name or password' })
+    res.status(401).json({ message: 'Invalid username or password' })
     throw new Error('Invalid name or password')
   }
 })
@@ -71,7 +80,10 @@ const updateUser = asyncHandler(async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 const logoutUser = (req, res) => {
-  res.clearCookie('jwt')
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  })
   res.status(200).json({ message: 'Logged out successfully' })
 }
 
@@ -82,7 +94,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   if (user) {
     await User.deleteOne({ _id: user._id })
-    res.json({ message: `User ${user.name} removed` })
+    res.json({ message: 'User removed' })
   } else {
     res.status(404)
     throw new Error('User not found')
@@ -96,4 +108,5 @@ module.exports = {
   updateUser,
   logoutUser,
   deleteUser,
+  getUserById,
 }
