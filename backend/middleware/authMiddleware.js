@@ -29,7 +29,6 @@ const protect = asyncHandler(async (req, res, next) => {
 
 // Admin middleware
 const admin = asyncHandler(async (req, res, next) => {
-  console.log(req.user)
   if (req.user && req.user.isAdmin) {
     next()
   } else {

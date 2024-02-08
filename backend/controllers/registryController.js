@@ -1,12 +1,12 @@
-const { Registry, validateRegistry } = require("../models/registryModel")
-const { Act } = require("../models/actModel")
+const { Registry, validateRegistry } = require('../models/registryModel')
+const { Act } = require('../models/actModel')
 
 // @desc      Fetch all registries
 // @route     GET /api/registries/
 const getRegistries = async (req, res) => {
   const foundRegistries = await Registry.find().sort({ registryId: -1 })
   if (!foundRegistries || foundRegistries.length === 0)
-    return res.status(404).send("No registries")
+    return res.status(404).send('No registries')
 
   res.status(200).send(foundRegistries)
 }
@@ -15,11 +15,11 @@ const getRegistries = async (req, res) => {
 // @route     GET /api/registries/:id
 const getRegistryById = async (req, res) => {
   const registry = await Registry.findById(req.params.id)
-    .populate("acts")
+    .populate('acts')
     .sort({ actId: -1 })
 
   if (!registry)
-    return res.status(404).send("The registry with the given ID was not found.")
+    return res.status(404).send('The registry with the given ID was not found.')
 
   res.send(registry)
 }
@@ -51,7 +51,7 @@ const editRegistry = async (req, res) => {
   })
 
   if (!registry)
-    return res.status(404).send("The registry with the given ID was not found.")
+    return res.status(404).send('The registry with the given ID was not found.')
 
   res.status(200).send(registry)
 }
@@ -63,7 +63,7 @@ const deleteRegistry = async (req, res) => {
   await Act.deleteMany({ registry: req.params.id })
 
   if (!registry)
-    return res.status(404).send("The registry with the given ID was not found.")
+    return res.status(404).send('The registry with the given ID was not found.')
 
   res.send(registry)
 }

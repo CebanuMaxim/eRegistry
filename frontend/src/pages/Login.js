@@ -6,7 +6,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const Login = () => {
-  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
   const userInfo = localStorage.getItem('userInfo')
@@ -23,12 +23,12 @@ const Login = () => {
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/users/login`,
         {
-          name,
+          username,
           password,
         }
       )
 
-      localStorage.setItem('userInfo', JSON.stringify(res.data.name))
+      localStorage.setItem('userInfo', JSON.stringify(res.data.username))
       navigate('/registries')
     } catch (err) {
       console.log(err)
@@ -41,12 +41,12 @@ const Login = () => {
       <h1>Sign In</h1>
 
       <Form onSubmit={submitHandler}>
-        <Form.Group className='my-2' controlId='name'>
+        <Form.Group className='my-2' controlId='username'>
           <Form.Control
             type='text'
             placeholder='username'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           ></Form.Control>
         </Form.Group>
 

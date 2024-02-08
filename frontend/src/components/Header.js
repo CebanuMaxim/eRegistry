@@ -5,6 +5,7 @@ import axios from 'axios'
 
 const Header = () => {
   const navigate = useNavigate()
+  const userInfoValue = JSON.parse(localStorage.getItem('userInfo'))
 
   const logout = async () => {
     try {
@@ -16,15 +17,25 @@ const Header = () => {
 
   return (
     <header style={{ display: 'flex', justifyContent: 'space-between' }}>
-      {!(useLocation().pathname === '/registries') && (
-        <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
-          Go back
+      <div>
+        {!(useLocation().pathname === '/registries') && (
+          <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
+            Go back
+          </Button>
+        )}
+
+        <Button className='btn btn-light my-3' onClick={logout}>
+          Logout
+        </Button>
+      </div>
+      {userInfoValue === 'admin' && (
+        <Button
+          className='btn btn-light my-3'
+          onClick={() => navigate('/admin')}
+        >
+          Admin
         </Button>
       )}
-
-      <Button className='btn btn-light my-3' onClick={logout}>
-        Logout
-      </Button>
     </header>
   )
 }

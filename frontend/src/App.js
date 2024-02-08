@@ -5,10 +5,13 @@ import Registries from './pages/Registries'
 import Acts from './pages/Acts'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Admin from './pages/Admin'
 import ProtectedRoute from './components/ProtectedRoute'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
+console.log(localStorage.getItem('userInfo'))
 
 const App = () => {
   return (
@@ -17,7 +20,14 @@ const App = () => {
       <Container fluid='lg'>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/register' element={<Register />} />
+          <Route
+            path='/register'
+            element={
+              <ProtectedRoute>
+                <Register />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path='/registries'
             element={
@@ -31,6 +41,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Acts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/admin'
+            element={
+              <ProtectedRoute>
+                <Admin />
               </ProtectedRoute>
             }
           />

@@ -15,27 +15,26 @@ const getUsers = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
   const user = await User.find({ _id: req.params.id })
-  console.log(req.params.id)
   res.json(user)
 })
 
 // @desc    Login user & get token
 // @route   POST /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
-  const { name, password } = req.body
+  const { username, password } = req.body
 
-  const user = await User.findOne({ name })
+  const user = await User.findOne({ username })
 
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id)
 
     res.json({
       _id: user._id,
-      name: user.name,
+      username: user.username,
     })
   } else {
     res.status(401).json({ message: 'Invalid username or password' })
-    throw new Error('Invalid name or password')
+    throw new Error('Invalid username or password')
   }
 })
 
@@ -64,6 +63,11 @@ const updateUser = asyncHandler(async (req, res) => {
 
   if (user) {
     user.name = req.body.name || user.name
+    user.isAdmin = req.body.isAdmin || user.isAdmin
+
+    if (req.body.password) {
+      user.password = req.body.password
+    }
 
     const updatedUser = await user.save()
 

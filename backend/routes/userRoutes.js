@@ -1,4 +1,6 @@
 const express = require('express')
+const app = express()
+
 const {
   loginUser,
   registerUser,
@@ -8,20 +10,19 @@ const {
   deleteUser,
   getUserById,
 } = require('../controllers/userController.js')
-const { protect, admin } = require('../middleware/authMiddleware.js')
 
 const router = express.Router()
+const { protect, admin } = require('../middleware/authMiddleware.js')
 
-router
-  .route('/')
-  .post(protect, admin, registerUser)
-  .get(protect, admin, getUsers)
 router.route('/login').post(loginUser)
-router.route('/logout').post(protect, logoutUser)
-router
-  .route('/:id')
-  .put(protect, updateUser)
-  .delete(protect, admin, deleteUser)
-  .get(protect, admin, getUserById)
+
+app.use(protect)
+
+router.route('/logout').post(logoutUser)
+
+app.use(admin)
+
+router.route('/').post(registerUser).get(getUsers)
+router.route('/:id').put(updateUser).delete(deleteUser).get(getUserById)
 
 module.exports = router

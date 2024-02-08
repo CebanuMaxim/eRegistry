@@ -1,1 +1,5 @@
-{}
+{
+  "username": "admin",
+  "password": "$2a$10$Qnd77f4jq4goM1vBT/iAe.8zYIHOZfjMPIeebX3srWKcNylAGOay6",
+  "isAdmin": true
+}

@@ -4,7 +4,7 @@ const Joi = require('joi')
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
     },
@@ -44,12 +44,12 @@ function validateUser(user, editing = false) {
 
   !editing
     ? (schema = Joi.object({
-        name: Joi.string().required(),
+        username: Joi.string().required(),
         password: Joi.string().required(),
         isAdmin: Joi.boolean(),
       }))
     : (schema = Joi.object({
-        name: Joi.string(),
+        username: Joi.string(),
         password: Joi.string(),
         isAdmin: Joi.boolean(),
       }))
