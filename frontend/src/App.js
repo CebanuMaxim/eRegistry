@@ -8,15 +8,11 @@ import Register from './pages/Register'
 import Admin from './pages/Admin'
 import ProtectedRoute from './components/ProtectedRoute'
 
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-
-console.log(localStorage.getItem('userInfo'))
+console.log(JSON.parse(localStorage.getItem('userInfo')))
 
 const App = () => {
   return (
     <Router>
-      <ToastContainer autoClose={1000} />
       <Container fluid='lg'>
         <Routes>
           <Route path='/' element={<Login />} />
