@@ -1,7 +1,14 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 
 const ProtectedRoute = ({ children }) => {
-  const userInfo = localStorage.getItem('userInfo')
+  const location = useLocation()
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  if (location.pathname === '/admin' && userInfo !== 'admin') {
+    console.log('admin: ', userInfo !== 'admin')
+    return <Navigate to='/' />
+  }
+
   if (!userInfo) {
     return <Navigate to='/' />
   }

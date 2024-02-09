@@ -1,14 +1,12 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
-import Registries from './pages/Registries'
-import Acts from './pages/Acts'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Admin from './pages/Admin'
+import Registries from './views/RegistriesView'
+import Acts from './views/ActsView'
+import Login from './views/LoginView'
+import Register from './views/RegisterView'
+import Admin from './views/AdminView'
 import ProtectedRoute from './components/ProtectedRoute'
-
-console.log(JSON.parse(localStorage.getItem('userInfo')))
 
 const App = () => {
   return (
