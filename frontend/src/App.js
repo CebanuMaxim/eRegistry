@@ -14,38 +14,12 @@ const App = () => {
       <Container fluid='lg'>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route
-            path='/register'
-            element={
-              <ProtectedRoute>
-                <Register />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/registries'
-            element={
-              <ProtectedRoute>
-                <Registries />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/regisrtry/:id'
-            element={
-              <ProtectedRoute>
-                <Acts />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path='/admin'
-            element={
-              <ProtectedRoute>
-                <Admin />
-              </ProtectedRoute>
-            }
-          />
+          <Route path='' element={<ProtectedRoute />}>
+            <Route path='/register' element={<Register />} />
+            <Route path='/registries' element={<Registries />} />
+            <Route path='/regisrtry/:id' element={<Acts />} />
+            <Route path='/admin' element={<Admin />} />
+          </Route>
           <Route path='*' element={<h1>Page Not Found</h1>} />
         </Routes>
       </Container>
