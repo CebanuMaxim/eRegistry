@@ -9,10 +9,6 @@ const ProtectedRoute = () => {
   }
 
   return userInfo ? <Outlet /> : <Navigate to='/' replace />
-
-  // if (!userInfo) {
-  //   return <Navigate to='/' />
-  // }
 }
 
 export default ProtectedRoute
