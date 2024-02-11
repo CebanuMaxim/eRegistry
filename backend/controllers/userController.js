@@ -29,8 +29,8 @@ const loginUser = asyncHandler(async (req, res) => {
     generateToken(res, user._id)
 
     res.json({
-      _id: user._id,
       username: user.username,
+      isAdmin: user.isAdmin,
     })
   } else {
     res.status(401).json({ message: 'Invalid username or password' })

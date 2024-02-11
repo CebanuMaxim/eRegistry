@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import axios from 'axios'
-import { Form, Button, Toast, Table } from 'react-bootstrap'
+import { Form, Button, Table } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
+import { toast } from 'react-toastify'
 
 const Admin = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
-  const [show, setShow] = useState(false)
   const [users, setUsers] = useState([])
 
   useEffect(() => {
@@ -27,18 +28,21 @@ const Admin = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault()
-
-    try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/users`, {
-        username,
-        password,
-        isAdmin,
-      })
-      const usr = { username, password, isAdmin }
-      setUsers([...users, usr])
-    } catch (error) {
-      console.log(error)
-      setShow(true)
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match')
+    } else {
+      try {
+        await axios.post(`${process.env.REACT_APP_API_URL}/users`, {
+          username,
+          password,
+          isAdmin,
+        })
+        const usr = { username, password, isAdmin }
+        setUsers([...users, usr])
+      } catch (error) {
+        console.log(error)
+        toast.error('All fields have to be ')
+      }
     }
   }
 
@@ -84,7 +88,6 @@ const Admin = () => {
       </Table>
       <FormContainer>
         <h2>Register new user</h2>
-
         <Form onSubmit={submitHandler}>
           <Form.Group className='my-3' controlId='username'>
             <Form.Control
@@ -103,6 +106,16 @@ const Admin = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Group>
+
+          <Form.Group className='my-3' controlId='confirmPassword'>
+            <Form.Control
+              type='password'
+              placeholder='confirm password'
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </Form.Group>
+
           <Form.Group className='mb-3' controlId='isAdmin'>
             <Form.Check
               type='checkbox'
@@ -118,17 +131,6 @@ const Admin = () => {
             </Button>
           </div>
         </Form>
-        <Toast
-          className='my-3 text-white'
-          onClose={() => setShow(false)}
-          show={show}
-          bg={'danger'}
-          delay={1500}
-          animation={true}
-          autohide
-        >
-          <Toast.Body>Wrong username or password</Toast.Body>
-        </Toast>
       </FormContainer>
     </>
   )

@@ -5,7 +5,7 @@ import axios from 'axios'
 
 const Header = () => {
   const navigate = useNavigate()
-  const userInfoValue = JSON.parse(localStorage.getItem('userInfo'))
+  const { isAdmin } = JSON.parse(localStorage.getItem('userInfo'))
 
   const logout = async () => {
     try {
@@ -28,7 +28,7 @@ const Header = () => {
           Logout
         </Button>
       </div>
-      {userInfoValue === 'admin' && (
+      {isAdmin && (
         <Button
           className='btn btn-light my-3'
           onClick={() => navigate('/admin')}

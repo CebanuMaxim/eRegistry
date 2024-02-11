@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Form, Button, Toast } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [show, setShow] = useState(false)
   const navigate = useNavigate()
   const userInfo = localStorage.getItem('userInfo')
 
@@ -27,12 +27,12 @@ const Login = () => {
           password,
         }
       )
-
-      localStorage.setItem('userInfo', JSON.stringify(res.data.username))
+      console.log(res.data)
+      const { username: user, isAdmin } = res.data
+      localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
       navigate('/registries')
     } catch (err) {
-      console.log(err)
-      setShow(true)
+      toast.error(err.response.data.message)
     }
   }
 
@@ -68,17 +68,6 @@ const Login = () => {
           </Button>
         </div>
       </Form>
-      <Toast
-        className='my-3 text-white'
-        onClose={() => setShow(false)}
-        show={show}
-        bg={'danger'}
-        delay={1500}
-        animation={true}
-        autohide
-      >
-        <Toast.Body>Wrong username or password</Toast.Body>
-      </Toast>
     </FormContainer>
   )
 }

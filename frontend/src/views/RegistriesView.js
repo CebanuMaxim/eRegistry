@@ -10,7 +10,7 @@ import Loader from '../components/Loader'
 const Registries = () => {
   const [loading, setLoading] = useState(false)
   const [registries, setRegistries] = useState([])
-  console.log('asdadad')
+
   useEffect(() => {
     async function getRegistries() {
       try {
