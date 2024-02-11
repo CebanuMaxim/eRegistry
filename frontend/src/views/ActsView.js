@@ -3,13 +3,10 @@ import { useParams } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
-import Header from '../components/Header'
 import axios from 'axios'
-import Loader from '../components/Loader'
 import { toast } from 'react-toastify'
 
 const Acts = () => {
-  const [loading, setLoading] = useState(false)
   const [acts, setActs] = useState([])
 
   const { id } = useParams()
@@ -17,15 +14,22 @@ const Acts = () => {
   useEffect(() => {
     async function getActs() {
       try {
-        setLoading(true)
         let res = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries/${id}`
         )
-        setActs(res.data.acts.reverse())
+        setActs(
+          res.data.acts
+            .sort(function (a, b) {
+              var keyA = a.actId,
+                keyB = b.actId
+              if (keyA < keyB) return -1
+              if (keyA > keyB) return 1
+              return 0
+            })
+            .reverse()
+        )
       } catch (error) {
         console.error(error)
-      } finally {
-        setLoading(false)
       }
     }
     getActs()
@@ -143,41 +147,34 @@ const Acts = () => {
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Header />
-          <Table striped>
-            <thead>
-              <tr className='border-bottom p-3 fw-bolder'>
-                <td>Act number</td>
-                <td>Date</td>
-                <td>Firstname</td>
-                <td>Lastname</td>
-                <td>IDNP</td>
-                <td>Act name</td>
-                <td>State fee</td>
-                <td>Notary fee</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {acts.map((act) => {
-                return (
-                  <ActItem
-                    key={act.actId}
-                    act={act}
-                    editAct={editAct}
-                    deleteAct={deleteAct}
-                  />
-                )
-              })}
-            </tbody>
-          </Table>
-          <AddAct addAct={addAct} />
-        </>
-      )}
+      <Table striped>
+        <thead>
+          <tr className='border-bottom p-3 fw-bolder'>
+            <td>Act number</td>
+            <td>Date</td>
+            <td>Firstname</td>
+            <td>Lastname</td>
+            <td>IDNP</td>
+            <td>Act name</td>
+            <td>State fee</td>
+            <td>Notary fee</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {acts.map((act) => {
+            return (
+              <ActItem
+                key={act.actId}
+                act={act}
+                editAct={editAct}
+                deleteAct={deleteAct}
+              />
+            )
+          })}
+        </tbody>
+      </Table>
+      <AddAct addAct={addAct} />
     </>
   )
 }

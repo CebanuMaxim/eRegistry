@@ -4,7 +4,7 @@ const { Act } = require('../models/actModel')
 // @desc      Fetch all registries
 // @route     GET /api/registries/
 const getRegistries = async (req, res) => {
-  const foundRegistries = await Registry.find().sort({ registryId: -1 })
+  const foundRegistries = await Registry.find()
   if (!foundRegistries || foundRegistries.length === 0)
     return res.status(404).send('No registries')
 
@@ -14,9 +14,7 @@ const getRegistries = async (req, res) => {
 // @desc      Fetch registry by id
 // @route     GET /api/registries/:id
 const getRegistryById = async (req, res) => {
-  const registry = await Registry.findById(req.params.id)
-    .populate('acts')
-    .sort({ actId: -1 })
+  const registry = await Registry.findById(req.params.id).populate('acts')
 
   if (!registry)
     return res.status(404).send('The registry with the given ID was not found.')

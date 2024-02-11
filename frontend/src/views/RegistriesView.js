@@ -3,18 +3,14 @@ import axios from 'axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
-import Header from '../components/Header'
 import { toast } from 'react-toastify'
-import Loader from '../components/Loader'
 
 const Registries = () => {
-  const [loading, setLoading] = useState(false)
   const [registries, setRegistries] = useState([])
 
   useEffect(() => {
     async function getRegistries() {
       try {
-        setLoading(true)
         let registries = await axios.get(
           `${process.env.REACT_APP_API_URL}/registries`
         )
@@ -22,8 +18,6 @@ const Registries = () => {
         setRegistries(registries.data)
       } catch (error) {
         console.error(error)
-      } finally {
-        setLoading(false)
       }
     }
     getRegistries()
@@ -100,37 +94,30 @@ const Registries = () => {
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Header />
-          <Table striped>
-            <thead>
-              <tr className='border-bottom p-3 fw-bolder'>
-                <td>Registry Number</td>
-                <td>Start date</td>
-                <td>End date</td>
-                <td></td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody>
-              {registries.map((registry) => {
-                return (
-                  <RegistryItem
-                    key={registry.registryId}
-                    registry={registry}
-                    editRegistry={editRegistry}
-                    deleteRegistry={deleteRegistry}
-                  />
-                )
-              })}
-            </tbody>
-          </Table>
-          <AddRegistry addRegistry={addRegistry} />
-        </>
-      )}
+      <Table striped>
+        <thead>
+          <tr className='border-bottom p-3 fw-bolder'>
+            <td>Registry Number</td>
+            <td>Start date</td>
+            <td>End date</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {registries.map((registry) => {
+            return (
+              <RegistryItem
+                key={registry.registryId}
+                registry={registry}
+                editRegistry={editRegistry}
+                deleteRegistry={deleteRegistry}
+              />
+            )
+          })}
+        </tbody>
+      </Table>
+      <AddRegistry addRegistry={addRegistry} />
     </>
   )
 }

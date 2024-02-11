@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Header from '../components/Header'
 import axios from 'axios'
 import { Form, Button, Table } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
@@ -57,8 +56,7 @@ const Admin = () => {
 
   return (
     <>
-      <Header />
-      <Table striped bordered size='sm'>
+      <Table striped>
         <thead>
           <tr>
             <th>Username</th>

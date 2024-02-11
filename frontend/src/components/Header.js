@@ -16,26 +16,33 @@ const Header = () => {
   }
 
   return (
-    <header style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <header
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        borderBottom: '1px solid gray',
+      }}
+    >
       <div>
         {!(useLocation().pathname === '/registries') && (
           <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
             Go back
           </Button>
         )}
-
+      </div>
+      <div>
+        {useLocation().pathname !== '/admin' && isAdmin && (
+          <Button
+            className='btn btn-light my-3'
+            onClick={() => navigate('/admin')}
+          >
+            Admin
+          </Button>
+        )}
         <Button className='btn btn-light my-3' onClick={logout}>
           Logout
         </Button>
       </div>
-      {isAdmin && (
-        <Button
-          className='btn btn-light my-3'
-          onClick={() => navigate('/admin')}
-        >
-          Admin
-        </Button>
-      )}
     </header>
   )
 }
