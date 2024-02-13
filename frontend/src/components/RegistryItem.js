@@ -95,12 +95,6 @@ const RegistryItem = ({
                 <Button variant='secondary' onClick={handleClose}>
                   Close
                 </Button>
-                <Button
-                  variant='danger'
-                  onClick={() => deleteRegistry(_id, registryId)}
-                >
-                  Delete
-                </Button>
                 <Button type='submit' variant='primary' onClick={handleClose}>
                   Save Changes
                 </Button>
@@ -108,6 +102,14 @@ const RegistryItem = ({
             </Form>
           </Modal.Body>
         </Modal>
+      </td>
+      <td>
+        <div
+          style={{ color: 'red', cursor: 'pointer' }}
+          onClick={() => deleteRegistry(_id, registryId)}
+        >
+          x
+        </div>
       </td>
     </tr>
   )

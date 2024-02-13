@@ -27,7 +27,6 @@ const Login = () => {
           password,
         }
       )
-      console.log(res.data)
       const { username: user, isAdmin } = res.data
       localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
       navigate('/registries')
@@ -62,9 +61,6 @@ const Login = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button type='submit' variant='link'>
             Sign In
-          </Button>
-          <Button variant='link' onClick={() => navigate('/register')}>
-            Register
           </Button>
         </div>
       </Form>

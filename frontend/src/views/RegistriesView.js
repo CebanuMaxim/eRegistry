@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
@@ -11,17 +11,20 @@ const Registries = () => {
   useEffect(() => {
     async function getRegistries() {
       try {
-        let registries = await axios.get(
-          `${process.env.REACT_APP_API_URL}/registries`
-        )
+        let response = await axios.get('/registries')
 
-        setRegistries(registries.data)
-      } catch (error) {
-        console.error(error)
+        setRegistries(
+          response.data
+            .sort(function (a, b) {
+              return a.registryId - b.registryId
+            })
+            .reverse()
+        )
+      } catch (err) {
+        console.error(err)
       }
     }
     getRegistries()
-    // eslint-disable-next-line
   }, [])
 
   const addRegistry = async (typographyId, registryId, startDate, endDate) => {
@@ -40,11 +43,11 @@ const Registries = () => {
 
     setRegistries([registry, ...registries])
 
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}/registries`, registry)
-      .catch(function (error) {
-        console.log(error)
-      })
+    try {
+      await axios.post('/registries', registry)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const editRegistry = async (
@@ -63,27 +66,26 @@ const Registries = () => {
 
     const { typographyId, registryId, startDate, endDate } = registry
 
-    await axios
-      .put(`${process.env.REACT_APP_API_URL}/registries/${_id}`, {
+    try {
+      await axios.put(`/registries/${_id}`, {
         typographyId,
         registryId,
         startDate,
         endDate,
       })
-      .catch(function (error) {
-        console.log(error)
-      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   function deleteRegistry(_id, registryId) {
     const check = prompt('Please enter registry id:')
     if (check === registryId) {
-      axios
-        .delete(`${process.env.REACT_APP_API_URL}/registries/${_id}`)
-        .catch(function (error) {
-          console.log(error)
-        })
-
+      try {
+        axios.delete(`/registries/${_id}`)
+      } catch (err) {
+        console.log(err)
+      }
       setRegistries((prevRegistries) =>
         prevRegistries.filter((item) => item._id !== _id)
       )
@@ -105,10 +107,10 @@ const Registries = () => {
           </tr>
         </thead>
         <tbody>
-          {registries.map((registry) => {
+          {registries.map((registry, i) => {
             return (
               <RegistryItem
-                key={registry.registryId}
+                key={i}
                 registry={registry}
                 editRegistry={editRegistry}
                 deleteRegistry={deleteRegistry}

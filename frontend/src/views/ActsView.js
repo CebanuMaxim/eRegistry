@@ -162,10 +162,10 @@ const Acts = () => {
           </tr>
         </thead>
         <tbody>
-          {acts.map((act) => {
+          {acts.map((act, i) => {
             return (
               <ActItem
-                key={act.actId}
+                key={i}
                 act={act}
                 editAct={editAct}
                 deleteAct={deleteAct}

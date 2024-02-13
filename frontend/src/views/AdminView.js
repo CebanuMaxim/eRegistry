@@ -65,9 +65,9 @@ const Admin = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => {
+          {users.map((user, i) => {
             return (
-              <tr key={user._id}>
+              <tr key={i}>
                 <td>{user.username}</td>
                 <td>{String(user.isAdmin)}</td>
                 <td>
