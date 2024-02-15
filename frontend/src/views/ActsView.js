@@ -147,6 +147,7 @@ const Acts = () => {
 
   return (
     <>
+      <AddAct addAct={addAct} />
       <Table striped>
         <thead>
           <tr className='border-bottom p-3 fw-bolder'>
@@ -174,7 +175,6 @@ const Acts = () => {
           })}
         </tbody>
       </Table>
-      <AddAct addAct={addAct} />
     </>
   )
 }

@@ -96,6 +96,7 @@ const Registries = () => {
 
   return (
     <>
+      <AddRegistry addRegistry={addRegistry} />
       <Table striped>
         <thead>
           <tr className='border-bottom p-3 fw-bolder'>
@@ -119,7 +120,6 @@ const Registries = () => {
           })}
         </tbody>
       </Table>
-      <AddRegistry addRegistry={addRegistry} />
     </>
   )
 }

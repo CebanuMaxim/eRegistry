@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
@@ -11,9 +11,15 @@ const AddRegistry = ({ addRegistry }) => {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
+  const ref = useRef()
+  const takeFocus = () => {
+    ref.current.focus()
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
     addRegistry(typographyId, registryId, startDate, endDate)
+    takeFocus()
   }
 
   return (
@@ -26,6 +32,7 @@ const AddRegistry = ({ addRegistry }) => {
                 placeholder='Typography Id'
                 value={typographyId}
                 onChange={(e) => setTypographyId(e.target.value)}
+                ref={ref}
               />
             </Col>
             <Col>

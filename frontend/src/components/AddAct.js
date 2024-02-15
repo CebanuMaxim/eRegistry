@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
@@ -15,9 +15,15 @@ const AddAct = ({ addAct }) => {
   const [stateFee, setStateFee] = useState('')
   const [notaryFee, setNotaryFee] = useState('')
 
+  const ref = useRef(null)
+  const takeFocus = () => {
+    ref.current.focus(null)
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
     addAct(actId, date, firstname, lastname, idnp, actName, stateFee, notaryFee)
+    takeFocus()
   }
 
   return (
@@ -30,6 +36,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='act id'
                 value={actId}
                 onChange={(e) => setActId(e.target.value)}
+                ref={ref}
               />
             </Col>
             <Col>
