@@ -36,10 +36,9 @@ const Admin = () => {
         password,
         isAdmin,
       })
-      const usr = { username, password, isAdmin }
-      setUsers([...users, usr])
+      window.location.reload(true)
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -48,7 +47,7 @@ const Admin = () => {
       await axios.delete(`/users/${id}`)
       setUsers(users.filter((user) => user._id !== id))
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
