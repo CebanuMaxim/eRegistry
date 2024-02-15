@@ -24,8 +24,6 @@ const Admin = () => {
   }, [])
 
   const submitHandler = async (e) => {
-    e.preventDefault()
-
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
       return
@@ -36,7 +34,6 @@ const Admin = () => {
         password,
         isAdmin,
       })
-      window.location.reload(true)
     } catch (err) {
       console.error(err)
     }

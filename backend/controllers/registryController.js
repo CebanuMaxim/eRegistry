@@ -1,5 +1,7 @@
 const { Registry, validateRegistry } = require('../models/registryModel')
 const { Act } = require('../models/actModel')
+const fs = require('fs')
+const path = require('path')
 
 // @desc      Fetch all registries
 // @route     GET /api/registries/
@@ -30,9 +32,17 @@ const createRegistry = async (req, res) => {
   const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
+  // const path = require('path')
+  // const dfile = path.resolve('backend/data', 'registries.json')
+  // console.log(dfile)
+
   try {
     const registry = new Registry(req.body)
-    await registry.save()
+    const newRegisrty = await registry.save()
+
+    // fs.appendFile(dfile, JSON.stringify(req.body), (err) => {
+    //   if (err) throw err
+    // })
 
     res.status(201).send({ success: true })
   } catch (err) {
