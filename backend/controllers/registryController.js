@@ -19,6 +19,8 @@ const getRegistryById = async (req, res) => {
   if (!registry)
     return res.status(404).send('The registry with the given ID was not found.')
 
+  if (registry.acts.length === 0) return res.send('No acts in this registry')
+
   res.send(registry)
 }
 

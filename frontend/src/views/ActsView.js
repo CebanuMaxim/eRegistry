@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Table } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
-import axios from 'axios'
+import axios from '../api/axios'
 import { toast } from 'react-toastify'
 
 const Acts = () => {
@@ -14,9 +14,11 @@ const Acts = () => {
   useEffect(() => {
     async function getActs() {
       try {
-        let res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/registries/${id}`
-        )
+        const res = await axios.get(`/registries/${id}`)
+        if (!res.data.acts) {
+          toast.error('No acts in this registry', 'danger')
+          return
+        }
         setActs(
           res.data.acts
             .sort(function (a, b) {
@@ -28,8 +30,8 @@ const Acts = () => {
             })
             .reverse()
         )
-      } catch (error) {
-        console.error(error)
+      } catch (err) {
+        console.error(err)
       }
     }
     getActs()
@@ -72,15 +74,11 @@ const Acts = () => {
     act.notaryFee = notaryFee
 
     setActs([act, ...acts])
-    await axios
-      .post(`${process.env.REACT_APP_API_URL}/acts/${id}`, act)
-      .then((res) => {
-        toast.success(res.data.message, 'success')
-      })
-      .catch((err) => {
-        console.log(err)
-        toast.error(err.response.data.message, 'danger')
-      })
+    try {
+      await axios.post(`/acts/${id}`, act)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const editAct = async (
@@ -116,8 +114,8 @@ const Acts = () => {
       notaryFee,
     } = act
 
-    await axios
-      .put(`${process.env.REACT_APP_API_URL}/acts/${_id}`, {
+    try {
+      await axios.put(`/acts/${_id}`, {
         actId,
         date,
         firstname,
@@ -127,9 +125,9 @@ const Acts = () => {
         stateFee,
         notaryFee,
       })
-      .catch(function (error) {
-        console.log(error)
-      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const deleteAct = async (actId, actNumber, registryId) => {
@@ -137,9 +135,11 @@ const Acts = () => {
 
     if (checkActNumber === actNumber.toString()) {
       setActs(acts.filter((item) => item._id !== actId))
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/acts/${registryId}/${actId}`
-      )
+      try {
+        await axios.delete(`/acts/${registryId}/${actId}`)
+      } catch (err) {
+        console.error(err)
+      }
     } else {
       alert('Wrong id')
     }

@@ -10,7 +10,6 @@ import App from './App'
 import Registries from './views/RegistriesView'
 import Acts from './views/ActsView'
 import Login from './views/LoginView'
-import Register from './views/RegisterView'
 import Admin from './views/AdminView'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
@@ -21,7 +20,6 @@ const router = createBrowserRouter(
     <Route path='/' element={<App />}>
       <Route index={true} path='/' element={<Login />} />
       <Route path='' element={<ProtectedRoute />}>
-        <Route path='/register' element={<Register />} />
         <Route path='/registries' element={<Registries />} />
         <Route path='/regisrtry/:id' element={<Acts />} />
       </Route>

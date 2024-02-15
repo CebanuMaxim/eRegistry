@@ -1,8 +1,8 @@
-const mongoose = require("mongoose")
-const Joi = require("joi")
+const mongoose = require('mongoose')
+const Joi = require('joi')
 
 const Act = mongoose.model(
-  "Act",
+  'Act',
   new mongoose.Schema({
     actId: {
       type: Number,
@@ -47,7 +47,7 @@ const Act = mongoose.model(
     registry: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "Registry",
+      ref: 'Registry',
     },
   })
 )

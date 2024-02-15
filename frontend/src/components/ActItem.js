@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 
 const ActItem = ({
@@ -67,7 +67,7 @@ const ActItem = ({
       <td>{stateFee}</td>
       <td>{notaryFee}</td>
       <td>
-        <Button variant='link' size='sm' onClick={handleShow}>
+        <Button variant='outline-warning' size='sm' onClick={handleShow}>
           Edit
         </Button>
 
@@ -163,12 +163,6 @@ const ActItem = ({
                 <Button variant='secondary' onClick={handleClose}>
                   Close
                 </Button>
-                <Button
-                  variant='danger'
-                  onClick={() => deleteAct(_id, actId, registry)}
-                >
-                  Delete
-                </Button>
                 <Button type='submit' variant='primary' onClick={handleClose}>
                   Save Changes
                 </Button>
@@ -176,6 +170,14 @@ const ActItem = ({
             </Form>
           </Modal.Body>
         </Modal>
+      </td>
+      <td>
+        <div
+          style={{ color: 'red', cursor: 'pointer' }}
+          onClick={() => deleteAct(_id, actId, registry)}
+        >
+          x
+        </div>
       </td>
     </tr>
   )

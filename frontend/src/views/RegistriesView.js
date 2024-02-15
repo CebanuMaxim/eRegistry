@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
@@ -78,7 +78,7 @@ const Registries = () => {
     }
   }
 
-  function deleteRegistry(_id, registryId) {
+  const deleteRegistry = (_id, registryId) => {
     const check = prompt('Please enter registry id:')
     if (check === registryId) {
       try {
