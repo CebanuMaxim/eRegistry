@@ -42,10 +42,12 @@ const Login = () => {
       <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='username'>
           <Form.Control
+            autoFocus
             type='text'
             placeholder='username'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
           ></Form.Control>
         </Form.Group>
 
@@ -55,6 +57,7 @@ const Login = () => {
             placeholder='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           ></Form.Control>
         </Form.Group>
 

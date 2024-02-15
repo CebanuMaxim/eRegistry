@@ -3,7 +3,6 @@ import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
-import { toast } from 'react-toastify'
 
 const Registries = () => {
   const [registries, setRegistries] = useState([])
@@ -27,26 +26,22 @@ const Registries = () => {
     getRegistries()
   }, [])
 
-  const addRegistry = async (typographyId, registryId, startDate, endDate) => {
-    if (typographyId === '' || registryId === '' || startDate === '') {
-      toast.error('Please fill all the fields')
-      return
+  const addRegistry = async (registry) => {
+    if (registry.endDate === '') {
+      registry.endDate = '--.--.----'
     }
-    if (endDate === '') {
-      endDate = '--.--.----'
-    }
-    const registry = {}
-    registry.typographyId = typographyId
-    registry.registryId = registryId
-    registry.startDate = startDate
-    registry.endDate = endDate
+    // const registry = {}
+    // registry.typographyId = typographyId
+    // registry.registryId = registryId
+    // registry.startDate = startDate
+    // registry.endDate = endDate
 
     setRegistries([registry, ...registries])
 
     try {
       await axios.post('/registries', registry)
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -74,7 +69,7 @@ const Registries = () => {
         endDate,
       })
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -84,7 +79,7 @@ const Registries = () => {
       try {
         axios.delete(`/registries/${_id}`)
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
       setRegistries((prevRegistries) =>
         prevRegistries.filter((item) => item._id !== _id)

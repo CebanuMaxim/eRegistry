@@ -22,7 +22,16 @@ const AddAct = ({ addAct }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    addAct(actId, date, firstname, lastname, idnp, actName, stateFee, notaryFee)
+    addAct({
+      actId,
+      date,
+      firstname,
+      lastname,
+      idnp,
+      actName,
+      stateFee,
+      notaryFee,
+    })
     takeFocus()
   }
 
@@ -33,10 +42,12 @@ const AddAct = ({ addAct }) => {
           <Row className='my-3'>
             <Col>
               <Form.Control
+                autoFocus
                 placeholder='act id'
                 value={actId}
                 onChange={(e) => setActId(e.target.value)}
                 ref={ref}
+                required
               />
             </Col>
             <Col>
@@ -44,6 +55,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='date'
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                required
               />
             </Col>
             <Col>
@@ -51,6 +63,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='firstname'
                 value={firstname}
                 onChange={(e) => setFirstname(e.target.value)}
+                required
               />
             </Col>
             <Col>
@@ -58,6 +71,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='lastname'
                 value={lastname}
                 onChange={(e) => setLastname(e.target.value)}
+                required
               />
             </Col>
             <Col>
@@ -65,6 +79,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='idnp'
                 value={idnp}
                 onChange={(e) => setIdnp(e.target.value)}
+                required
               />
             </Col>
           </Row>
@@ -74,6 +89,7 @@ const AddAct = ({ addAct }) => {
                 as='select'
                 value={actName}
                 onChange={(e) => setActName(e.target.value)}
+                required
               >
                 <option value='0'>Select act</option>
                 <option value='procura'>Procura</option>
@@ -90,6 +106,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='state fee'
                 value={stateFee}
                 onChange={(e) => setStateFee(e.target.value)}
+                required
               />
             </Col>
             <Col>
@@ -97,6 +114,7 @@ const AddAct = ({ addAct }) => {
                 placeholder='notary fee'
                 value={notaryFee}
                 onChange={(e) => setNotaryFee(e.target.value)}
+                required
               />
             </Col>
           </Row>

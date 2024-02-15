@@ -18,7 +18,7 @@ const AddRegistry = ({ addRegistry }) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    addRegistry(typographyId, registryId, startDate, endDate)
+    addRegistry({ typographyId, registryId, startDate, endDate })
     takeFocus()
   }
 
@@ -29,10 +29,12 @@ const AddRegistry = ({ addRegistry }) => {
           <Row className='my-3'>
             <Col>
               <Form.Control
+                autoFocus
                 placeholder='Typography Id'
                 value={typographyId}
                 onChange={(e) => setTypographyId(e.target.value)}
                 ref={ref}
+                required
               />
             </Col>
             <Col>
@@ -40,6 +42,7 @@ const AddRegistry = ({ addRegistry }) => {
                 placeholder='Registry Id'
                 value={registryId}
                 onChange={(e) => setRegistryId(e.target.value)}
+                required
               />
             </Col>
             <Col>
@@ -47,6 +50,7 @@ const AddRegistry = ({ addRegistry }) => {
                 placeholder='Start Date'
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                required
               />
             </Col>
             <Col>

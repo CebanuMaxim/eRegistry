@@ -38,41 +38,7 @@ const Acts = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const addAct = async (
-    actId,
-    date,
-    firstname,
-    lastname,
-    idnp,
-    actName,
-    stateFee,
-    notaryFee
-  ) => {
-    if (
-      actId === '' ||
-      date === '' ||
-      firstname === '' ||
-      lastname === '' ||
-      idnp === '' ||
-      actName === '' ||
-      stateFee === '' ||
-      notaryFee === ''
-    ) {
-      toast.error('Please fill all the fields', 'danger')
-      return
-    }
-
-    const act = {}
-
-    act.actId = actId
-    act.date = date
-    act.actName = actName
-    act.firstname = firstname
-    act.lastname = lastname
-    act.idnp = idnp
-    act.stateFee = stateFee
-    act.notaryFee = notaryFee
-
+  const addAct = async (act) => {
     setActs([act, ...acts])
     try {
       await axios.post(`/acts/${id}`, act)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import axios from '../api/axios'
 import { Form, Button, Table } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import { toast } from 'react-toastify'
@@ -14,12 +14,10 @@ const Admin = () => {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/users`
-        )
+        const response = await axios.get('/users')
         setUsers(response.data)
-      } catch (error) {
-        console.log(error)
+      } catch (err) {
+        console.error(err)
       }
     }
     getUsers()
@@ -27,30 +25,30 @@ const Admin = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault()
+
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
-    } else {
-      try {
-        await axios.post(`${process.env.REACT_APP_API_URL}/users`, {
-          username,
-          password,
-          isAdmin,
-        })
-        const usr = { username, password, isAdmin }
-        setUsers([...users, usr])
-      } catch (error) {
-        console.log(error)
-        toast.error('All fields have to be ')
-      }
+      return
+    }
+    try {
+      await axios.post('/users', {
+        username,
+        password,
+        isAdmin,
+      })
+      const usr = { username, password, isAdmin }
+      setUsers([...users, usr])
+    } catch (err) {
+      console.log(err)
     }
   }
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/users/${id}`)
+      await axios.delete(`/users/${id}`)
       setUsers(users.filter((user) => user._id !== id))
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -93,6 +91,7 @@ const Admin = () => {
               placeholder='username'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              required
             />
           </Form.Group>
 
@@ -102,6 +101,7 @@ const Admin = () => {
               placeholder='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </Form.Group>
 
@@ -111,6 +111,7 @@ const Admin = () => {
               placeholder='confirm password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              required
             />
           </Form.Group>
 
