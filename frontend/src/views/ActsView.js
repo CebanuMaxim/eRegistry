@@ -5,9 +5,11 @@ import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
 import axios from '../api/axios'
 import { toast } from 'react-toastify'
+import SearchItem from '../components/SearchItem'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
+  const [search, setSearch] = useState('')
 
   const { id } = useParams()
 
@@ -22,11 +24,7 @@ const Acts = () => {
         setActs(
           res.data.acts
             .sort(function (a, b) {
-              var keyA = a.actId,
-                keyB = b.actId
-              if (keyA < keyB) return -1
-              if (keyA > keyB) return 1
-              return 0
+              return a.actId - b.actId
             })
             .reverse()
         )
@@ -110,10 +108,11 @@ const Acts = () => {
       alert('Wrong id')
     }
   }
-
+  const switchingValue = 'actId'
   return (
     <>
       <AddAct addAct={addAct} />
+      <SearchItem search={search} setSearch={setSearch} item='act number' />
       <Table striped>
         <thead>
           <tr className='border-bottom p-3 fw-bolder'>
@@ -129,16 +128,29 @@ const Acts = () => {
           </tr>
         </thead>
         <tbody>
-          {acts.map((act, i) => {
-            return (
-              <ActItem
-                key={i}
-                act={act}
-                editAct={editAct}
-                deleteAct={deleteAct}
-              />
-            )
-          })}
+          {acts
+            .filter((act, i) => {
+              switch (actKey) {
+                case 'actId':
+                  act.actId.toString().includes(search)
+                  break
+                case 'firstname':
+                  act.actId.toString().includes(search)
+                  break
+                default:
+                  return 0
+              }
+            })
+            .map((act, i) => {
+              return (
+                <ActItem
+                  key={i}
+                  act={act}
+                  editAct={editAct}
+                  deleteAct={deleteAct}
+                />
+              )
+            })}
         </tbody>
       </Table>
     </>

@@ -30,11 +30,6 @@ const Registries = () => {
     if (registry.endDate === '') {
       registry.endDate = '--.--.----'
     }
-    // const registry = {}
-    // registry.typographyId = typographyId
-    // registry.registryId = registryId
-    // registry.startDate = startDate
-    // registry.endDate = endDate
 
     setRegistries([registry, ...registries])
 
