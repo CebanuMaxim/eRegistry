@@ -10,6 +10,8 @@ import SearchItem from '../components/SearchItem'
 const Acts = () => {
   const [acts, setActs] = useState([])
   const [search, setSearch] = useState('')
+  const [actKey, setActKey] = useState('')
+  console.log(actKey)
 
   const { id } = useParams()
 
@@ -108,11 +110,15 @@ const Acts = () => {
       alert('Wrong id')
     }
   }
-  const switchingValue = 'actId'
   return (
     <>
       <AddAct addAct={addAct} />
-      <SearchItem search={search} setSearch={setSearch} item='act number' />
+      <SearchItem
+        search={search}
+        setSearch={setSearch}
+        actKey={actKey}
+        setActKey={setActKey}
+      />
       <Table striped>
         <thead>
           <tr className='border-bottom p-3 fw-bolder'>
@@ -131,14 +137,14 @@ const Acts = () => {
           {acts
             .filter((act, i) => {
               switch (actKey) {
-                case 'actId':
-                  act.actId.toString().includes(search)
-                  break
                 case 'firstname':
-                  act.actId.toString().includes(search)
-                  break
+                  return act.firstname.toString().toLowerCase().includes(search)
+                case 'lastname':
+                  return act.lastname.toString().toLowerCase().includes(search)
+                case 'idnp':
+                  return act.idnp.toString().toLowerCase().includes(search)
                 default:
-                  return 0
+                  return act.actId.toString().includes(search)
               }
             })
             .map((act, i) => {

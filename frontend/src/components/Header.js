@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
-import axios from 'axios'
+import axios from '../api/axios'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -9,7 +9,7 @@ const Header = () => {
 
   const logout = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/users/logout`)
+      await axios.post('/users/logout')
       localStorage.removeItem('userInfo')
       navigate('/')
     } catch (error) {}
