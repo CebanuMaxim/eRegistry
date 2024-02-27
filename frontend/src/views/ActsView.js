@@ -12,7 +12,7 @@ const Acts = () => {
   const [acts, setActs] = useState([])
   const [search, setSearch] = useState('')
   const [actKey, setActKey] = useState('')
-  const [toggle, setToggle] = useState(false)
+  const [toggle, setToggle] = useState(true)
 
   const { id } = useParams()
 
@@ -49,6 +49,7 @@ const Acts = () => {
     }
   }
 
+  // use Object.assign()
   const editAct = async (
     _id,
     newActId,
@@ -114,13 +115,10 @@ const Acts = () => {
   }
 
   const toggleSort = () => {
-    const newToggle = !toggle
-    setToggle(newToggle)
-    setActs((acts) =>
-      acts.sort((a, b) => {
-        return newToggle ? a.actId - b.actId : b.actId - a.actId
-      })
+    setActs(
+      acts.sort((a, b) => (toggle ? a.actId - b.actId : b.actId - a.actId))
     )
+    setToggle(!toggle)
   }
 
   return (
