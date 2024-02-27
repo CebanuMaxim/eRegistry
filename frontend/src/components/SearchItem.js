@@ -13,6 +13,7 @@ const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
               onChange={(e) => setActKey(e.target.value)}
             >
               <option value='actId'>Act Id</option>
+              <option value='date'>Date</option>
               <option value='firstname'>Firstname</option>
               <option value='lastname'>Lastname</option>
               <option value='idnp'>IDNP</option>

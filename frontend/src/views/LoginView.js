@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
-import axios from 'axios'
+import axios from '../api/axios'
 import { toast } from 'react-toastify'
 
 const Login = () => {
@@ -20,13 +20,10 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/users/login`,
-        {
-          username,
-          password,
-        }
-      )
+      const res = await axios.post('/users/login', {
+        username,
+        password,
+      })
       const { username: user, isAdmin } = res.data
       localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
       navigate('/registries')

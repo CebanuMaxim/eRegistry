@@ -6,12 +6,13 @@ import AddAct from '../components/AddAct'
 import axios from '../api/axios'
 import { toast } from 'react-toastify'
 import SearchItem from '../components/SearchItem'
+import { FaSort } from 'react-icons/fa'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
   const [search, setSearch] = useState('')
   const [actKey, setActKey] = useState('')
-  console.log(actKey)
+  const [toggle, setToggle] = useState(false)
 
   const { id } = useParams()
 
@@ -30,6 +31,7 @@ const Acts = () => {
             })
             .reverse()
         )
+        console.log(acts)
       } catch (err) {
         console.error(err)
       }
@@ -110,6 +112,17 @@ const Acts = () => {
       alert('Wrong id')
     }
   }
+
+  const toggleSort = () => {
+    const newToggle = !toggle
+    setToggle(newToggle)
+    setActs((acts) =>
+      acts.sort((a, b) => {
+        return newToggle ? a.actId - b.actId : b.actId - a.actId
+      })
+    )
+  }
+
   return (
     <>
       <AddAct addAct={addAct} />
@@ -122,7 +135,13 @@ const Acts = () => {
       <Table striped>
         <thead>
           <tr className='border-bottom p-3 fw-bolder'>
-            <td>Act number</td>
+            <td>
+              Act number
+              <FaSort
+                style={{ cursor: 'pointer', marginLeft: '5px' }}
+                onClick={toggleSort}
+              />
+            </td>
             <td>Date</td>
             <td>Firstname</td>
             <td>Lastname</td>
@@ -137,6 +156,8 @@ const Acts = () => {
           {acts
             .filter((act, i) => {
               switch (actKey) {
+                case 'date':
+                  return act.date.toString().toLowerCase().includes(search)
                 case 'firstname':
                   return act.firstname.toString().toLowerCase().includes(search)
                 case 'lastname':
