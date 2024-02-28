@@ -34,10 +34,12 @@ const Login = () => {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
-
-      <Form onSubmit={submitHandler}>
-        <Form.Group className='my-2' controlId='username'>
+      <Form onSubmit={submitHandler} style={{ marginTop: '200px' }}>
+        <Form.Group
+          className='my-2'
+          controlId='username'
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
           <Form.Control
             autoFocus
             type='text'
@@ -45,21 +47,39 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            style={{
+              border: 'none',
+              boxShadow: 'inset 0 0 5px #ddd',
+              width: '300px',
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <Form.Group className='my-2' controlId='password'>
+        <Form.Group
+          className='my-2'
+          controlId='password'
+          style={{ display: 'flex', justifyContent: 'center' }}
+        >
           <Form.Control
             type='password'
             placeholder='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            style={{
+              border: 'none',
+              boxShadow: 'inset 0 0 5px #ddd',
+              width: '300px',
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button type='submit' variant='link'>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            type='submit'
+            variant='link'
+            style={{ color: 'cornflowerblue' }}
+          >
             Sign In
           </Button>
         </div>

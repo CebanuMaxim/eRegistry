@@ -4,7 +4,9 @@ import { Col, Form, Row } from 'react-bootstrap'
 const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
   return (
     <Row>
-      <div style={{ width: '200px' }}>Search by </div>
+      <span style={{ width: '100px', display: 'flex', alignItems: 'center' }}>
+        Search by:{' '}
+      </span>
       <Form onSubmit={(e) => e.preventDefault()} style={{ width: '300px' }}>
         <Row className='my-3'>
           <Col>
@@ -12,7 +14,7 @@ const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
               value={actKey}
               onChange={(e) => setActKey(e.target.value)}
             >
-              <option value='actId'>Act Id</option>
+              <option value='actId'>Act Nr.</option>
               <option value='date'>Date</option>
               <option value='firstname'>Firstname</option>
               <option value='lastname'>Lastname</option>
@@ -21,6 +23,7 @@ const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
           </Col>
           <Col>
             <Form.Control
+              style={{ width: '150px' }}
               placeholder='search'
               value={search}
               onChange={(e) => setSearch(e.target.value)}
