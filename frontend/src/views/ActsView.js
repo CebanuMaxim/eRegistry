@@ -20,8 +20,9 @@ const Acts = () => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
+        console.log(res)
         if (!res.data.acts) {
-          toast.error('No acts in this registry', 'danger')
+          toast.info('Registry is empty')
           return
         }
         setActs(
@@ -31,7 +32,6 @@ const Acts = () => {
             })
             .reverse()
         )
-        console.log(acts)
       } catch (err) {
         console.error(err)
       }
@@ -49,7 +49,6 @@ const Acts = () => {
     }
   }
 
-  // use Object.assign()
   const editAct = async (
     _id,
     newActId,

@@ -69,7 +69,8 @@ const Registries = () => {
   }
 
   const deleteRegistry = (_id, registryId) => {
-    const check = prompt('Please enter registry id:')
+    console.log(_id, registryId)
+    const check = prompt('Enter registry id:')
     if (check === registryId) {
       try {
         axios.delete(`/registries/${_id}`)
