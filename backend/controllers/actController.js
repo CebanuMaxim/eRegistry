@@ -1,5 +1,5 @@
-const { Act, validateAct } = require("../models/actModel")
-const { Registry } = require("../models/registryModel")
+const { Act, validateAct } = require('../models/actModel')
+const { Registry } = require('../models/registryModel')
 
 // @desc      Fetch all acts
 // @route     GET /api/acts/
@@ -7,7 +7,7 @@ const getAllActs = async (req, res) => {
   const foundActs = await Act.find()
 
   if (!foundActs || foundActs.length === 0)
-    return res.status(404).send("No acts")
+    return res.status(404).send('No acts')
 
   res.status(200).send(foundActs)
 }
@@ -16,8 +16,8 @@ const getAllActs = async (req, res) => {
 // @route     GET /api/acts/:actId
 const getAct = async (req, res) => {
   const foundAct = await Act.findById(req.params.actId).populate({
-    path: "registry",
-    select: "typographyId registryId",
+    path: 'registry',
+    select: 'typographyId registryId',
   })
 
   if (!foundAct || foundAct.length === 0)
@@ -51,15 +51,21 @@ const createAct = async (req, res) => {
 // @desc      Edit act
 // @route     PUT /api/acts/:actId
 const editAct = async (req, res) => {
-  const { error } = validateAct(req.body, { editing: true })
+  const { error } = validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
-  const act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
-    new: true,
-  })
+  let act
+  try {
+    act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
+      new: true,
+    })
+  } catch (err) {
+    console.log(err)
+    return res.status(400).send(err)
+  }
 
   if (!act)
-    return res.status(404).send("The act with the given ID was not found.")
+    return res.status(404).send('The act with the given ID was not found.')
   res.status(200).send(act)
 }
 

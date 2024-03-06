@@ -20,7 +20,13 @@ const RegistryItem = ({
   const onSubmit = (e) => {
     e.preventDefault()
 
-    editRegistry(_id, newTypographyId, newRegistryId, newStartDate, newEndDate)
+    editRegistry({
+      _id,
+      typographyId: newTypographyId,
+      registryId: newRegistryId,
+      startDate: newStartDate,
+      endDate: newEndDate,
+    })
 
     setNewTypographyId('')
     setNewRegistryId('')

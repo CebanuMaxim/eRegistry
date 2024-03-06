@@ -40,36 +40,23 @@ const Registries = () => {
     }
   }
 
-  const editRegistry = async (
-    _id,
-    newTypographyId,
-    newRegistryId,
-    newStartDate,
-    newEndDate
-  ) => {
-    const registry = registries.find((registry) => registry._id === _id)
+  const editRegistry = async (updatedRegistry) => {
+    const registry = registries.find(
+      (registry) => registry._id === updatedRegistry._id
+    )
 
-    if (newTypographyId) registry.typographyId = newTypographyId
-    if (newRegistryId) registry.registryId = newRegistryId
-    if (newStartDate) registry.startDate = newStartDate
-    if (newEndDate) registry.endDate = newEndDate
-
-    const { typographyId, registryId, startDate, endDate } = registry
-
+    for (const [key, value] of Object.entries(updatedRegistry)) {
+      if (value) registry[key] = value
+    }
+    console.log(registry)
     try {
-      await axios.put(`/registries/${_id}`, {
-        typographyId,
-        registryId,
-        startDate,
-        endDate,
-      })
+      await axios.put(`/registries/${registry._id}`, registry)
     } catch (err) {
       console.error(err)
     }
   }
 
   const deleteRegistry = (_id, registryId) => {
-    console.log(_id, registryId)
     const check = prompt('Enter registry id:')
     if (check === registryId) {
       try {

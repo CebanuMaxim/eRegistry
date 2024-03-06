@@ -4,7 +4,6 @@ import { Table } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
 import axios from '../api/axios'
-import { toast } from 'react-toastify'
 import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
 
@@ -20,11 +19,6 @@ const Acts = () => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
-        console.log(res)
-        if (!res.data.acts) {
-          toast.info('Registry is empty')
-          return
-        }
         setActs(
           res.data.acts
             .sort(function (a, b) {
@@ -41,58 +35,23 @@ const Acts = () => {
   }, [])
 
   const addAct = async (act) => {
-    setActs([act, ...acts])
     try {
       await axios.post(`/acts/${id}`, act)
     } catch (err) {
       console.error(err)
     }
+    setActs([act, ...acts])
   }
 
-  const editAct = async (
-    _id,
-    newActId,
-    newDate,
-    newFirstname,
-    newLastname,
-    newIdnp,
-    newActName,
-    newStateFee,
-    newNotaryFee
-  ) => {
-    const act = acts.find((act) => act._id === _id)
+  const editAct = async (updatedAct) => {
+    const act = acts.find((act) => act._id === updatedAct._id)
 
-    if (newActId) act.actId = newActId
-    if (newDate) act.date = newDate
-    if (newFirstname) act.firstname = newFirstname
-    if (newLastname) act.lastname = newLastname
-    if (newIdnp) act.idnp = newIdnp
-    if (newActName) act.actName = newActName
-    if (newStateFee) act.stateFee = newStateFee
-    if (newNotaryFee) act.notaryFee = newNotaryFee
-
-    const {
-      actId,
-      date,
-      firstname,
-      lastname,
-      idnp,
-      actName,
-      stateFee,
-      notaryFee,
-    } = act
+    for (const [key, value] of Object.entries(updatedAct)) {
+      if (value) act[key] = value
+    }
 
     try {
-      await axios.put(`/acts/${_id}`, {
-        actId,
-        date,
-        firstname,
-        lastname,
-        idnp,
-        actName,
-        stateFee,
-        notaryFee,
-      })
+      await axios.put(`/acts/${act._id}`, act)
     } catch (err) {
       console.error(err)
     }
@@ -129,54 +88,62 @@ const Acts = () => {
         actKey={actKey}
         setActKey={setActKey}
       />
-      <Table striped>
-        <thead>
-          <tr className='border-bottom p-3 fw-bolder'>
-            <td>
-              Act number
-              <FaSort
-                style={{ cursor: 'pointer', marginLeft: '5px' }}
-                onClick={toggleSort}
-              />
-            </td>
-            <td>Date</td>
-            <td>Firstname</td>
-            <td>Lastname</td>
-            <td>IDNP</td>
-            <td>Act name</td>
-            <td>State fee</td>
-            <td>Notary fee</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {acts
-            .filter((act, i) => {
-              switch (actKey) {
-                case 'date':
-                  return act.date.toString().toLowerCase().includes(search)
-                case 'firstname':
-                  return act.firstname.toString().toLowerCase().includes(search)
-                case 'lastname':
-                  return act.lastname.toString().toLowerCase().includes(search)
-                case 'idnp':
-                  return act.idnp.toString().toLowerCase().includes(search)
-                default:
-                  return act.actId.toString().includes(search)
-              }
-            })
-            .map((act, i) => {
-              return (
-                <ActItem
-                  key={i}
-                  act={act}
-                  editAct={editAct}
-                  deleteAct={deleteAct}
+      <div style={{ height: '500px', overflowY: 'auto' }}>
+        <Table striped style={{ overflowY: 'auto' }}>
+          <thead>
+            <tr className='border-bottom p-3 fw-bolder'>
+              <td>
+                Act number
+                <FaSort
+                  style={{ cursor: 'pointer', marginLeft: '5px' }}
+                  onClick={toggleSort}
                 />
-              )
-            })}
-        </tbody>
-      </Table>
+              </td>
+              <td>Date</td>
+              <td>Firstname</td>
+              <td>Lastname</td>
+              <td>IDNP</td>
+              <td>Act name</td>
+              <td>State fee</td>
+              <td>Notary fee</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {acts
+              .filter((act, i) => {
+                switch (actKey) {
+                  case 'date':
+                    return act.date.toString().toLowerCase().includes(search)
+                  case 'firstname':
+                    return act.firstname
+                      .toString()
+                      .toLowerCase()
+                      .includes(search)
+                  case 'lastname':
+                    return act.lastname
+                      .toString()
+                      .toLowerCase()
+                      .includes(search)
+                  case 'idnp':
+                    return act.idnp.toString().toLowerCase().includes(search)
+                  default:
+                    return act.actId.toString().includes(search)
+                }
+              })
+              .map((act, i) => {
+                return (
+                  <ActItem
+                    key={i}
+                    act={act}
+                    editAct={editAct}
+                    deleteAct={deleteAct}
+                  />
+                )
+              })}
+          </tbody>
+        </Table>
+      </div>
     </>
   )
 }

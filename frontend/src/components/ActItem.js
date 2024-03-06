@@ -34,17 +34,17 @@ const ActItem = ({
   const onSubmit = (e) => {
     e.preventDefault()
 
-    editAct(
+    editAct({
       _id,
-      newActId,
-      newDate,
-      newFirstname,
-      newLastname,
-      newIdnp,
-      newActName,
-      newStateFee,
-      newNotaryFee
-    )
+      actId: newActId,
+      date: newDate,
+      firstname: newFirstname,
+      lastname: newLastname,
+      idnp: newIdnp,
+      actName: newActName,
+      stateFee: newStateFee,
+      notaryFee: newNotaryFee,
+    })
 
     setNewActId('')
     setNewDate('')

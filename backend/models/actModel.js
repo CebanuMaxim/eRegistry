@@ -52,31 +52,20 @@ const Act = mongoose.model(
   })
 )
 
-function validateAct(act, editing = false) {
-  let schema = {}
-
-  !editing
-    ? (schema = Joi.object({
-        actId: Joi.number().required(),
-        date: Joi.string().required(),
-        actName: Joi.string().required(),
-        firstname: Joi.string().required().min(2).max(20),
-        lastname: Joi.string().required().min(2).max(20),
-        idnp: Joi.number().required(),
-        stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
-        notaryFee: Joi.number().required(),
-      }))
-    : (schema = Joi.object({
-        actId: Joi.number(),
-        date: Joi.string(),
-        actName: Joi.string(),
-        firstname: Joi.string().min(2).max(20),
-        lastname: Joi.string().min(2).max(20),
-        idnp: Joi.number(),
-        stateFee: Joi.number().valid(0, 0.5, 1, 5),
-        notaryFee: Joi.number(),
-        registryId: Joi.number(),
-      }))
+function validateAct(act) {
+  const schema = Joi.object({
+    actId: Joi.number().required(),
+    date: Joi.string().required(),
+    actName: Joi.string().required(),
+    firstname: Joi.string().required().min(2).max(20),
+    lastname: Joi.string().required().min(2).max(20),
+    idnp: Joi.number().required(),
+    stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
+    notaryFee: Joi.number().required(),
+    registry: Joi.string().required(),
+    _id: Joi.string(),
+    __v: Joi.number(),
+  })
 
   return schema.validate(act)
 }

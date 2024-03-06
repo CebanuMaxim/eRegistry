@@ -9,13 +9,13 @@ const App = () => {
   const loginView = useLocation().pathname === '/'
 
   return (
-    <>
+    <div style={{ height: '100vh' }}>
       <ToastContainer autoClose={1500} />
       <Container fluid='lg'>
         {!loginView && <Header />}
         <Outlet />
       </Container>
-    </>
+    </div>
   )
 }
 

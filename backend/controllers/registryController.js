@@ -53,7 +53,7 @@ const createRegistry = async (req, res) => {
 // @desc      Edit registry
 // @route     POST /api/registries/:id
 const editRegistry = async (req, res) => {
-  const { error } = validateRegistry(req.body, (editing = true))
+  const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
   const registry = await Registry.findByIdAndUpdate(req.params.id, req.body, {

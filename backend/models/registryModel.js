@@ -1,8 +1,8 @@
-const mongoose = require("mongoose")
-const Joi = require("joi")
+const mongoose = require('mongoose')
+const Joi = require('joi')
 
 const Registry = mongoose.model(
-  "Registry",
+  'Registry',
   new mongoose.Schema({
     typographyId: {
       type: String,
@@ -34,28 +34,24 @@ const Registry = mongoose.model(
     acts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Act",
+        ref: 'Act',
       },
     ],
   })
 )
 
-function validateRegistry(registry, editing = false) {
+function validateRegistry(registry) {
   let schema = {}
 
-  !editing
-    ? (schema = Joi.object({
-        typographyId: Joi.number().required(),
-        registryId: Joi.number().required(),
-        startDate: Joi.date().required(),
-        endDate: Joi.string(),
-      }))
-    : (schema = Joi.object({
-        typographyId: Joi.number(),
-        registryId: Joi.number(),
-        startDate: Joi.date(),
-        endDate: Joi.string(),
-      }))
+  schema = Joi.object({
+    typographyId: Joi.number().required(),
+    registryId: Joi.number().required(),
+    startDate: Joi.date().required(),
+    endDate: Joi.string(),
+    acts: Joi.array(),
+    _id: Joi.string(),
+    __v: Joi.number(),
+  })
   return schema.validate(registry)
 }
 
