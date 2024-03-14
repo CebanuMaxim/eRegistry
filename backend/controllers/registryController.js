@@ -1,7 +1,5 @@
 const { Registry, validateRegistry } = require('../models/registryModel')
 const { Act } = require('../models/actModel')
-const fs = require('fs')
-const path = require('path')
 
 // @desc      Fetch all registries
 // @route     GET /api/registries/
@@ -38,7 +36,7 @@ const createRegistry = async (req, res) => {
 
   try {
     const registry = new Registry(req.body)
-    const newRegisrty = await registry.save()
+    await registry.save()
 
     // fs.appendFile(dfile, JSON.stringify(req.body), (err) => {
     //   if (err) throw err

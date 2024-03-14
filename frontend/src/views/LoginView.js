@@ -25,6 +25,7 @@ const Login = () => {
         password,
       })
       const { username: user, isAdmin } = res.data
+
       localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
       navigate('/registries')
     } catch (err) {
@@ -43,6 +44,7 @@ const Login = () => {
           <Form.Control
             autoFocus
             type='text'
+            autoComplete='off'
             placeholder='username'
             value={username}
             onChange={(e) => setUsername(e.target.value)}

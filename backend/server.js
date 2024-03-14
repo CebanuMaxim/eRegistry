@@ -1,19 +1,22 @@
 const express = require('express')
 const app = express()
-const dotenv = require('dotenv').config()
+require('dotenv').config()
 const { connectDB } = require('./config/db.js')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const registries = require('./routes/registryRoutes.js')
 const acts = require('./routes/actRoutes.js')
 const users = require('./routes/userRoutes.js')
+const corsOptions = require('./middleware/corsOptions.js')
 
 connectDB()
 
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+
+const { protect } = require('./middleware/authMiddleware.js')
 
 app.use('/api/users', users)
 app.use('/api/registries', registries)
