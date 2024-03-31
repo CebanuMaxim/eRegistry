@@ -7,7 +7,7 @@ const getRegistries = async (req, res) => {
   const foundRegistries = await Registry.find()
   if (!foundRegistries || foundRegistries.length === 0)
     return res.status(404).send('No registries')
-
+  console.log(foundRegistries)
   res.status(200).send(foundRegistries)
 }
 

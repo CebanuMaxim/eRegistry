@@ -20,11 +20,12 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('/users/login', {
+      const response = await axios.post('/users/login', {
         username,
         password,
       })
-      const { username: user, isAdmin } = res.data
+      console.log(response)
+      const { username: user, isAdmin } = response.data
 
       localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
       navigate('/registries')

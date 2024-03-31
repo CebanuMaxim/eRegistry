@@ -11,6 +11,7 @@ const generateToken = (res, userId) => {
     // sameSite: 'strict', // Prevent CSRF attacks
     maxAge: 8 * 60 * 60 * 1000, // 8 hours
   })
+  res.json({ message: 'Login successful', token })
 }
 
 module.exports = generateToken

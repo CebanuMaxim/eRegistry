@@ -5,7 +5,7 @@ const { User } = require('../models/userModel.js')
 // User must be authenticated
 const protect = asyncHandler(async (req, res, next) => {
   let token
-  console.log(req)
+
   // Read JWT from the 'jwt' cookie
   token = req.cookies.jwt
 

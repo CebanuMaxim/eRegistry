@@ -11,12 +11,10 @@ const corsOptions = require('./middleware/corsOptions.js')
 
 connectDB()
 
+app.use(cookieParser())
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cookieParser())
-
-const { protect } = require('./middleware/authMiddleware.js')
 
 app.use('/api/users', users)
 app.use('/api/registries', registries)

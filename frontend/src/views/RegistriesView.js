@@ -11,7 +11,7 @@ const Registries = () => {
     async function getRegistries() {
       try {
         let response = await axios.get('/registries')
-
+        console.log(response)
         setRegistries(
           response.data
             .sort(function (a, b) {
