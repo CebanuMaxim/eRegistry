@@ -4,15 +4,13 @@ const { User } = require('../models/userModel.js')
 
 // User must be authenticated
 const protect = asyncHandler(async (req, res, next) => {
-  let token
-
-  // Read JWT from the 'jwt' cookie
-  token = req.cookies.jwt
+  // let token
+  const token = req.headers.authorization
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
+      const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET) // Remove "Bearer " prefix
+      console.log(decoded)
       req.user = await User.findById(decoded.userId).select('-password')
 
       next()

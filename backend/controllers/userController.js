@@ -1,6 +1,6 @@
 const asyncHandler = require('../middleware/asyncHandler.js')
-const generateToken = require('../utils/generateToken.js')
 const { User, validateUser } = require('../models/userModel.js')
+const jwt = require('jsonwebtoken')
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -26,10 +26,19 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username })
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id)
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h',
+      }
+    )
+
     res.json({
       username: user.username,
       isAdmin: user.isAdmin,
+      message: 'Login successful',
+      token,
     })
   } else {
     res.status(401).json({ message: 'Invalid username or password' })

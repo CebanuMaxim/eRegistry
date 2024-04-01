@@ -28,6 +28,8 @@ const Login = () => {
       const { username: user, isAdmin } = response.data
 
       localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
+      localStorage.setItem('token', response.data.token)
+
       navigate('/registries')
     } catch (err) {
       toast.error(err.response.data.message)
