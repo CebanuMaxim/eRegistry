@@ -30,6 +30,8 @@ const getAct = async (req, res) => {
 // @route     POST /api/acts/:registryId
 const createAct = async (req, res) => {
   const { error } = validateAct(req.body)
+  console.log(error)
+  console.log(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
   req.body.registry = req.params.registryId

@@ -46,7 +46,7 @@ function validateRegistry(registry) {
   schema = Joi.object({
     typographyId: Joi.number().required(),
     registryId: Joi.number().required(),
-    startDate: Joi.date().required(),
+    startDate: Joi.string().required(),
     endDate: Joi.string(),
     acts: Joi.array(),
     _id: Joi.string(),

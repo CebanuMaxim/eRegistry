@@ -6,6 +6,7 @@ import AddAct from '../components/AddAct'
 import axios from '../api/axios'
 import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
@@ -19,6 +20,9 @@ const Acts = () => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
+        if (!res.data.acts) {
+          return
+        }
         setActs(
           res.data.acts
             .sort(function (a, b) {
@@ -38,7 +42,7 @@ const Acts = () => {
     try {
       await axios.post(`/acts/${id}`, act)
     } catch (err) {
-      console.error(err)
+      toast.error(err.response.data)
     }
     setActs([act, ...acts])
   }

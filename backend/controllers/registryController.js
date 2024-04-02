@@ -34,10 +34,6 @@ const createRegistry = async (req, res) => {
     const registry = new Registry(req.body)
     await registry.save()
 
-    // fs.appendFile(dfile, JSON.stringify(req.body), (err) => {
-    //   if (err) throw err
-    // })
-
     res.status(201).send({ success: true })
   } catch (err) {
     console.log(err)

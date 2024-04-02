@@ -10,7 +10,7 @@ const App = () => {
 
   return (
     <div style={{ height: '100vh' }}>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={3000} />
       <Container fluid='lg'>
         {!loginView && <Header />}
         <Outlet />

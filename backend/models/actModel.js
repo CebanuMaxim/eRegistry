@@ -37,12 +37,12 @@ const Act = mongoose.model(
     stateFee: {
       type: Number,
       required: true,
-      enum: [5, 1, 0.5, 0],
+      enum: [10, 5, 1, 0.5, 0],
     },
     notaryFee: {
       type: Number,
       required: true,
-      enum: [0, 395, 399, 400, 445],
+      enum: [0, 350, 395, 399, 400, 445],
     },
     registry: {
       type: mongoose.Schema.Types.ObjectId,
@@ -60,9 +60,9 @@ function validateAct(act) {
     firstname: Joi.string().required().min(2).max(20),
     lastname: Joi.string().required().min(2).max(20),
     idnp: Joi.number().required(),
-    stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
+    stateFee: Joi.number().required().valid(0, 0.5, 1, 5, 10),
     notaryFee: Joi.number().required(),
-    registry: Joi.string().required(),
+    registry: Joi.string(),
     _id: Joi.string(),
     __v: Joi.number(),
   })

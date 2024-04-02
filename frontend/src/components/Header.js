@@ -26,7 +26,10 @@ const Header = () => {
     >
       <div>
         {!(currentLocation === '/registries') && (
-          <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
+          <Button
+            className='btn btn-light my-3'
+            onClick={() => navigate('/registries')}
+          >
             Go back
           </Button>
         )}
