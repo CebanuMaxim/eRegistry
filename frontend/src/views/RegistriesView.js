@@ -10,14 +10,13 @@ const Registries = () => {
   useEffect(() => {
     async function getRegistries() {
       try {
-        // Assuming you have the token stored in localStorage
-        const token = localStorage.getItem('token')
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+        const token = userInfo.token
 
-        // Set the Authorization header for all Axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
         let response = await axios.get('/registries')
-        console.log(response)
+
         setRegistries(
           response.data
             .sort(function (a, b) {
@@ -54,7 +53,6 @@ const Registries = () => {
     for (const [key, value] of Object.entries(updatedRegistry)) {
       if (value) registry[key] = value
     }
-    console.log(registry)
     try {
       await axios.put(`/registries/${registry._id}`, registry)
     } catch (err) {

@@ -24,11 +24,9 @@ const Login = () => {
         username,
         password,
       })
-      console.log(response)
-      const { username: user, isAdmin } = response.data
+      const { username: user, isAdmin, token } = response.data
 
-      localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin }))
-      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin, token }))
 
       navigate('/registries')
     } catch (err) {

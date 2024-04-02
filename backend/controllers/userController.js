@@ -55,8 +55,6 @@ const registerUser = asyncHandler(async (req, res) => {
   const user = await User.create(req.body)
 
   if (user) {
-    generateToken(res, user._id)
-
     res.status(201).json(user)
   } else {
     res.status(400)
@@ -92,10 +90,6 @@ const updateUser = asyncHandler(async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 const logoutUser = (req, res) => {
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    expires: new Date(0),
-  })
   res.status(200).json({ message: 'Logged out successfully' })
 }
 

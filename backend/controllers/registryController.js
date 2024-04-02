@@ -7,7 +7,7 @@ const getRegistries = async (req, res) => {
   const foundRegistries = await Registry.find()
   if (!foundRegistries || foundRegistries.length === 0)
     return res.status(404).send('No registries')
-  console.log(foundRegistries)
+
   res.status(200).send(foundRegistries)
 }
 
@@ -29,10 +29,6 @@ const getRegistryById = async (req, res) => {
 const createRegistry = async (req, res) => {
   const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
-
-  // const path = require('path')
-  // const dfile = path.resolve('backend/data', 'registries.json')
-  // console.log(dfile)
 
   try {
     const registry = new Registry(req.body)
