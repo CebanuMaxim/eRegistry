@@ -34,8 +34,8 @@ const loginUser = asyncHandler(async (req, res) => {
     )
     res.cookie('jwt', token, {
       httpOnly: true,
-      secure: true, // Set to true if using HTTPS
-      sameSite: 'strict', // Recommended to prevent CSRF attacks
+      // secure: true, // Set to true if using HTTPS
+      // sameSite: 'strict', // Recommended to prevent CSRF attacks
     })
 
     res.json({
