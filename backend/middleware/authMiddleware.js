@@ -6,18 +6,19 @@ const protect = asyncHandler(async (req, res, next) => {
   const token = req.headers.authorization
 
   if (!token) {
-    return res.status(401).json({ message: 'No token, authorization denied' })
+    return res.status(401).json({ message: 'No token provided' })
   }
 
   try {
     const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET) // Remove "Bearer " prefix
 
-    req.user = await User.findById(decoded.userId).select('-password')
-
+    req.user = await User.findById(decoded.id).select('-password')
     next()
   } catch (error) {
-    console.error(error)
-    res.status(401).json({ message: 'Not authorized, no token' })
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token expired' })
+    }
+    return res.status(401).json({ message: 'Token is not valid...' })
   }
 })
 

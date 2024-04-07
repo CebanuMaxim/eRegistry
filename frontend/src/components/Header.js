@@ -4,13 +4,13 @@ import axios from '../api/axios'
 
 const Header = () => {
   const navigate = useNavigate()
-
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-
+  const token = localStorage.getItem('token')
+  const isAdmin = localStorage.getItem('isAdmin')
   const logout = async () => {
     try {
       await axios.post('/users/logout')
-      localStorage.removeItem('userInfo')
+      localStorage.removeItem('token')
+      localStorage.removeItem('isAdmin')
       navigate('/')
     } catch (error) {}
   }
@@ -35,7 +35,7 @@ const Header = () => {
         )}
       </div>
       <div>
-        {currentLocation !== '/admin' && userInfo && userInfo.isAdmin && (
+        {currentLocation !== '/admin' && token && isAdmin && (
           <Button
             className='btn btn-light m-3'
             onClick={() => navigate('/admin')}

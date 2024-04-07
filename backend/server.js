@@ -11,8 +11,8 @@ const corsOptions = require('./middleware/corsOptions.js')
 
 connectDB()
 
-app.use(cookieParser())
 app.use(cors(corsOptions))
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

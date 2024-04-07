@@ -34,6 +34,7 @@ const Acts = () => {
         console.error(err)
       }
     }
+
     getActs()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -30,20 +30,20 @@ const getAct = async (req, res) => {
 // @route     POST /api/acts/:registryId
 const createAct = async (req, res) => {
   const { error } = validateAct(req.body)
-  console.log(error)
-  console.log(req.body)
+
   if (error) return res.status(400).send(error.details[0].message)
 
   req.body.registry = req.params.registryId
 
   try {
     const act = new Act(req.body)
-
     const createdAct = await act.save()
+
     await Registry.updateOne(
       { _id: req.params.registryId },
       { $push: { acts: createdAct._id } }
     )
+
     res.status(200).send(createdAct)
   } catch (error) {
     res.send(error.message)

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
@@ -6,12 +7,32 @@ import AddRegistry from '../components/AddRegistry'
 
 const Registries = () => {
   const [registries, setRegistries] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function getRegistries() {
       try {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-        const token = userInfo.token
+        const token = localStorage.getItem('token')
+
+        axios.interceptors.response.use(
+          (response) => {
+            return response
+          },
+          async (error) => {
+            if (
+              error.response &&
+              error.response.status === 401 &&
+              error.response.data.message === 'Token expired'
+            ) {
+              // Handle token expiration (e.g., log out the user)
+              console.log('Token expired. Logging out...')
+              localStorage.removeItem('toke')
+              localStorage.removeItem('isAdmin')
+              navigate('/')
+            }
+            return Promise.reject(error)
+          }
+        )
 
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
@@ -29,7 +50,7 @@ const Registries = () => {
       }
     }
     getRegistries()
-  }, [])
+  }, [navigate])
 
   const addRegistry = async (registry) => {
     if (registry.endDate === '') {

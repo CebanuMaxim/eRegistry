@@ -9,28 +9,35 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
-  const userInfo = localStorage.getItem('userInfo')
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
-    if (userInfo) {
+    if (token) {
       navigate('/registries')
     }
-  }, [navigate, userInfo])
+  }, [navigate, token])
 
   const submitHandler = async (e) => {
     e.preventDefault()
     try {
+      axios.create({
+        baseURL: process.env.REACT_APP_API_URL,
+        withCredentials: true, // Send cookies with cross-origin requests
+      })
       const response = await axios.post('/users/login', {
         username,
         password,
       })
-      const { username: user, isAdmin, token } = response.data
 
-      localStorage.setItem('userInfo', JSON.stringify({ user, isAdmin, token }))
+      const { isAdmin, token } = response.data
+
+      localStorage.setItem('isAdmin', isAdmin)
+      localStorage.setItem('token', token)
 
       navigate('/registries')
     } catch (err) {
-      toast.error(err.response.data.message)
+      console.log(err)
+      // toast.error(err.response.data.message)
     }
   }
 

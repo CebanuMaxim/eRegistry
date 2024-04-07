@@ -22,7 +22,6 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route   POST /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body
-
   const user = await User.findOne({ username })
 
   if (user && (await user.matchPassword(password))) {
@@ -30,9 +29,14 @@ const loginUser = asyncHandler(async (req, res) => {
       { id: user._id, username: user.username },
       process.env.JWT_SECRET,
       {
-        expiresIn: '1h',
+        expiresIn: '5m',
       }
     )
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: true, // Set to true if using HTTPS
+      sameSite: 'strict', // Recommended to prevent CSRF attacks
+    })
 
     res.json({
       username: user.username,
@@ -42,7 +46,6 @@ const loginUser = asyncHandler(async (req, res) => {
     })
   } else {
     res.status(401).json({ message: 'Invalid username or password' })
-    throw new Error('Invalid username or password')
   }
 })
 

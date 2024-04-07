@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
 const AdminRoute = () => {
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  const isAdmin = localStorage.getItem('isAdmin')
 
-  return userInfo && userInfo.isAdmin ? <Outlet /> : <Navigate to='/' replace />
+  return isAdmin ? <Outlet /> : <Navigate to='/' replace />
 }
 export default AdminRoute
