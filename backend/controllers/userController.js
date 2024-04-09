@@ -39,13 +39,12 @@ const loginUser = asyncHandler(async (req, res) => {
     })
 
     res.json({
-      username: user.username,
+      id: user._id,
       isAdmin: user.isAdmin,
       message: 'Login successful',
-      token,
     })
   } else {
-    res.status(401).json({ message: 'Invalid username or password' })
+    res.status(401).json({ message: 'Invalid username or password...' })
   }
 })
 
@@ -93,6 +92,7 @@ const updateUser = asyncHandler(async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 const logoutUser = (req, res) => {
+  res.clearCookie('jwt')
   res.status(200).json({ message: 'Logged out successfully' })
 }
 

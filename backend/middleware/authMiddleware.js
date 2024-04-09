@@ -3,14 +3,14 @@ const asyncHandler = require('./asyncHandler.js')
 const { User } = require('../models/userModel.js')
 
 const protect = asyncHandler(async (req, res, next) => {
-  const token = req.headers.authorization
+  const token = req.cookies.jwt
 
   if (!token) {
     return res.status(401).json({ message: 'No token provided' })
   }
 
   try {
-    const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET) // Remove "Bearer " prefix
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
     req.user = await User.findById(decoded.id).select('-password')
     next()

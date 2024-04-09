@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
 const ProtectedRoute = () => {
-  const token = localStorage.getItem('token')
-  Cookies.remove()
+  // console.log(Cookies.get())
+  const token = localStorage.getItem('userInfo')
+
   return token ? <Outlet /> : <Navigate to='/' replace />
 }
 
