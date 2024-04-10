@@ -17,6 +17,8 @@ const AddRegistry = ({ addRegistry }) => {
   }
 
   const onSubmit = (e) => {
+    e.preventDefault()
+
     addRegistry({ typographyId, registryId, startDate, endDate })
     takeFocus()
   }

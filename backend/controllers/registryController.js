@@ -1,15 +1,28 @@
 const { Registry, validateRegistry } = require('../models/registryModel')
 const { Act } = require('../models/actModel')
+const asyncHandler = require('../middleware/asyncHandler')
+
+// @desc      Create registry
+// @route     POST /api/registries
+const createRegistry = asyncHandler(async (req, res) => {
+  const { error } = validateRegistry(req.body)
+  if (error) return res.status(400).send(error.details[0].message)
+
+  const registry = new Registry(req.body)
+  await registry.save()
+
+  res.status(201).send(registry)
+})
 
 // @desc      Fetch all registries
 // @route     GET /api/registries/
-const getRegistries = async (req, res) => {
+const getRegistries = asyncHandler(async (req, res) => {
   const foundRegistries = await Registry.find()
   if (!foundRegistries || foundRegistries.length === 0)
     return res.status(404).send('No registries')
 
   res.status(200).send(foundRegistries)
-}
+})
 
 // @desc      Fetch registry by id
 // @route     GET /api/registries/:id
@@ -22,22 +35,6 @@ const getRegistryById = async (req, res) => {
   if (registry.acts.length === 0) return res.send('No acts in this registry')
 
   res.send(registry)
-}
-
-// @desc      Create registry
-// @route     POST /api/registries
-const createRegistry = async (req, res) => {
-  const { error } = validateRegistry(req.body)
-  if (error) return res.status(400).send(error.details[0].message)
-
-  try {
-    const registry = new Registry(req.body)
-    await registry.save()
-
-    res.status(201).send({ success: true })
-  } catch (err) {
-    console.log(err)
-  }
 }
 
 // @desc      Edit registry

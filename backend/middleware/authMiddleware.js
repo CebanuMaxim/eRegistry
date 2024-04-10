@@ -13,12 +13,19 @@ const protect = asyncHandler(async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
     req.user = await User.findById(decoded.id).select('-password')
+
     next()
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ message: 'Token expired' })
+      const expiredTokenPayload = jwt.decode(token)
+      const newToken = jwt.sign(expiredTokenPayload, process.env.JWT_SECRET)
+      res.cookie('jwt', newToken, { httpOnly: true })
+      req.user = expiredTokenPayload
+
+      next()
+    } else {
+      return res.status(401).json({ message: 'Invalid token' })
     }
-    return res.status(401).json({ message: 'Token is not valid...' })
   }
 })
 

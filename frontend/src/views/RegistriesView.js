@@ -56,11 +56,13 @@ const Registries = () => {
     if (registry.endDate === '') {
       registry.endDate = '--.--.----'
     }
-    setRegistries([registry, ...registries])
 
     try {
-      const response = await axios.post('/registries', registry)
-      console.log(response)
+      const { data } = await axios.post('/registries', registry)
+
+      console.log('1: ', data)
+      setRegistries([data, ...registries])
+      console.log('2: ', data)
     } catch (err) {
       console.error(err)
     }
