@@ -1,6 +1,6 @@
 const { Registry, validateRegistry } = require('../models/registryModel')
 const { Act } = require('../models/actModel')
-const asyncHandler = require('../middleware/asyncHandler')
+const asyncHandler = require('express-async-handler')
 
 // @desc      Create registry
 // @route     POST /api/registries
@@ -18,6 +18,7 @@ const createRegistry = asyncHandler(async (req, res) => {
 // @route     GET /api/registries/
 const getRegistries = asyncHandler(async (req, res) => {
   const foundRegistries = await Registry.find()
+
   if (!foundRegistries || foundRegistries.length === 0)
     return res.status(404).send('No registries')
 

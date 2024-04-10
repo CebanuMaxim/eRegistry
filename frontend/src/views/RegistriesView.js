@@ -12,30 +12,6 @@ const Registries = () => {
   useEffect(() => {
     async function getRegistries() {
       try {
-        // const token = localStorage.getItem('token')
-
-        // axios.interceptors.response.use(
-        //   (response) => {
-        //     return response
-        //   },
-        //   async (error) => {
-        //     if (
-        //       error.response &&
-        //       error.response.status === 401 &&
-        //       error.response.data.message === 'Token expired'
-        //     ) {
-        //       // Handle token expiration (e.g., log out the user)
-        //       console.log('Token expired. Logging out...')
-        //       localStorage.removeItem('toke')
-        //       localStorage.removeItem('isAdmin')
-        //       navigate('/')
-        //     }
-        //     return Promise.reject(error)
-        //   }
-        // )
-
-        // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
         let response = await axios.get('/registries')
 
         setRegistries(
@@ -60,9 +36,7 @@ const Registries = () => {
     try {
       const { data } = await axios.post('/registries', registry)
 
-      console.log('1: ', data)
       setRegistries([data, ...registries])
-      console.log('2: ', data)
     } catch (err) {
       console.error(err)
     }

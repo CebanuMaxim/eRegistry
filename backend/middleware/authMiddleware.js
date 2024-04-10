@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const asyncHandler = require('./asyncHandler.js')
+const asyncHandler = require('express-async-handler')
 const { User } = require('../models/userModel.js')
 
 const protect = asyncHandler(async (req, res, next) => {
@@ -19,6 +19,7 @@ const protect = asyncHandler(async (req, res, next) => {
     if (error.name === 'TokenExpiredError') {
       const expiredTokenPayload = jwt.decode(token)
       const newToken = jwt.sign(expiredTokenPayload, process.env.JWT_SECRET)
+
       res.cookie('jwt', newToken, { httpOnly: true })
       req.user = expiredTokenPayload
 
