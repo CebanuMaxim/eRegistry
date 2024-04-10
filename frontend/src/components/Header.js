@@ -12,7 +12,9 @@ const Header = () => {
       await axios.post('/users/logout')
       localStorage.clear()
       navigate('/')
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   }
   const currentLocation = useLocation().pathname
 
