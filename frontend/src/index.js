@@ -14,6 +14,7 @@ import Admin from './views/AdminView'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import MyDocument from './components/MyDocument'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin' element={<Admin />} />
+        <Route path='/pdfDocument' element={<MyDocument />} />
       </Route>
       <Route path='*' element={<h1>Page Not Found</h1>} />
     </Route>

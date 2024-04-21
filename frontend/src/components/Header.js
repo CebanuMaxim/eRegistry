@@ -37,6 +37,12 @@ const Header = () => {
         )}
       </div>
       <div>
+        <Button
+          className='btn btn-light m-3'
+          onClick={() => navigate('/pdfDocument')}
+        >
+          PDF
+        </Button>
         {currentLocation !== '/admin' && id && isAdmin && (
           <Button
             className='btn btn-light m-3'
