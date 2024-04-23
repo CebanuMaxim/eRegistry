@@ -4,6 +4,7 @@ import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
+import { toast } from 'react-toastify'
 
 const Registries = () => {
   const [registries, setRegistries] = useState([])
@@ -37,8 +38,10 @@ const Registries = () => {
       const { data } = await axios.post('/registries', registry)
 
       setRegistries([data, ...registries])
+      // setRegistries((prevRegistries) => [data, ...prevRegistries])
     } catch (err) {
       console.error(err)
+      toast.error(err.response.data)
     }
   }
 

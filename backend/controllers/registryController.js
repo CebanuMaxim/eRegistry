@@ -9,7 +9,15 @@ const createRegistry = asyncHandler(async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message)
 
   const registry = new Registry(req.body)
-  await registry.save()
+
+  try {
+    await registry.save()
+  } catch (error) {
+    console.log(error)
+
+    res.status(400).send(error.errors.typographyId.message)
+    return
+  }
 
   res.status(201).send(registry)
 })
