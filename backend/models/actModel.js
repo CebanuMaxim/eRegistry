@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
 
+const dateRegex = /^(19|20)\d{2}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/
+const dateRegexMessage = (val) =>
+  `${val.value} has to be a valid date in 'YYYY-MM-DD' format`
+
 const Act = mongoose.model(
   'Act',
   new mongoose.Schema({
@@ -11,6 +15,12 @@ const Act = mongoose.model(
     date: {
       type: String,
       required: true,
+      validate: {
+        validator: function (val) {
+          return dateRegex.test(val)
+        },
+        message: (val) => dateRegexMessage(val),
+      },
     },
     actName: {
       type: String,
@@ -25,11 +35,11 @@ const Act = mongoose.model(
       required: true,
     },
     idnp: {
-      type: Number,
+      type: String,
       required: true,
       validate: {
         validator: function (val) {
-          return val.toString().length === 13
+          return val.length === 13
         },
         message: (val) => `${val.value} has to be 13 digits`,
       },
@@ -37,7 +47,7 @@ const Act = mongoose.model(
     stateFee: {
       type: Number,
       required: true,
-      enum: [10, 5, 1, 0.5, 0],
+      enum: [5, 1, 0.5, 0],
     },
     notaryFee: {
       type: Number,
@@ -55,13 +65,19 @@ const Act = mongoose.model(
 function validateAct(act) {
   const schema = Joi.object({
     actId: Joi.number().required(),
-    date: Joi.string().required(),
+    date: Joi.date().required(),
     actName: Joi.string().required(),
-    firstname: Joi.string().required().min(2).max(20),
-    lastname: Joi.string().required().min(2).max(20),
-    idnp: Joi.number().required(),
-    stateFee: Joi.number().required().valid(0, 0.5, 1, 5, 10),
-    notaryFee: Joi.number().required(),
+    firstname: Joi.string().required(),
+    lastname: Joi.string().required(),
+    idnp: Joi.string()
+      .pattern(/^\d{13}$/)
+      .required()
+      .messages({
+        'string.pattern.base': 'idnp must be a 13-digit number',
+        'any.required': 'idnp is required',
+      }),
+    stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
+    notaryFee: Joi.number().required().valid(0, 395, 399, 400),
     registry: Joi.string(),
     _id: Joi.string(),
     __v: Joi.number(),

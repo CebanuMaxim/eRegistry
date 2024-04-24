@@ -39,20 +39,13 @@ userSchema.pre('save', async function (next) {
 })
 
 const User = mongoose.model('User', userSchema)
-function validateUser(user, editing = false) {
-  let schema = {}
+function validateUser(user) {
+  const schema = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+    isAdmin: Joi.boolean().required(),
+  })
 
-  !editing
-    ? (schema = Joi.object({
-        username: Joi.string().required(),
-        password: Joi.string().required(),
-        isAdmin: Joi.boolean(),
-      }))
-    : (schema = Joi.object({
-        username: Joi.string(),
-        password: Joi.string(),
-        isAdmin: Joi.boolean(),
-      }))
   return schema.validate(user)
 }
 module.exports = { User, validateUser }

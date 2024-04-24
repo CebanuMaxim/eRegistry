@@ -64,7 +64,7 @@ function validateRegistry(registry) {
         'any.required': 'registryId is required',
       }),
     startDate: Joi.date().required(),
-    endDate: Joi.date(),
+    endDate: Joi.date().required(),
     acts: Joi.array(),
     _id: Joi.string(),
     __v: Joi.string(),
