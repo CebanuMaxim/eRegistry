@@ -31,9 +31,8 @@ const Registries = () => {
 
   const addRegistry = async (registry) => {
     if (registry.endDate === '') {
-      registry.endDate = '--.--.----'
+      registry.endDate = registry.startDate
     }
-
     try {
       const { data } = await axios.post('/registries', registry)
 

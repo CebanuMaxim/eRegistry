@@ -14,8 +14,7 @@ const createRegistry = asyncHandler(async (req, res) => {
     await registry.save()
   } catch (error) {
     console.log(error)
-
-    res.status(400).send(error.errors.typographyId.message)
+    res.status(400).send(error.errors)
     return
   }
 
