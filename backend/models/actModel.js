@@ -67,17 +67,26 @@ function validateAct(act) {
     actId: Joi.number().required(),
     date: Joi.date().required(),
     actName: Joi.string().required(),
-    firstname: Joi.string().required(),
-    lastname: Joi.string().required(),
+    firstname: Joi.string()
+      .pattern(/^[a-zA-Z]+$/)
+      .messages({
+        'string.pattern.base': 'firstname must contain only letters',
+        'any.required': 'firstname is required',
+      }),
+    lastname: Joi.string()
+      .pattern(/^[a-zA-Z]+$/)
+      .messages({
+        'string.pattern.base': 'lastname must contain only letters',
+        'any.required': 'lastname is required',
+      }),
     idnp: Joi.string()
       .pattern(/^\d{13}$/)
-      .required()
       .messages({
         'string.pattern.base': 'idnp must be a 13-digit number',
         'any.required': 'idnp is required',
       }),
     stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
-    notaryFee: Joi.number().required().valid(0, 395, 399, 400),
+    notaryFee: Joi.number().required().valid(0, 395, 399, 400, 445),
     registry: Joi.string(),
     _id: Joi.string(),
     __v: Joi.number(),

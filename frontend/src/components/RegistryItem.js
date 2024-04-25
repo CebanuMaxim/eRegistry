@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { dateFormatToMD } from '../utils/formatDateHandler'
 
 const RegistryItem = ({
   registry: { _id, typographyId, registryId, startDate, endDate },
@@ -33,6 +34,8 @@ const RegistryItem = ({
     setNewStartDate('')
     setNewEndDate('')
   }
+  startDate = dateFormatToMD(startDate)
+  endDate = dateFormatToMD(endDate)
 
   return (
     <tr key={registryId} className='border-bottom p-3'>

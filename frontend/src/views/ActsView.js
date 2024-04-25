@@ -7,6 +7,7 @@ import axios from '../api/axios'
 import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+import { dateFormatToISO, dateFormatToMD } from '../utils/formatDateHandler'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
@@ -40,12 +41,16 @@ const Acts = () => {
   }, [])
 
   const addAct = async (act) => {
+    act.date = dateFormatToISO(act.date)
+
     try {
       await axios.post(`/acts/${id}`, act)
+
+      act.date = dateFormatToMD(act.date)
+      setActs((prevActs) => [act, ...prevActs])
     } catch (err) {
       toast.error(err.response.data)
     }
-    setActs([act, ...acts])
   }
 
   const editAct = async (updatedAct) => {

@@ -5,6 +5,7 @@ import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
 import { toast } from 'react-toastify'
+import { dateFormatToISO, dateFormatToMD } from '../utils/formatDateHandler'
 
 const Registries = () => {
   const [registries, setRegistries] = useState([])
@@ -30,16 +31,21 @@ const Registries = () => {
   }, [navigate])
 
   const addRegistry = async (registry) => {
-    const [day, month, year] = registry.startDate.split('.')
-    registry.startDate = `${year}-${month}-${day}`
+    registry.startDate = dateFormatToISO(registry.startDate)
 
-    if (registry.endDate === '') registry.endDate = registry.startDate
+    if (registry.endDate === '') {
+      registry.endDate = registry.startDate
+    } else {
+      registry.endDate = dateFormatToISO(registry.endDate)
+    }
 
     try {
       const { data } = await axios.post('/registries', registry)
 
-      setRegistries([data, ...registries])
-      // setRegistries((prevRegistries) => [data, ...prevRegistries])
+      data.startDate = dateFormatToMD(data.startDate)
+      data.endDate = dateFormatToMD(data.endDate)
+
+      setRegistries((prevRegistries) => [data, ...prevRegistries])
     } catch (err) {
       console.error(err)
       toast.error(err.response.data)

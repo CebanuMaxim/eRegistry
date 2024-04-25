@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
+import { dateFormatToMD } from '../utils/formatDateHandler'
 
 const ActItem = ({
   act: {
@@ -55,6 +56,8 @@ const ActItem = ({
     setNewStateFee('')
     setNewNotaryFee('')
   }
+
+  date = dateFormatToMD(date)
 
   return (
     <tr key={_id} className='border-bottom p-3'>
