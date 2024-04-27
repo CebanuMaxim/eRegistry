@@ -34,8 +34,13 @@ const RegistryItem = ({
     setNewStartDate('')
     setNewEndDate('')
   }
-  startDate = dateFormatToMD(startDate)
-  endDate = dateFormatToMD(endDate)
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(startDate)) {
+    startDate = dateFormatToMD(startDate)
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+    endDate = dateFormatToMD(endDate)
+  }
 
   return (
     <tr key={registryId} className='border-bottom p-3'>
