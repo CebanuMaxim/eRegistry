@@ -14,8 +14,12 @@ const Registries = () => {
   useEffect(() => {
     async function getRegistries() {
       try {
-        let response = await axios.get('/registries')
+        const response = await axios.get('/registries')
 
+        if (response.data === '') {
+          console.log(response.statusText)
+          return
+        }
         setRegistries(
           response.data
             .sort(function (a, b) {

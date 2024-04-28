@@ -26,8 +26,9 @@ const createRegistry = asyncHandler(async (req, res) => {
 const getRegistries = asyncHandler(async (req, res) => {
   const foundRegistries = await Registry.find()
 
-  if (!foundRegistries || foundRegistries.length === 0)
-    return res.status(404).send('No registries')
+  if (!foundRegistries || foundRegistries.length === 0) {
+    return res.status(204).send({ message: 'No registries' })
+  }
 
   res.status(200).send(foundRegistries)
 })
