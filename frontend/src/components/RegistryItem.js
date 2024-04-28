@@ -2,56 +2,97 @@ import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { dateFormatToMD } from '../utils/formatDateHandler'
+import RegistrySchema from '../validation/RegistrySchema'
 
-const RegistryItem = ({
-  registry: { _id, typographyId, registryId, startDate, endDate },
-  editRegistry,
-  deleteRegistry,
-}) => {
+const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
   const [show, setShow] = useState(false)
 
-  const handleClose = () => setShow(false)
+  const [newRegistry, setNewRegistry] = useState({
+    typographyId: registry.typographyId,
+    registryId: registry.registryId,
+    startDate: registry.startDate,
+    endDate: registry.endDate,
+  })
+
+  const [errors, setErrors] = useState({
+    typographyId: '',
+    registryId: '',
+    startDate: '',
+    endDate: '',
+  })
+
+  const handleClose = () => {
+    setNewRegistry({
+      typographyId: '',
+      registryId: '',
+      startDate: '',
+      endDate: '',
+    })
+    setErrors({})
+
+    setShow(false)
+  }
   const handleShow = () => setShow(true)
 
-  const [newTypographyId, setNewTypographyId] = useState('')
-  const [newRegistryId, setNewRegistryId] = useState('')
-  const [newStartDate, setNewStartDate] = useState('')
-  const [newEndDate, setNewEndDate] = useState('')
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setNewRegistry((prevRegistry) => ({ ...prevRegistry, [name]: value }))
+  }
 
-  const onSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    editRegistry({
-      _id,
-      typographyId: newTypographyId,
-      registryId: newRegistryId,
-      startDate: newStartDate,
-      endDate: newEndDate,
-    })
+    try {
+      await RegistrySchema.validate(newRegistry, {
+        abortEarly: false,
+      })
+      setErrors({})
 
-    setNewTypographyId('')
-    setNewRegistryId('')
-    setNewStartDate('')
-    setNewEndDate('')
+      for (const [key, value] of Object.entries(newRegistry)) {
+        if (value) registry[key] = value
+      }
+
+      await editRegistry(registry)
+    } catch (validationErrors) {
+      const allErrors = {}
+      validationErrors.inner.forEach((error) => {
+        allErrors[error.path] = error.message
+      })
+      setErrors(allErrors)
+      console.log(errors)
+      if (Object.keys(errors).length === 0) setShow(false)
+    }
+    // setNewRegistry({
+    //   typographyId: '',
+    //   registryId: '',
+    //   startDate: '',
+    //   endDate: '',
+    // })
   }
 
-  if (/^\d{4}-\d{2}-\d{2}$/.test(startDate)) {
-    startDate = dateFormatToMD(startDate)
+  if (/^\d{4}-\d{2}-\d{2}$/.test(registry.startDate)) {
+    registry.startDate = dateFormatToMD(registry.startDate)
   }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
-    endDate = dateFormatToMD(endDate)
+  if (/^\d{4}-\d{2}-\d{2}$/.test(registry.endDate)) {
+    registry.endDate = dateFormatToMD(registry.endDate)
+  }
+
+  const errorStyle = {
+    color: 'red',
+    fontSize: '0.8rem',
+    marginTop: '0.25rem',
   }
 
   return (
-    <tr key={registryId} className='border-bottom p-3'>
+    <tr key={registry.registryId} className='border-bottom p-3'>
       <td>
-        {typographyId} / {registryId}
+        {registry.typographyId} / {registry.registryId}
       </td>
-      <td>{startDate}</td>
-      <td>{endDate}</td>
+      <td>{registry.startDate}</td>
+      <td>{registry.endDate}</td>
       <td>
         <Button variant='link' size='sm'>
-          <Link to={`/regisrtry/${_id}`}>Open</Link>
+          <Link to={`/regisrtry/${registry._id}`}>Open</Link>
         </Button>
       </td>
       <td>
@@ -64,16 +105,21 @@ const RegistryItem = ({
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={onSubmit}>
+            <Form onSubmit={handleSubmit}>
               <Form.Group
                 className='mb-3'
                 controlId='exampleForm.ControlInput1'
               >
                 <Form.Label>Typography id</Form.Label>
                 <Form.Control
-                  placeholder={typographyId}
-                  onChange={(e) => setNewTypographyId(e.target.value)}
+                  placeholder={registry.typographyId}
+                  name='typographyId'
+                  value={newRegistry.typographyId}
+                  onChange={handleChange}
                 />
+                {errors.typographyId && (
+                  <div style={errorStyle}>{errors.typographyId}</div>
+                )}
               </Form.Group>
               <Form.Group
                 className='mb-3'
@@ -81,9 +127,14 @@ const RegistryItem = ({
               >
                 <Form.Label>Registry id</Form.Label>
                 <Form.Control
-                  placeholder={registryId}
-                  onChange={(e) => setNewRegistryId(e.target.value)}
+                  placeholder={registry.registryId}
+                  name='registryId'
+                  value={newRegistry.registryId}
+                  onChange={handleChange}
                 />
+                {errors.registryId && (
+                  <div style={errorStyle}>{errors.registryId}</div>
+                )}
               </Form.Group>
               <Form.Group
                 className='mb-3'
@@ -91,9 +142,14 @@ const RegistryItem = ({
               >
                 <Form.Label>Start date</Form.Label>
                 <Form.Control
-                  placeholder={startDate}
-                  onChange={(e) => setNewStartDate(e.target.value)}
+                  placeholder={registry.startDate}
+                  name='startDate'
+                  value={newRegistry.startDate}
+                  onChange={handleChange}
                 />
+                {errors.startDate && (
+                  <div style={errorStyle}>{errors.startDate}</div>
+                )}
               </Form.Group>
               <Form.Group
                 className='mb-3'
@@ -101,15 +157,20 @@ const RegistryItem = ({
               >
                 <Form.Label>End date</Form.Label>
                 <Form.Control
-                  placeholder={endDate}
-                  onChange={(e) => setNewEndDate(e.target.value)}
+                  placeholder={registry.endDate}
+                  name='endDate'
+                  value={newRegistry.endDate}
+                  onChange={handleChange}
                 />
+                {errors.endDate && (
+                  <div style={errorStyle}>{errors.endDate}</div>
+                )}
               </Form.Group>
               <div className='d-flex justify-content-between'>
                 <Button variant='secondary' onClick={handleClose}>
                   Close
                 </Button>
-                <Button type='submit' variant='primary' onClick={handleClose}>
+                <Button type='submit' variant='primary'>
                   Save Changes
                 </Button>
               </div>
@@ -120,7 +181,7 @@ const RegistryItem = ({
       <td>
         <div
           style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteRegistry(_id, registryId)}
+          onClick={() => deleteRegistry(registry._id, registry.registryId)}
         >
           x
         </div>

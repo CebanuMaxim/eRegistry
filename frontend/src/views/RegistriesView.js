@@ -64,6 +64,7 @@ const Registries = () => {
     for (const [key, value] of Object.entries(updatedRegistry)) {
       if (value) registry[key] = value
     }
+
     try {
       await axios.put(`/registries/${registry._id}`, registry)
     } catch (err) {

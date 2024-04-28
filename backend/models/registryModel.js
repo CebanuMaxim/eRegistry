@@ -67,7 +67,7 @@ function validateRegistry(registry) {
     endDate: Joi.date().required(),
     acts: Joi.array(),
     _id: Joi.string(),
-    __v: Joi.string(),
+    __v: Joi.number(),
   })
 
   return schema.validate(registry)
