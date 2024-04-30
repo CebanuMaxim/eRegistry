@@ -52,8 +52,7 @@ const RegistrySchema = yup.object().shape({
         date.getFullYear() === year // Ensure year matches the original value
       )
     })
-    .matches(DATE_FORMAT_REGEX, 'Invalid date format. Please use DD.MM.YYYY')
-    .required('End Date is required'),
+    .matches(DATE_FORMAT_REGEX, 'Invalid date format. Please use DD.MM.YYYY'),
 })
 
 export default RegistrySchema

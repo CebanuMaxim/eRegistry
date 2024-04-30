@@ -6,32 +6,30 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 
 const AddAct = ({ addAct }) => {
-  const [actId, setActId] = useState('')
-  const [date, setDate] = useState('')
-  const [firstname, setFirstname] = useState('')
-  const [lastname, setLastname] = useState('')
-  const [idnp, setIdnp] = useState('')
-  const [actName, setActName] = useState('')
-  const [stateFee, setStateFee] = useState('')
-  const [notaryFee, setNotaryFee] = useState('')
+  const [act, setAct] = useState({
+    actId: '',
+    date: '',
+    firstname: '',
+    lastname: '',
+    idnp: '',
+    actName: '',
+    stateFee: '',
+    notaryFee: '',
+  })
 
   const ref = useRef(null)
   const takeFocus = () => {
     ref.current.focus(null)
   }
 
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setAct((prevAct) => ({ ...prevAct, [name]: value }))
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
-    addAct({
-      actId,
-      date,
-      firstname,
-      lastname,
-      idnp,
-      actName,
-      stateFee,
-      notaryFee,
-    })
+    addAct({ act })
     takeFocus()
   }
 
@@ -43,9 +41,9 @@ const AddAct = ({ addAct }) => {
             <Col>
               <Form.Control
                 autoFocus
-                placeholder='act id'
-                value={actId}
-                onChange={(e) => setActId(e.target.value)}
+                placeholder='act ID'
+                value={act.actId}
+                onChange={handleChange}
                 ref={ref}
                 required
               />
@@ -53,32 +51,32 @@ const AddAct = ({ addAct }) => {
             <Col>
               <Form.Control
                 placeholder='date'
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={act.date}
+                onChange={handleChange}
                 required
               />
             </Col>
             <Col>
               <Form.Control
                 placeholder='firstname'
-                value={firstname}
-                onChange={(e) => setFirstname(e.target.value)}
+                value={act.firstname}
+                onChange={handleChange}
                 required
               />
             </Col>
             <Col>
               <Form.Control
                 placeholder='lastname'
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
+                value={act.lastname}
+                onChange={handleChange}
                 required
               />
             </Col>
             <Col>
               <Form.Control
                 placeholder='idnp'
-                value={idnp}
-                onChange={(e) => setIdnp(e.target.value)}
+                value={act.idnp}
+                onChange={handleChange}
                 required
               />
             </Col>
@@ -87,8 +85,8 @@ const AddAct = ({ addAct }) => {
             <Col>
               <Form.Control
                 as='select'
-                value={actName}
-                onChange={(e) => setActName(e.target.value)}
+                value={act.actName}
+                onChange={handleChange}
                 required
               >
                 <option value='0'>Select act</option>
@@ -104,16 +102,16 @@ const AddAct = ({ addAct }) => {
             <Col>
               <Form.Control
                 placeholder='state fee'
-                value={stateFee}
-                onChange={(e) => setStateFee(e.target.value)}
+                value={act.stateFee}
+                onChange={handleChange}
                 required
               />
             </Col>
             <Col>
               <Form.Control
                 placeholder='notary fee'
-                value={notaryFee}
-                onChange={(e) => setNotaryFee(e.target.value)}
+                value={act.notaryFee}
+                onChange={handleChange}
                 required
               />
             </Col>
