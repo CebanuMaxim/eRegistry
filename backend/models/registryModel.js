@@ -1,9 +1,6 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
-
-const dateRegex = /^(19|20)\d{2}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/
-const dateRegexMessage = (val) =>
-  `${val.value} has to be a valid date in 'YYYY-MM-DD' format`
+const moment = require('moment')
 
 const Registry = mongoose.model(
   'Registry',
@@ -20,21 +17,10 @@ const Registry = mongoose.model(
     startDate: {
       type: String,
       required: true,
-      validate: {
-        validator: function (val) {
-          return dateRegex.test(val)
-        },
-        message: (val) => dateRegexMessage(val),
-      },
     },
     endDate: {
       type: String,
-      validate: {
-        validator: function (val) {
-          return dateRegex.test(val)
-        },
-        message: (val) => dateRegexMessage(val),
-      },
+      required: true,
     },
     acts: [
       {
@@ -44,6 +30,14 @@ const Registry = mongoose.model(
     ],
   })
 )
+
+const customDateValidator = (value, helpers) => {
+  const date = moment(value, 'DD.MM.YYYY', true)
+  if (!date.isValid()) {
+    return helpers.error('date.format')
+  }
+  return value
+}
 
 function validateRegistry(registry) {
   let schema = {}
@@ -63,8 +57,18 @@ function validateRegistry(registry) {
         'string.pattern.base': 'registryId must be a 4-digit number',
         'any.required': 'registryId is required',
       }),
-    startDate: Joi.date().required(),
-    endDate: Joi.date().required(),
+    startDate: Joi.string()
+      .custom(customDateValidator, 'custom date validation')
+      .required()
+      .messages({
+        'date.format': '{{#label}} must be a valid date in DD.MM.YYYY format',
+      }),
+    endDate: Joi.string()
+      .custom(customDateValidator, 'custom date validation')
+      .required()
+      .messages({
+        'date.format': '{{#label}} must be a valid date in DD.MM.YYYY format',
+      }),
     acts: Joi.array(),
     _id: Joi.string(),
     __v: Joi.number(),

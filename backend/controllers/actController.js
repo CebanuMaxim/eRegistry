@@ -29,8 +29,7 @@ const getAct = async (req, res) => {
 // @desc      Create new act
 // @route     POST /api/acts/:registryId
 const createAct = async (req, res) => {
-  const { error } = validateAct(req.body)
-
+  const { error } = await validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
   req.body.registry = req.params.registryId
@@ -56,19 +55,20 @@ const editAct = async (req, res) => {
   const { error } = validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
-  let act
   try {
-    act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
+    const act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
       new: true,
     })
+
+    if (!act) {
+      return res.status(404).send('The act with the given ID was not found.')
+    }
+
+    res.status(200).send(act)
   } catch (err) {
     console.log(err)
     return res.status(400).send(err)
   }
-
-  if (!act)
-    return res.status(404).send('The act with the given ID was not found.')
-  res.status(200).send(act)
 }
 
 // @desc      Delete last act from registry

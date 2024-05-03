@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import { dateFormatToMD } from '../utils/formatDateHandler'
 import RegistrySchema from '../validation/RegistrySchema'
 
 const AddRegistry = ({ addRegistry }) => {
@@ -52,13 +51,6 @@ const AddRegistry = ({ addRegistry }) => {
     color: 'red',
     fontSize: '0.8rem',
     marginTop: '0.25rem',
-  }
-
-  if (/^\d{4}-\d{2}-\d{2}$/.test(registry.startDate)) {
-    registry.startDate = dateFormatToMD(registry.startDate)
-  }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(registry.endDate)) {
-    registry.endDate = dateFormatToMD(registry.endDate)
   }
 
   return (

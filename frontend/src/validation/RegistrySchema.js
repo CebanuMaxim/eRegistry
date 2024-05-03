@@ -1,7 +1,16 @@
 import * as yup from 'yup'
+import moment from 'moment'
 
-const DATE_FORMAT_REGEX =
-  /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[0-2])\.(19|20)\d{2}$/
+const customDateValidator = (value, context) => {
+  const date = moment(value, 'DD.MM.YYYY', true)
+  if (!date.isValid()) {
+    return context.createError({
+      message: 'This must be a valid date in DD.MM.YYYY format',
+      path: context.path,
+    })
+  }
+  return true
+}
 
 const RegistrySchema = yup.object().shape({
   typographyId: yup
@@ -14,45 +23,12 @@ const RegistrySchema = yup.object().shape({
     .required('Registry Id is required'),
   startDate: yup
     .string()
-    .test('valid-calendar-day', 'Invalid calendar day', (value) => {
-      // Skip validation if the value is empty
-      if (!value) return true
-
-      // Parse the date string into day, month, and year components
-      const [day, month, year] = value.split('.').map(Number)
-
-      // Create a Date object and set the day, month, and year
-      const date = new Date(year, month - 1, day) // Month is zero-based in JavaScript Date object
-
-      // Check if the parsed date components match the original values and the date object is valid
-      return (
-        date.getDate() === day && // Ensure day matches the original value
-        date.getMonth() + 1 === month && // Ensure month matches the original value
-        date.getFullYear() === year // Ensure year matches the original value
-      )
-    })
-    .matches(DATE_FORMAT_REGEX, 'Invalid date format. Please use DD.MM.YYYY')
-    .required('Start Date is required'),
+    .test('custom-date-validation', 'Invalid date', customDateValidator)
+    .required(),
   endDate: yup
     .string()
-    .test('valid-calendar-day', 'Invalid calendar day', (value) => {
-      // Skip validation if the value is empty
-      if (!value) return true
-
-      // Parse the date string into day, month, and year components
-      const [day, month, year] = value.split('.').map(Number)
-
-      // Create a Date object and set the day, month, and year
-      const date = new Date(year, month - 1, day) // Month is zero-based in JavaScript Date object
-
-      // Check if the parsed date components match the original values and the date object is valid
-      return (
-        date.getDate() === day && // Ensure day matches the original value
-        date.getMonth() + 1 === month && // Ensure month matches the original value
-        date.getFullYear() === year // Ensure year matches the original value
-      )
-    })
-    .matches(DATE_FORMAT_REGEX, 'Invalid date format. Please use DD.MM.YYYY'),
+    .test('custom-date-validation', 'Invalid date', customDateValidator)
+    .required(),
 })
 
 export default RegistrySchema

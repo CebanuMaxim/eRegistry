@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { dateFormatToMD } from '../utils/formatDateHandler'
 const moment = require('moment')
 
 const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
@@ -37,11 +36,12 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
     setErrors({})
     setShow(false)
   }
+
   const checkInput = (name, value, inputName, pattern, message) => {
     if (name === inputName && !pattern.test(value)) {
       if (
         (name === 'startDate' || name === 'endDate') &&
-        !isValidDateMoment(value)
+        !moment(value, 'DD.MM.YYYY', true).isValid()
       ) {
         console.log('notValidDate')
       }
@@ -94,11 +94,6 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
     }
   }
 
-  function isValidDateMoment(dateString) {
-    // 'DD.MM.YYYY' specifies the expected date format
-    return moment(dateString, 'DD.MM.YYYY', true).isValid()
-  }
-
   const handleChange = (e) => {
     const { name, value } = e.target
 
@@ -124,13 +119,6 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
       console.log(err)
     }
     handleCloseModal()
-  }
-
-  if (/^\d{4}-\d{2}-\d{2}$/.test(registry.startDate)) {
-    registry.startDate = dateFormatToMD(registry.startDate)
-  }
-  if (/^\d{4}-\d{2}-\d{2}$/.test(registry.endDate)) {
-    registry.endDate = dateFormatToMD(registry.endDate)
   }
 
   const errorStyle = {
