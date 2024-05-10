@@ -1,17 +1,6 @@
-import { useValidation } from './ActValidationContext'
-import moment from 'moment'
-
-const useActValidation = (name, value) => {
-  const { errors, setErrors } = useValidation()
-
+export default function actValidation(name, value, errors, setErrors) {
   const checkInput = (inputName, pattern, message) => {
     if (name === inputName && !pattern.test(value)) {
-      if (
-        (name === 'startDate' || name === 'endDate') &&
-        !moment(value, 'DD.MM.YYYY', true).isValid()
-      ) {
-        console.log('notValidDate')
-      }
       setErrors((prevErrors) => ({ ...prevErrors, [inputName]: message }))
     } else {
       setErrors((prevErrors) => ({ ...prevErrors, [inputName]: '' }))
@@ -19,46 +8,38 @@ const useActValidation = (name, value) => {
   }
 
   switch (name) {
-    case 'typographyId':
-      checkInput(
-        name,
-        value,
-        'typographyId',
-        /^\d{7}$/,
-        'typographyId must be 7-digits string'
-      )
+    case 'actId':
+      checkInput(name, /^\d+$/, 'actId must be 4-digits string')
       break
-    case 'registryId':
+    case 'date':
       checkInput(
         name,
-        value,
-        'registryId',
-        /^\d{4}$/,
-        'registryId must be 4-digits string'
-      )
-      break
-    case 'startDate':
-      checkInput(
-        name,
-        value,
-        'startDate',
         /^\d{2}.\d{2}.\d{4}$/,
-        'Invalid date format. Please use DD.MM.YYYY'
+        'date must be DD.MM.YYYY format valid calendar day'
       )
       break
-    case 'endDate':
+    case 'firstname':
+      checkInput(name, /^[a-zA-Z]+$/, 'Username must contain only letters')
+      break
+    case 'lastname':
+      checkInput(name, /^[a-zA-Z]+$/, 'Lastname must contain only letters')
+      break
+    case 'idnp':
+      checkInput(name, /^\d{13}$/, 'idnp must be a 13-digit number')
+      break
+    case 'stateFee':
+      checkInput(name, /^(0|0.5|1|5)$/, 'Possible values: 0, 0.1, 1, 5')
+      break
+    case 'notaryFee':
       checkInput(
         name,
-        value,
-        'endDate',
-        /^\d{2}.\d{2}.\d{4}$/,
-        'Invalid date format. Please use DD.MM.YYYY'
+        /^(0|395|399|400|445)$/,
+        'Possible values: 0, 395, 399, 400, 445'
       )
       break
+    case 'actName':
     default:
       break
   }
   return errors
 }
-
-export default useActValidation

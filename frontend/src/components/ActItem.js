@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
-import { useValidation } from '../validation/ActValidationContext'
-import ActValidation from '../validation/ActValidation'
+import actValidation from '../validation/actValidation'
+import { ActValidationContext } from '../context/Context'
 
 const ActItem = ({ act, editAct, deleteAct }) => {
   const [show, setShow] = useState(false)
   const [newAct, setNewAct] = useState({})
-  const { errors, setErrors } = useValidation()
+  const { errors, setErrors } = useContext(ActValidationContext)
 
   const handleOpenModal = () => {
     setNewAct({ ...act })
@@ -25,21 +25,28 @@ const ActItem = ({ act, editAct, deleteAct }) => {
   const handleChange = (e) => {
     const { name, value } = e.target
 
-    ActValidation(name, value)
+    actValidation(name, value, errors, setErrors)
 
     setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
       return
     }
 
-    editAct(newAct)
+    const data = await editAct(newAct)
       .then(handleCloseModal())
-      .catch((error) => console.log(error))
+      .catch((error) => console.log('error.response: ', error.response))
+    console.log(data)
+  }
+
+  const errorStyle = {
+    color: 'red',
+    fontSize: '0.8rem',
+    marginTop: '0.25rem',
   }
 
   return (
@@ -75,6 +82,7 @@ const ActItem = ({ act, editAct, deleteAct }) => {
                       name={key}
                       onChange={handleChange}
                     />
+                    {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
                   </Form.Group>
                 )
               })}
