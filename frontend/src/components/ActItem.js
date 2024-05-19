@@ -45,7 +45,7 @@ const ActItem = ({ act, editAct, deleteAct }) => {
   return (
     <tr className='border-bottom p-3'>
       {Object.entries(act).map(([key, value], index) => {
-        if (key === '_id' || key === 'registry' || key === '__v') return null
+        if (['_id', 'registry', '__v'].includes(key)) return null
         return <td key={index}>{value}</td>
       })}
 
@@ -69,7 +69,6 @@ const ActItem = ({ act, editAct, deleteAct }) => {
                     controlId='exampleForm.ControlInput1'
                   >
                     <Form.Control
-                      placeholder={key}
                       name={key}
                       value={newAct[key]}
                       onChange={handleChange}

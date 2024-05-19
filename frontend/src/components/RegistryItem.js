@@ -77,7 +77,10 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={handleSubmit}>
-              {Object.entries(registry).map(([key, value], index) => {
+              {Object.keys(registry).map((key, index) => {
+                console.log(registry)
+                if (['acts', '_id', 'registry', '__v'].includes(key))
+                  return null
                 return (
                   <Form.Group
                     key={index}
