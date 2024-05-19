@@ -1,12 +1,12 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
-import actValidation from '../validation/actValidation'
-import { ActValidationContext } from '../context/Context'
+import inputValidation from '../validation/inputValidation'
+import { errorStyle } from './Styles'
 
 const ActItem = ({ act, editAct, deleteAct }) => {
   const [show, setShow] = useState(false)
   const [newAct, setNewAct] = useState({})
-  const { errors, setErrors } = useContext(ActValidationContext)
+  const [errors, setErrors] = useState({})
 
   const handleOpenModal = () => {
     setNewAct({ ...act })
@@ -22,11 +22,11 @@ const ActItem = ({ act, editAct, deleteAct }) => {
     setErrors({})
     setShow(false)
   }
+
   const handleChange = (e) => {
+    console.log('name, value: ', e.target)
     const { name, value } = e.target
-
-    actValidation(name, value, errors, setErrors)
-
+    inputValidation(name, value, errors, setErrors)
     setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
@@ -37,16 +37,9 @@ const ActItem = ({ act, editAct, deleteAct }) => {
       return
     }
 
-    const data = await editAct(newAct)
+    await editAct(newAct)
       .then(handleCloseModal())
       .catch((error) => console.log('error.response: ', error.response))
-    console.log(data)
-  }
-
-  const errorStyle = {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: '0.25rem',
   }
 
   return (
@@ -67,19 +60,18 @@ const ActItem = ({ act, editAct, deleteAct }) => {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={handleSubmit}>
-              {Object.entries(act).map(([key, value], index) => {
-                if (key === '_id' || key === 'registry' || key === '__v')
-                  return null
+              {Object.keys(act).map((key, index) => {
+                if (['_id', 'registry', '__v'].includes(key)) return null
                 return (
                   <Form.Group
                     key={index}
                     className='mb-3'
                     controlId='exampleForm.ControlInput1'
                   >
-                    <Form.Label>{key}</Form.Label>
                     <Form.Control
-                      value={newAct[key]}
+                      placeholder={key}
                       name={key}
+                      value={newAct[key]}
                       onChange={handleChange}
                     />
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}

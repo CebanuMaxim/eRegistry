@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { ActValidationContext, RegistryValidationContext } from './Context'
+import {
+  ActValidationContext,
+  // ActsValidationContext,
+  RegistryValidationContext,
+} from './Context'
 
 export const ActValidationProvider = ({ children }) => {
   const [act, setAct] = useState({
@@ -29,6 +33,15 @@ export const ActValidationProvider = ({ children }) => {
     </ActValidationContext.Provider>
   )
 }
+// export const ActsValidationProvider = ({ children }) => {
+//   const [acts, setActs] = useState([])
+
+//   return (
+//     <ActsValidationContext.Provider value={{ acts, setActs }}>
+//       {children}
+//     </ActsValidationContext.Provider>
+//   )
+// }
 
 export const RegistryValidationProvider = ({ children }) => {
   const [registry, setRegistry] = useState({

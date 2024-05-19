@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-const moment = require('moment')
+import inputValidation from '../validation/inputValidation'
+import { errorStyle } from './Styles'
 
 const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
   const [show, setShow] = useState(false)
@@ -14,91 +15,23 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
   })
 
   const handleOpenModal = () => {
-    setNewRegistry({
-      typographyId: registry.typographyId,
-      registryId: registry.registryId,
-      startDate: registry.startDate,
-      endDate: registry.endDate,
-    })
+    setNewRegistry({ ...registry })
     setShow(true)
   }
+
   const handleCloseModal = () => {
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
       return
     }
-    setNewRegistry({
-      typographyId: '',
-      registryId: '',
-      startDate: '',
-      endDate: '',
-    })
+    setNewRegistry({})
     setErrors({})
     setShow(false)
   }
 
-  const checkInput = (name, value, inputName, pattern, message) => {
-    if (name === inputName && !pattern.test(value)) {
-      if (
-        (name === 'startDate' || name === 'endDate') &&
-        !moment(value, 'DD.MM.YYYY', true).isValid()
-      ) {
-        console.log('notValidDate')
-      }
-      setErrors((prevErrors) => ({ ...prevErrors, [inputName]: message }))
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, [inputName]: '' }))
-    }
-  }
-
-  const modalValidation = (name, value) => {
-    switch (name) {
-      case 'typographyId':
-        checkInput(
-          name,
-          value,
-          'typographyId',
-          /^\d{7}$/,
-          'typographyId must be 7-digits string'
-        )
-        break
-      case 'registryId':
-        checkInput(
-          name,
-          value,
-          'registryId',
-          /^\d{4}$/,
-          'registryId must be 4-digits string'
-        )
-        break
-      case 'startDate':
-        checkInput(
-          name,
-          value,
-          'startDate',
-          /^\d{2}.\d{2}.\d{4}$/,
-          'Invalid date format. Please use DD.MM.YYYY'
-        )
-        break
-      case 'endDate':
-        checkInput(
-          name,
-          value,
-          'endDate',
-          /^\d{2}.\d{2}.\d{4}$/,
-          'Invalid date format. Please use DD.MM.YYYY'
-        )
-        break
-      default:
-        break
-    }
-  }
-
   const handleChange = (e) => {
     const { name, value } = e.target
-
-    modalValidation(name, value)
-
+    inputValidation(name, value, errors, setErrors)
     setNewRegistry((prevRegistry) => ({ ...prevRegistry, [name]: value }))
   }
 
@@ -119,12 +52,6 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
       console.log(err)
     }
     handleCloseModal()
-  }
-
-  const errorStyle = {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: '0.25rem',
   }
 
   return (
@@ -150,66 +77,24 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={handleSubmit}>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>Typography id</Form.Label>
-                <Form.Control
-                  placeholder={registry.typographyId}
-                  name='typographyId'
-                  value={newRegistry.typographyId}
-                  onChange={handleChange}
-                />
-                {errors.typographyId && (
-                  <div style={errorStyle}>{errors.typographyId}</div>
-                )}
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>Registry id</Form.Label>
-                <Form.Control
-                  placeholder={registry.registryId}
-                  name='registryId'
-                  value={newRegistry.registryId}
-                  onChange={handleChange}
-                />
-                {errors.registryId && (
-                  <div style={errorStyle}>{errors.registryId}</div>
-                )}
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>Start date</Form.Label>
-                <Form.Control
-                  placeholder={registry.startDate}
-                  name='startDate'
-                  value={newRegistry.startDate}
-                  onChange={handleChange}
-                />
-                {errors.startDate && (
-                  <div style={errorStyle}>{errors.startDate}</div>
-                )}
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>End date</Form.Label>
-                <Form.Control
-                  placeholder={registry.endDate}
-                  name='endDate'
-                  value={newRegistry.endDate}
-                  onChange={handleChange}
-                />
-                {errors.endDate && (
-                  <div style={errorStyle}>{errors.endDate}</div>
-                )}
-              </Form.Group>
+              {Object.entries(registry).map(([key, value], index) => {
+                return (
+                  <Form.Group
+                    key={index}
+                    className='mb-3'
+                    controlId='exampleForm.ControlInput1'
+                  >
+                    <Form.Control
+                      name={key}
+                      value={newRegistry[key]}
+                      onChange={handleChange}
+                    />
+                    {errors.typographyId && (
+                      <div style={errorStyle}>{errors[key]}</div>
+                    )}
+                  </Form.Group>
+                )
+              })}
               <div className='d-flex justify-content-between'>
                 <Button variant='secondary' onClick={handleCloseModal}>
                   Close

@@ -6,7 +6,8 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import RegistrySchema from '../validation/RegistryYupSchema'
 import { RegistryValidationContext } from '../context/Context'
-import registryValidation from '../validation/registryValidation'
+import inputValidation from '../validation/inputValidation'
+import { errorStyle } from './Styles'
 
 const AddRegistry = ({ addRegistry }) => {
   const { registry, setRegistry, errors, setErrors } = useContext(
@@ -15,7 +16,7 @@ const AddRegistry = ({ addRegistry }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    registryValidation(name, value, errors, setErrors)
+    inputValidation(name, value, errors, setErrors)
     setRegistry((prevRegistry) => ({ ...prevRegistry, [name]: value }))
   }
 
@@ -28,11 +29,9 @@ const AddRegistry = ({ addRegistry }) => {
     try {
       await RegistrySchema.validate(registry, { abortEarly: false })
         .then((valid) => {
-          // Handle valid input, update state or form
           console.log('Input is valid:', valid)
         })
         .catch((error) => {
-          // Handle validation errors
           console.error('Validation error:', error.message)
         })
       setErrors({})
@@ -46,19 +45,13 @@ const AddRegistry = ({ addRegistry }) => {
     }
   }
 
-  const errorStyle = {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: '0.25rem',
-  }
-
   return (
     <Card className='mt-5 mb-3'>
       <Card.Body>
         <Form onSubmit={onSubmit}>
           <Row className='my-3'>
-            {Object.entries(registry).map(([key, value], index) => {
-              if (key === '_id' || key === 'typography' || key === '__v')
+            {Object.keys(registry).map((key, index) => {
+              if ([key === '_id', 'typography', '__v'].includes(key))
                 return null
               return (
                 <Col key={index}>

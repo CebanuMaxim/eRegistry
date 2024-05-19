@@ -5,15 +5,15 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import ActSchema from '../validation/ActYupSchema'
-import actValidation from '../validation/actValidation'
+import inputValidation from '../validation/inputValidation'
 import { ActValidationContext } from '../context/Context'
+import { errorStyle } from './Styles'
 
 const AddAct = ({ addAct }) => {
   const { act, setAct, errors, setErrors } = useContext(ActValidationContext)
-
   const handleChange = async (e) => {
     const { name, value } = e.target
-    actValidation(name, value, errors, setErrors)
+    inputValidation(name, value, errors, setErrors)
 
     setAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
@@ -27,11 +27,9 @@ const AddAct = ({ addAct }) => {
     try {
       await ActSchema.validate(act, { abortEarly: false })
         .then((valid) => {
-          // Handle valid input, update state or form
           console.log('Input is valid:', valid)
         })
         .catch((error) => {
-          // Handle validation errors
           console.error('Validation error:', error.message)
         })
       setErrors({})
@@ -43,12 +41,6 @@ const AddAct = ({ addAct }) => {
       })
       setErrors(allErrors)
     }
-  }
-
-  const errorStyle = {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: '0.25rem',
   }
 
   return (

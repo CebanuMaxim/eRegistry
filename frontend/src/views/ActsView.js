@@ -20,6 +20,7 @@ const Acts = () => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
+
         if (!res.data.acts) {
           return
         }
