@@ -1,6 +1,9 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import axios from '../api/axios'
+import { useState } from 'react'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import MyDocument from './MyDocument'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -17,6 +20,20 @@ const Header = () => {
     }
   }
   const currentLocation = useLocation().pathname
+
+  const [printOptions, setPrintOptions] = useState({
+    header: true,
+    footer: true,
+    pageNumber: true,
+  })
+
+  const handleOptionChange = (e) => {
+    const { name, checked } = e.target
+    setPrintOptions((prevOptions) => ({
+      ...prevOptions,
+      [name]: checked,
+    }))
+  }
 
   return (
     <header
@@ -36,6 +53,7 @@ const Header = () => {
           </Button>
         )}
       </div>
+
       <div>
         <Button
           className='btn btn-light m-3'
