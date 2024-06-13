@@ -33,6 +33,7 @@ const AddAct = ({ addAct }) => {
           console.error('Validation error:', error.message)
         })
       setErrors({})
+
       await addAct(act)
     } catch (validationErrors) {
       const allErrors = {}
@@ -61,12 +62,26 @@ const AddAct = ({ addAct }) => {
                       required
                     >
                       <option value='0'>Select act</option>
-                      <option value='procura'>Procura</option>
-                      <option value='declaratie'>
-                        Declaratie. Multiple plecari.
+                      <option value='Procură. Mijloc de transport.'>
+                        Procură. Mijloc de transport.
                       </option>
-                      <option value='legalizarea copiei'>
-                        Declaratie. Regim matrimonial
+                      <option value='Legalizarea copiei.'>
+                        Legalizarea copiei.
+                      </option>
+                      <option value='legalizarea semnaturii traducatorului'>
+                        Legalizarea semnăturii traducătorului.
+                      </option>
+                      <option value='Declarație. Multiple plecări.'>
+                        Declarație. Multiple plecări.
+                      </option>
+                      <option value='Declarație. Plecare temporară.'>
+                        Declarație. Plecare temporară.
+                      </option>
+                      <option value='Declarație. Multiple plecări.'>
+                        Declarație. Multiple plecări.
+                      </option>
+                      <option value='Procură. Să cumpere/vămuiască auto.'>
+                        Procură. Să cumpere/vămuiască auto.
                       </option>
                     </Form.Control>
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}

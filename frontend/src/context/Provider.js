@@ -9,8 +9,8 @@ export const ActValidationProvider = ({ children }) => {
   const [act, setAct] = useState({
     actId: '',
     date: '',
-    firstname: '',
     lastname: '',
+    firstname: '',
     idnp: '',
     actName: '',
     stateFee: '',
@@ -20,8 +20,8 @@ export const ActValidationProvider = ({ children }) => {
   const [errors, setErrors] = useState({
     actId: '',
     date: '',
-    firstname: '',
     lastname: '',
+    firstname: '',
     idnp: '',
     actName: '',
     stateFee: '',

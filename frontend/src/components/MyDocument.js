@@ -1,12 +1,15 @@
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import axios from '../api/axios'
 import {
   Page,
   Text,
   View,
   Document,
-  StyleSheet,
   PDFViewer,
   Font,
 } from '@react-pdf/renderer'
+import { styles } from './Styles'
 import RobotoLight from '../fonts/Roboto-Light.ttf'
 import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
@@ -24,48 +27,6 @@ Font.register({
   src: RobotoMedium,
 })
 
-const styles = StyleSheet.create({
-  page: {
-    display: 'flex',
-    fontFamily: 'RobotoLight',
-    fontSize: 12,
-    padding: 30,
-    border: '1px solid black',
-  },
-  header: {
-    textAlign: 'center',
-    fontFamily: 'RobotoMedium',
-  },
-  verticalLine: {
-    height: 1,
-    width: '100%',
-    backgroundColor: 'black',
-    marginTop: 3,
-    marginBottom: 3,
-  },
-  seal: {
-    textAlign: 'right',
-    fontSize: 8,
-  },
-  title: {
-    fontFamily: 'RobotoMedium',
-    fontSize: 12,
-    marginTop: 20,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  content: {
-    textIndent: 15,
-    lineHeight: 1.7,
-  },
-  boldText: {
-    fontFamily: 'RobotoMedium',
-  },
-  footer: {
-    fontFamily: 'RobotoMedium',
-    marginTop: 70,
-  },
-})
 const underline = (text) => (
   <Text style={{ textDecoration: 'underline', textDecorationColor: 'gray' }}>
     {text}
@@ -73,9 +34,9 @@ const underline = (text) => (
 )
 const indentation = (text) => <Text style={{ color: 'white' }}>{text}</Text>
 
-const confirmations = [1, 2]
+const confirmation = (act, i, typographyId, registryId) => {
+  const totalFee = act.stateFee + act.notaryFee
 
-const confirmation = (nr, i) => {
   return (
     <Page key={i} size='A5' orientation='landscape' style={styles.page}>
       <View style={styles.header}>
@@ -93,18 +54,18 @@ const confirmation = (nr, i) => {
         <Text>și raportării financiare nr. 287 din 15.12.2017</Text>
       </View>
       <Text style={styles.title}>
-        C O N F I R M A R E {indentation('_')} n r . {nr}
+        C O N F I R M A R E {indentation('_')} n r . 1
       </Text>
       <View style={styles.content}>
         <View style={styles.indentation} />
         <Text>
           {indentation('_____')}Prin prezenta se confirmă, că la data de
-          25.03.2023, pentru acordarea asistenței notariale cu nr. de
-          înregistrare {underline('2-1978')} din registrul actelor notariale nr.
-          0002152/4734, a fost achitată plata pentru asistență notarială{' '}
-          {underline('355 lei')} și taxa de stat 10 lei, în total 360 lei,
-          achitați de cet. {underline('Boliuh Serghei')}, numărul de
-          identificare 0980710426302.
+          {act.date}, pentru acordarea asistenței notariale cu nr. de
+          înregistrare {act.number} din registrul actelor notariale nr.
+          {typographyId}/{registryId}, a fost achitată plata pentru asistență
+          notarială {act.notaryFee} și taxa de stat {act.stateFee} lei, în total{' '}
+          {totalFee} lei, achitați de cet. {act.lastname} {act.firstname},
+          numărul de identificare 0980710426302.
         </Text>
       </View>
       <View style={styles.footer}>
@@ -118,14 +79,47 @@ const confirmation = (nr, i) => {
 }
 
 // Create Document Component
-const MyDocument = () => (
-  <PDFViewer style={{ width: window.innerWidth, height: window.innerHeight }}>
-    <Document>
-      {confirmations.map((nr, i) => {
-        return confirmation(nr, i)
-      })}
-    </Document>
-  </PDFViewer>
-)
+const MyDocument = () => {
+  const [confirmations, setConfirmations] = useState([])
+  const [acts, setActs] = useState([])
+  const { id } = useParams()
+  let typographyId = undefined
+  let registryId = undefined
+
+  useEffect(() => {
+    async function getActs() {
+      try {
+        const res = await axios.get(`/registries/${id}`)
+        typographyId = res.data.typographyId
+        registryId = res.data.registryId
+        if (!res.data.acts) {
+          return
+        }
+        setActs(
+          res.data.acts
+            .sort(function (a, b) {
+              return a.actId - b.actId
+            })
+            .reverse()
+        )
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    getActs()
+  }, [])
+  console.log(typographyId, registryId)
+
+  return (
+    <PDFViewer style={{ width: window.innerWidth, height: window.innerHeight }}>
+      <Document>
+        {acts.map((act, i) => {
+          return confirmation(act, i, typographyId, registryId)
+        })}
+      </Document>
+    </PDFViewer>
+  )
+}
 
 export default MyDocument

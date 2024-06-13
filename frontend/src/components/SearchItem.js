@@ -15,8 +15,8 @@ const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
             >
               <option value='actId'>Act Nr.</option>
               <option value='date'>Date</option>
-              <option value='firstname'>Firstname</option>
               <option value='lastname'>Lastname</option>
+              <option value='firstname'>Firstname</option>
               <option value='idnp'>IDNP</option>
             </Form.Select>
           </Col>
