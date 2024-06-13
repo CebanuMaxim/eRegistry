@@ -3,6 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import inputValidation from '../validation/inputValidation'
 import { errorStyle } from './Styles'
+import moment from 'moment'
 
 const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
   const [show, setShow] = useState(false)

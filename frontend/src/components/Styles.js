@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'RobotoLight',
     fontSize: 12,
     padding: 30,
-    border: '1px solid black',
   },
   header: {
     textAlign: 'center',

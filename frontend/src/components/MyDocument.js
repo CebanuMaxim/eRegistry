@@ -59,12 +59,12 @@ const confirmation = (act, i, typographyId, registryId) => {
       <View style={styles.content}>
         <View style={styles.indentation} />
         <Text>
-          {indentation('_____')}Prin prezenta se confirmă, că la data de
+          {indentation('_____')}Prin prezenta se confirmă, că la data de{' '}
           {act.date}, pentru acordarea asistenței notariale cu nr. de
-          înregistrare {act.number} din registrul actelor notariale nr.
+          înregistrare {act.number} din registrul actelor notariale nr.{' '}
           {typographyId}/{registryId}, a fost achitată plata pentru asistență
-          notarială {act.notaryFee} și taxa de stat {act.stateFee} lei, în total{' '}
-          {totalFee} lei, achitați de cet. {act.lastname} {act.firstname},
+          notarială {act.notaryFee} lei și taxa de stat {act.stateFee} lei, în
+          total {totalFee} lei, achitați de cet. {act.lastname} {act.firstname},
           numărul de identificare 0980710426302.
         </Text>
       </View>
@@ -80,18 +80,17 @@ const confirmation = (act, i, typographyId, registryId) => {
 
 // Create Document Component
 const MyDocument = () => {
-  const [confirmations, setConfirmations] = useState([])
   const [acts, setActs] = useState([])
   const { id } = useParams()
-  let typographyId = undefined
-  let registryId = undefined
+  const [typographyId, setTypographyId] = useState()
+  const [registryId, setRegistryId] = useState()
 
   useEffect(() => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
-        typographyId = res.data.typographyId
-        registryId = res.data.registryId
+        setTypographyId(res.data.typographyId)
+        setRegistryId(res.data.registryId)
         if (!res.data.acts) {
           return
         }
@@ -109,10 +108,9 @@ const MyDocument = () => {
 
     getActs()
   }, [])
-  console.log(typographyId, registryId)
 
   return (
-    <PDFViewer style={{ width: window.innerWidth, height: window.innerHeight }}>
+    <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
       <Document>
         {acts.map((act, i) => {
           return confirmation(act, i, typographyId, registryId)
