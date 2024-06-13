@@ -1,172 +1,87 @@
 import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
-import { dateFormatToMD } from '../utils/formatDateHandler'
+import inputValidation from '../validation/inputValidation'
+import { errorStyle } from './Styles'
 
-const ActItem = ({
-  act: {
-    _id,
-    actId,
-    date,
-    firstname,
-    lastname,
-    idnp,
-    actName,
-    notaryFee,
-    stateFee,
-    registry,
-  },
-  editAct,
-  deleteAct,
-}) => {
+const ActItem = ({ act, editAct, deleteAct }) => {
   const [show, setShow] = useState(false)
+  const [newAct, setNewAct] = useState({})
+  const [errors, setErrors] = useState({})
 
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-
-  const [newActId, setNewActId] = useState('')
-  const [newDate, setNewDate] = useState('')
-  const [newFirstname, setNewFirstname] = useState('')
-  const [newLastname, setNewLastname] = useState('')
-  const [newIdnp, setNewIdnp] = useState('')
-  const [newActName, setNewActName] = useState('')
-  const [newStateFee, setNewStateFee] = useState('')
-  const [newNotaryFee, setNewNotaryFee] = useState('')
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-
-    editAct({
-      _id,
-      actId: newActId,
-      date: newDate,
-      firstname: newFirstname,
-      lastname: newLastname,
-      idnp: newIdnp,
-      actName: newActName,
-      stateFee: newStateFee,
-      notaryFee: newNotaryFee,
-    })
-
-    setNewActId('')
-    setNewDate('')
-    setNewFirstname('')
-    setNewLastname('')
-    setNewIdnp('')
-    setNewActName('')
-    setNewStateFee('')
-    setNewNotaryFee('')
+  const handleOpenModal = () => {
+    setNewAct({ ...act })
+    setShow(true)
   }
 
-  date = dateFormatToMD(date)
+  const handleCloseModal = () => {
+    if (!Object.values(errors).every((value) => value === '')) {
+      alert(Object.values(errors).join('\n'))
+      return
+    }
+    setNewAct({})
+    setErrors({})
+    setShow(false)
+  }
+
+  const handleChange = (e) => {
+    console.log('name, value: ', e.target)
+    const { name, value } = e.target
+    inputValidation(name, value, errors, setErrors)
+    setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!Object.values(errors).every((value) => value === '')) {
+      alert(Object.values(errors).join('\n'))
+      return
+    }
+
+    await editAct(newAct)
+      .then(handleCloseModal())
+      .catch((error) => console.log('error.response: ', error.response))
+  }
 
   return (
-    <tr key={_id} className='border-bottom p-3'>
-      <td>{actId}</td>
-      <td>{date}</td>
-      <td>{firstname}</td>
-      <td>{lastname}</td>
-      <td>{idnp}</td>
-      <td>{actName}</td>
-      <td>{stateFee}</td>
-      <td>{notaryFee}</td>
+    <tr className='border-bottom p-3'>
+      {Object.entries(act).map(([key, value], index) => {
+        if (['_id', 'registry', '__v'].includes(key)) return null
+        return <td key={index}>{value}</td>
+      })}
+
       <td>
-        <Button variant='outline-warning' size='sm' onClick={handleShow}>
+        <Button variant='outline-warning' size='sm' onClick={handleOpenModal}>
           Edit
         </Button>
 
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={onSubmit}>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>Act Id</Form.Label>
-                <Form.Control
-                  placeholder={actId}
-                  onChange={(e) => setNewActId(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>Date</Form.Label>
-                <Form.Control
-                  placeholder={date}
-                  onChange={(e) => setNewDate(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>firstname</Form.Label>
-                <Form.Control
-                  placeholder={firstname}
-                  onChange={(e) => setNewFirstname(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>lastname</Form.Label>
-                <Form.Control
-                  placeholder={lastname}
-                  onChange={(e) => setNewLastname(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>IDNP</Form.Label>
-                <Form.Control
-                  placeholder={idnp}
-                  onChange={(e) => setNewIdnp(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>act name</Form.Label>
-                <Form.Control
-                  placeholder={actName}
-                  onChange={(e) => setNewActName(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>state fee</Form.Label>
-                <Form.Control
-                  placeholder={stateFee}
-                  onChange={(e) => setNewStateFee(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group
-                className='mb-3'
-                controlId='exampleForm.ControlInput1'
-              >
-                <Form.Label>notary fee</Form.Label>
-                <Form.Control
-                  placeholder={notaryFee}
-                  onChange={(e) => setNewNotaryFee(e.target.value)}
-                />
-              </Form.Group>
+            <Form onSubmit={handleSubmit}>
+              {Object.keys(act).map((key, index) => {
+                if (['_id', 'registry', '__v'].includes(key)) return null
+                return (
+                  <Form.Group
+                    key={index}
+                    className='mb-3'
+                    controlId='exampleForm.ControlInput1'
+                  >
+                    <Form.Control
+                      name={key}
+                      value={newAct[key]}
+                      onChange={handleChange}
+                    />
+                    {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
+                  </Form.Group>
+                )
+              })}
               <div className='d-flex justify-content-between'>
-                <Button variant='secondary' onClick={handleClose}>
+                <Button variant='secondary' onClick={handleCloseModal}>
                   Close
                 </Button>
-                <Button type='submit' variant='primary' onClick={handleClose}>
+                <Button type='submit' variant='primary'>
                   Save Changes
                 </Button>
               </div>
@@ -177,7 +92,7 @@ const ActItem = ({
       <td>
         <div
           style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteAct(_id, actId, registry)}
+          onClick={() => deleteAct(act._id, act.actId, act.registry)}
         >
           x
         </div>

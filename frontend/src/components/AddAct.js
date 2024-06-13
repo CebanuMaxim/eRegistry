@@ -1,36 +1,47 @@
-import { useState, useRef } from 'react'
+import { useContext } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
+import ActSchema from '../validation/ActYupSchema'
+import inputValidation from '../validation/inputValidation'
+import { ActValidationContext } from '../context/Context'
+import { errorStyle } from './Styles'
 
 const AddAct = ({ addAct }) => {
-  const [act, setAct] = useState({
-    actId: '',
-    date: '',
-    firstname: '',
-    lastname: '',
-    idnp: '',
-    actName: '',
-    stateFee: '',
-    notaryFee: '',
-  })
-
-  const ref = useRef(null)
-  const takeFocus = () => {
-    ref.current.focus(null)
-  }
-
-  const handleChange = (e) => {
+  const { act, setAct, errors, setErrors } = useContext(ActValidationContext)
+  const handleChange = async (e) => {
     const { name, value } = e.target
+    inputValidation(name, value, errors, setErrors)
+
     setAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    addAct({ act })
-    takeFocus()
+    if (!Object.values(errors).every((value) => value === '')) {
+      alert(Object.values(errors).join('\n'))
+      return
+    }
+    try {
+      await ActSchema.validate(act, { abortEarly: false })
+        .then((valid) => {
+          console.log('Input is valid:', valid)
+        })
+        .catch((error) => {
+          console.error('Validation error:', error.message)
+        })
+      setErrors({})
+
+      await addAct(act)
+    } catch (validationErrors) {
+      const allErrors = {}
+      validationErrors.inner.forEach((error) => {
+        allErrors[error.path] = error.message
+      })
+      setErrors(allErrors)
+    }
   }
 
   return (
@@ -38,83 +49,59 @@ const AddAct = ({ addAct }) => {
       <Card.Body>
         <Form onSubmit={onSubmit}>
           <Row className='my-3'>
-            <Col>
-              <Form.Control
-                autoFocus
-                placeholder='act ID'
-                value={act.actId}
-                onChange={handleChange}
-                ref={ref}
-                required
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                placeholder='date'
-                value={act.date}
-                onChange={handleChange}
-                required
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                placeholder='firstname'
-                value={act.firstname}
-                onChange={handleChange}
-                required
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                placeholder='lastname'
-                value={act.lastname}
-                onChange={handleChange}
-                required
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                placeholder='idnp'
-                value={act.idnp}
-                onChange={handleChange}
-                required
-              />
-            </Col>
-          </Row>
-          <Row className='my-3'>
-            <Col>
-              <Form.Control
-                as='select'
-                value={act.actName}
-                onChange={handleChange}
-                required
-              >
-                <option value='0'>Select act</option>
-                <option value='procura'>Procura</option>
-                <option value='declaratie'>
-                  Declaratie. Multiple plecari.
-                </option>
-                <option value='legalizarea copiei'>
-                  Declaratie. Regim matrimonial
-                </option>
-              </Form.Control>
-            </Col>
-            <Col>
-              <Form.Control
-                placeholder='state fee'
-                value={act.stateFee}
-                onChange={handleChange}
-                required
-              />
-            </Col>
-            <Col>
-              <Form.Control
-                placeholder='notary fee'
-                value={act.notaryFee}
-                onChange={handleChange}
-                required
-              />
-            </Col>
+            {Object.entries(act).map(([key, value], index) => {
+              if (key === '_id' || key === 'registry' || key === '__v')
+                return null
+              if (key === 'actName') {
+                return (
+                  <Col className='mb-4' key={index} md={3} lg={3} xl={3}>
+                    <Form.Control
+                      as='select'
+                      name={key}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value='0'>Select act</option>
+                      <option value='Procură. Mijloc de transport.'>
+                        Procură. Mijloc de transport.
+                      </option>
+                      <option value='Legalizarea copiei.'>
+                        Legalizarea copiei.
+                      </option>
+                      <option value='legalizarea semnaturii traducatorului'>
+                        Legalizarea semnăturii traducătorului.
+                      </option>
+                      <option value='Declarație. Multiple plecări.'>
+                        Declarație. Multiple plecări.
+                      </option>
+                      <option value='Declarație. Plecare temporară.'>
+                        Declarație. Plecare temporară.
+                      </option>
+                      <option value='Declarație. Multiple plecări.'>
+                        Declarație. Multiple plecări.
+                      </option>
+                      <option value='Procură. Să cumpere/vămuiască auto.'>
+                        Procură. Să cumpere/vămuiască auto.
+                      </option>
+                    </Form.Control>
+                    {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
+                  </Col>
+                )
+              } else {
+                return (
+                  <Col className='mb-4' key={index} md={3} lg={3} xl={3}>
+                    <Form.Control
+                      placeholder={key}
+                      name={key}
+                      value={value}
+                      onChange={handleChange}
+                      required
+                    />
+                    {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
+                  </Col>
+                )
+              }
+            })}
           </Row>
           <Row>
             <Col className='d-grid'>

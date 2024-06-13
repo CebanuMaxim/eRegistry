@@ -1,26 +1,17 @@
 const mongoose = require('mongoose')
 const Joi = require('joi')
-
-const dateRegex = /^(19|20)\d{2}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01])$/
-const dateRegexMessage = (val) =>
-  `${val.value} has to be a valid date in 'YYYY-MM-DD' format`
+const moment = require('moment')
 
 const Act = mongoose.model(
   'Act',
   new mongoose.Schema({
     actId: {
-      type: Number,
+      type: String,
       required: true,
     },
     date: {
       type: String,
       required: true,
-      validate: {
-        validator: function (val) {
-          return dateRegex.test(val)
-        },
-        message: (val) => dateRegexMessage(val),
-      },
     },
     actName: {
       type: String,
@@ -62,10 +53,23 @@ const Act = mongoose.model(
   })
 )
 
+const customDateValidator = (value, helpers) => {
+  const date = moment(value, 'DD.MM.YYYY', true)
+  if (!date.isValid()) {
+    return helpers.error('date.format')
+  }
+  return value
+}
+
 function validateAct(act) {
   const schema = Joi.object({
-    actId: Joi.number().required(),
-    date: Joi.date().required(),
+    actId: Joi.string().pattern(/^\d+$/).required(),
+    date: Joi.string()
+      .custom(customDateValidator, 'custom date validation')
+      .required()
+      .messages({
+        'date.format': '{{#label}} must be a valid date in DD.MM.YYYY format',
+      }),
     actName: Joi.string().required(),
     firstname: Joi.string()
       .pattern(/^[a-zA-Z]+$/)

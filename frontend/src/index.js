@@ -26,7 +26,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin' element={<Admin />} />
-        <Route path='/pdfDocument' element={<MyDocument />} />
+        <Route path='/confirmations/:id' element={<MyDocument />} />
       </Route>
       <Route path='*' element={<h1>Page Not Found</h1>} />
     </Route>

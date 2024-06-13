@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Table } from 'react-bootstrap'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Table, Button } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
 import axios from '../api/axios'
 import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-import { dateFormatToISO, dateFormatToMD } from '../utils/formatDateHandler'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
@@ -16,6 +15,7 @@ const Acts = () => {
   const [toggle, setToggle] = useState(true)
 
   const { id } = useParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function getActs() {
@@ -41,14 +41,11 @@ const Acts = () => {
   }, [])
 
   const addAct = async (act) => {
-    act.date = dateFormatToISO(act.date)
-
     try {
       await axios.post(`/acts/${id}`, act)
-
-      act.date = dateFormatToMD(act.date)
       setActs((prevActs) => [act, ...prevActs])
     } catch (err) {
+      console.log(err)
       toast.error(err.response.data)
     }
   }
@@ -92,12 +89,20 @@ const Acts = () => {
   return (
     <>
       <AddAct addAct={addAct} />
-      <SearchItem
-        search={search}
-        setSearch={setSearch}
-        actKey={actKey}
-        setActKey={setActKey}
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <SearchItem
+          search={search}
+          setSearch={setSearch}
+          actKey={actKey}
+          setActKey={setActKey}
+        />
+        <Button
+          className='btn btn-light my-3'
+          onClick={() => navigate(`/confirmations/${id}`)}
+        >
+          Confirmări
+        </Button>
+      </div>
       <div style={{ height: '500px', overflowY: 'auto' }}>
         <Table striped style={{ overflowY: 'auto' }}>
           <thead>
@@ -121,26 +126,26 @@ const Acts = () => {
           </thead>
           <tbody>
             {acts
-              .filter((act, i) => {
-                switch (actKey) {
-                  case 'date':
-                    return act.date.toString().toLowerCase().includes(search)
-                  case 'firstname':
-                    return act.firstname
-                      .toString()
-                      .toLowerCase()
-                      .includes(search)
-                  case 'lastname':
-                    return act.lastname
-                      .toString()
-                      .toLowerCase()
-                      .includes(search)
-                  case 'idnp':
-                    return act.idnp.toString().toLowerCase().includes(search)
-                  default:
-                    return act.actId.toString().includes(search)
-                }
-              })
+              // .filter((act, i) => {
+              //   switch (actKey) {
+              //     case 'date':
+              //       return act.date.toString().toLowerCase().includes(search)
+              //     case 'firstname':
+              //       return act.firstname
+              //         .toString()
+              //         .toLowerCase()
+              //         .includes(search)
+              //     case 'lastname':
+              //       return act.lastname
+              //         .toString()
+              //         .toLowerCase()
+              //         .includes(search)
+              //     case 'idnp':
+              //       return act.idnp.toString().toLowerCase().includes(search)
+              //     default:
+              //       return act.actId.toString().includes(search)
+              //   }
+              // })
               .map((act, i) => {
                 return (
                   <ActItem

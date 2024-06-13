@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
 import { toast } from 'react-toastify'
-import { dateFormatToISO, dateFormatToMD } from '../utils/formatDateHandler'
 
 const Registries = () => {
   const [registries, setRegistries] = useState([])
-  const navigate = useNavigate()
 
   useEffect(() => {
     async function getRegistries() {
@@ -32,22 +29,15 @@ const Registries = () => {
       }
     }
     getRegistries()
-  }, [navigate])
+  }, [])
 
   const addRegistry = async (registry) => {
-    registry.startDate = dateFormatToISO(registry.startDate)
-
     if (registry.endDate === '') {
       registry.endDate = registry.startDate
-    } else {
-      registry.endDate = dateFormatToISO(registry.endDate)
     }
 
     try {
       const { data } = await axios.post('/registries', registry)
-
-      data.startDate = dateFormatToMD(data.startDate)
-      data.endDate = dateFormatToMD(data.endDate)
 
       setRegistries((prevRegistries) => [data, ...prevRegistries])
     } catch (err) {
@@ -64,7 +54,7 @@ const Registries = () => {
     for (const [key, value] of Object.entries(updatedRegistry)) {
       if (value) registry[key] = value
     }
-    registry.startDate = dateFormatToISO(registry.startDate)
+
     try {
       await axios.put(`/registries/${registry._id}`, registry)
     } catch (err) {

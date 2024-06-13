@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import axios from '../api/axios'
+import { useState } from 'react'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -36,10 +37,11 @@ const Header = () => {
           </Button>
         )}
       </div>
+
       <div>
         <Button
           className='btn btn-light m-3'
-          onClick={() => navigate('/pdfDocument')}
+          onClick={() => navigate('/confirmations')}
         >
           PDF
         </Button>
