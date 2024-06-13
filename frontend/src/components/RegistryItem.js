@@ -37,6 +37,12 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
     setErrors({})
     setShow(false)
   }
+
+  function isValidDateMoment(dateString) {
+    // 'DD.MM.YYYY' specifies the expected date format
+    return moment(dateString, 'DD.MM.YYYY', true).isValid()
+  }
+  
   const checkInput = (name, value, inputName, pattern, message) => {
     if (name === inputName && !pattern.test(value)) {
       if (
@@ -92,11 +98,6 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
       default:
         break
     }
-  }
-
-  function isValidDateMoment(dateString) {
-    // 'DD.MM.YYYY' specifies the expected date format
-    return moment(dateString, 'DD.MM.YYYY', true).isValid()
   }
 
   const handleChange = (e) => {
