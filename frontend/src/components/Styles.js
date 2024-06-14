@@ -7,7 +7,7 @@ export const errorStyle = {
 }
 
 export const searchItemStyle = {
-  width: '100px',
+  width: '110px',
   display: 'flex',
   alignItems: 'center',
 }
@@ -44,6 +44,7 @@ export const styles = StyleSheet.create({
   content: {
     textIndent: 15,
     lineHeight: 1.7,
+    textAlign: 'justify',
   },
   boldText: {
     fontFamily: 'RobotoMedium',

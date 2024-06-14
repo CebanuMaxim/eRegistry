@@ -108,44 +108,45 @@ const Acts = () => {
           <thead>
             <tr className='border-bottom p-3 fw-bolder'>
               <td>
-                Act number
+                Nr. actului
                 <FaSort
                   style={{ cursor: 'pointer', marginLeft: '5px' }}
                   onClick={toggleSort}
                 />
               </td>
-              <td>Date</td>
-              <td>Firstname</td>
-              <td>Lastname</td>
+              <td>Data</td>
+              <td>Denumirea actului</td>
+              <td>Nume</td>
+              <td>Prenume</td>
               <td>IDNP</td>
-              <td>Act name</td>
-              <td>State fee</td>
-              <td>Notary fee</td>
+              <td>Taxa de stat</td>
+              <td>Taxa notarială</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
             {acts
-              // .filter((act, i) => {
-              //   switch (actKey) {
-              //     case 'date':
-              //       return act.date.toString().toLowerCase().includes(search)
-              //     case 'firstname':
-              //       return act.firstname
-              //         .toString()
-              //         .toLowerCase()
-              //         .includes(search)
-              //     case 'lastname':
-              //       return act.lastname
-              //         .toString()
-              //         .toLowerCase()
-              //         .includes(search)
-              //     case 'idnp':
-              //       return act.idnp.toString().toLowerCase().includes(search)
-              //     default:
-              //       return act.actId.toString().includes(search)
-              //   }
-              // })
+              // Search logic
+              .filter((act, i) => {
+                switch (actKey) {
+                  case 'date':
+                    return act.date.toString().toLowerCase().includes(search)
+                  case 'firstname':
+                    return act.firstname
+                      .toString()
+                      .toLowerCase()
+                      .includes(search)
+                  case 'lastname':
+                    return act.lastname
+                      .toString()
+                      .toLowerCase()
+                      .includes(search)
+                  case 'idnp':
+                    return act.idnp.toString().toLowerCase().includes(search)
+                  default:
+                    return act.actId.toString().includes(search)
+                }
+              })
               .map((act, i) => {
                 return (
                   <ActItem

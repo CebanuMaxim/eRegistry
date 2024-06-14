@@ -9,7 +9,7 @@ import {
   PDFViewer,
   Font,
 } from '@react-pdf/renderer'
-import { styles } from './Styles'
+import { styles } from '../components/Styles'
 import RobotoLight from '../fonts/Roboto-Light.ttf'
 import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'

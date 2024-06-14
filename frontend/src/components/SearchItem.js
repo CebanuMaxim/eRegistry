@@ -5,18 +5,18 @@ import { searchItemStyle } from './Styles'
 const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
   return (
     <Row>
-      <span style={searchItemStyle}>Search by: </span>
-      <Form onSubmit={(e) => e.preventDefault()} style={{ width: '300px' }}>
+      <span style={searchItemStyle}>Caută după: </span>
+      <Form onSubmit={(e) => e.preventDefault()} style={{ width: '410px' }}>
         <Row className='my-3'>
           <Col>
             <Form.Select
               value={actKey}
               onChange={(e) => setActKey(e.target.value)}
             >
-              <option value='actId'>Act Nr.</option>
-              <option value='date'>Date</option>
-              <option value='lastname'>Lastname</option>
-              <option value='firstname'>Firstname</option>
+              <option value='actId'>Nr. actului</option>
+              <option value='date'>Dată</option>
+              <option value='lastname'>Numele de familie</option>
+              <option value='firstname'>Prenume</option>
               <option value='idnp'>IDNP</option>
             </Form.Select>
           </Col>
