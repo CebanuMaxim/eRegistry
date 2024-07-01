@@ -27,16 +27,10 @@ Font.register({
   src: RobotoMedium,
 })
 
-const underline = (text) => (
-  <Text style={{ textDecoration: 'underline', textDecorationColor: 'gray' }}>
-    {text}
-  </Text>
-)
 const indentation = (text) => <Text style={{ color: 'white' }}>{text}</Text>
 
 const confirmation = (act, i, typographyId, registryId) => {
   const totalFee = act.stateFee + act.notaryFee
-
   return (
     <Page key={i} size='A5' orientation='landscape' style={styles.page}>
       <View style={styles.header}>
@@ -60,12 +54,17 @@ const confirmation = (act, i, typographyId, registryId) => {
         <View style={styles.indentation} />
         <Text>
           {indentation('_____')}Prin prezenta se confirmă, că la data de{' '}
-          {act.date}, pentru acordarea asistenței notariale cu nr. de
-          înregistrare {act.number} din registrul actelor notariale nr.{' '}
-          {typographyId}/{registryId}, a fost achitată plata pentru asistență
-          notarială {act.notaryFee} lei și taxa de stat {act.stateFee} lei, în
-          total {totalFee} lei, achitați de cet. {act.lastname} {act.firstname},
-          numărul de identificare 0980710426302.
+          <Text style={{ color: 'red' }}>{act.date}</Text>, pentru acordarea
+          asistenței notariale cu nr. de înregistrare{' '}
+          <Text style={styles.underline}>2-{act.actId}</Text> din registrul
+          actelor notariale nr. {typographyId}/{registryId}, a fost achitată
+          plata pentru asistență notarială{' '}
+          <Text style={styles.underline}>{act.notaryFee}</Text> lei și taxa de
+          stat {act.stateFee} lei, în total {totalFee} lei, achitați de cet.{' '}
+          <Text style={styles.underline}>
+            {act.lastname} {act.firstname}
+          </Text>
+          , numărul de identificare 0980710426302.
         </Text>
       </View>
       <View style={styles.footer}>

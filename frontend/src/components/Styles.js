@@ -49,6 +49,10 @@ export const styles = StyleSheet.create({
   boldText: {
     fontFamily: 'RobotoMedium',
   },
+  underline: {
+    textDecoration: 'underline',
+    textDecorationColor: 'gray',
+  },
   footer: {
     fontFamily: 'RobotoMedium',
     marginTop: 70,
