@@ -43,7 +43,7 @@ const Act = mongoose.model(
     notaryFee: {
       type: Number,
       required: true,
-      enum: [0, 30, 350, 395, 399, 400, 445],
+      enum: [0, 30, 59, 350, 395, 399, 400, 445],
     },
     registry: {
       type: mongoose.Schema.Types.ObjectId,
@@ -72,13 +72,13 @@ function validateAct(act) {
       }),
     actName: Joi.string().required(),
     firstname: Joi.string()
-      .pattern(/^[a-zA-Z]+$/)
+      .pattern(/^[\p{L}\p{M}]+$/u)
       .messages({
         'string.pattern.base': 'firstname must contain only letters',
         'any.required': 'firstname is required',
       }),
     lastname: Joi.string()
-      .pattern(/^[a-zA-Z]+$/)
+      .pattern(/^[\p{L}\p{M}]+$/u)
       .messages({
         'string.pattern.base': 'lastname must contain only letters',
         'any.required': 'lastname is required',
@@ -90,7 +90,7 @@ function validateAct(act) {
         'any.required': 'idnp is required',
       }),
     stateFee: Joi.number().required().valid(0, 0.5, 1, 5),
-    notaryFee: Joi.number().required().valid(0, 30, 395, 399, 400, 445),
+    notaryFee: Joi.number().required().valid(0, 30, 59, 395, 399, 400, 445),
     registry: Joi.string(),
     _id: Joi.string(),
     __v: Joi.number(),

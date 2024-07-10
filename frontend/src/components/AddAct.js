@@ -72,17 +72,15 @@ const AddAct = ({ addAct }) => {
                       <option value='legalizarea semnaturii traducatorului'>
                         Legalizarea semnăturii traducătorului.
                       </option>
-                      <option value='Declarație. Multiple plecări.'>
-                        Declarație. Multiple plecări.
-                      </option>
                       <option value='Declarație. Plecare temporară.'>
-                        Declarație. Plecare temporară.
+                        Legalizarea semnăturii pe acord la plecare/multiple
+                        plecări.
                       </option>
                       <option value='Declarație. Multiple plecări.'>
-                        Declarație. Multiple plecări.
+                        Declarație autentificată la plecare/multiple plecări.
                       </option>
                       <option value='Procură. Să cumpere/vămuiască auto.'>
-                        Procură. Să cumpere/vămuiască auto.
+                        Procură cumpărare/vămuire mijloc de transport.
                       </option>
                     </Form.Control>
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}

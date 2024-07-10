@@ -106,14 +106,18 @@ const MyDocument = () => {
     }
 
     getActs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
       <Document>
-        {acts.map((act, i) => {
-          return confirmation(act, i, typographyId, registryId)
-        })}
+        {acts
+          .slice()
+          .reverse()
+          .map((act, i) => {
+            return confirmation(act, i, typographyId, registryId)
+          })}
       </Document>
     </PDFViewer>
   )

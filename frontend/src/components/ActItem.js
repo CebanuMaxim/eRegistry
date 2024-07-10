@@ -24,7 +24,6 @@ const ActItem = ({ act, editAct, deleteAct }) => {
   }
 
   const handleChange = (e) => {
-    console.log('name, value: ', e.target)
     const { name, value } = e.target
     inputValidation(name, value, errors, setErrors)
     setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
