@@ -20,6 +20,7 @@ const AddAct = ({ addAct }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
       return
@@ -27,7 +28,7 @@ const AddAct = ({ addAct }) => {
     try {
       await ActSchema.validate(act, { abortEarly: false })
         .then((valid) => {
-          console.log('Input is valid:', valid)
+          // console.log('Input is valid:', valid)
         })
         .catch((error) => {
           console.error('Validation error:', error.message)

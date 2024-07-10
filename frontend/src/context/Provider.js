@@ -9,10 +9,10 @@ export const ActValidationProvider = ({ children }) => {
   const [act, setAct] = useState({
     actId: '',
     date: '',
+    actName: '',
     lastname: '',
     firstname: '',
     idnp: '',
-    actName: '',
     stateFee: '',
     notaryFee: '',
   })

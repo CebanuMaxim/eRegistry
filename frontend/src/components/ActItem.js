@@ -46,6 +46,7 @@ const ActItem = ({ act, editAct, deleteAct }) => {
     <tr className='border-bottom p-3'>
       {Object.entries(act).map(([key, value], index) => {
         if (['_id', 'registry', '__v'].includes(key)) return null
+
         return <td key={index}>{value}</td>
       })}
 

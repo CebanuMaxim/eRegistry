@@ -52,13 +52,13 @@ export default function actValidation(name, value, errors, setErrors) {
       checkInput(name, /^\d{13}$/, 'idnp must be a 13-digit number')
       break
     case 'stateFee':
-      checkInput(name, /^(0|0.5|1|5)$/, 'Possible values: 0, 0.1, 1, 5')
+      checkInput(name, /^(0|0.5|1|5)$/, 'Possible values: 0, 0.5, 1, 5')
       break
     case 'notaryFee':
       checkInput(
         name,
-        /^(0|395|399|400|445)$/,
-        'Possible values: 0, 395, 399, 400, 445'
+        /^(0|30|395|399|400|445)$/,
+        'Possible values: 0, 30, 395, 399, 400, 445'
       )
       break
     case 'actName':
