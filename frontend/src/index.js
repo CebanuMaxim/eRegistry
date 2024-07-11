@@ -15,6 +15,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import ConfirmationsView from './views/ConfirmationsView'
+import Reports from './views/ReportsView'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +27,11 @@ const router = createBrowserRouter(
       </Route>
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin' element={<Admin />} />
-        <Route path='/confirmations' element={<ConfirmationsView />} />
+        <Route
+          path='/confirmations/:typographyId/:registryId'
+          element={<ConfirmationsView />}
+        />
+        <Route path='/reports' element={<Reports />} />
       </Route>
       <Route path='*' element={<h1>Page Not Found</h1>} />
     </Route>

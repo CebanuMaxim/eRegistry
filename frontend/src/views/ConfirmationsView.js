@@ -1,4 +1,5 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import { FilteredActsContext } from '../context/Context'
 import {
   Page,
@@ -8,7 +9,7 @@ import {
   PDFViewer,
   Font,
 } from '@react-pdf/renderer'
-import { styles } from '../components/Styles'
+import { confirmationStyles as styles } from '../components/Styles'
 import RobotoLight from '../fonts/Roboto-Light.ttf'
 import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
@@ -76,10 +77,9 @@ const confirmation = (act, i, typographyId, registryId) => {
   )
 }
 
-const MyDocument = () => {
+const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
-  const [typographyId] = useState(null)
-  const [registryId] = useState(null)
+  const { typographyId, registryId } = useParams()
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
@@ -95,4 +95,4 @@ const MyDocument = () => {
   )
 }
 
-export default MyDocument
+export default Confirmations

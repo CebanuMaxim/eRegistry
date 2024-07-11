@@ -12,6 +12,8 @@ import { FilteredActsContext } from '../context/Context'
 const Acts = () => {
   const [acts, setActs] = useState([])
   const { filteredActs, setFilteredActs } = useContext(FilteredActsContext)
+  const [typographyId, setTypographyId] = useState('')
+  const [registryId, setRegistryId] = useState('')
   const [search, setSearch] = useState('')
   const [actKey, setActKey] = useState('')
   const [toggle, setToggle] = useState(true)
@@ -23,6 +25,10 @@ const Acts = () => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
+
+        setTypographyId(res.data.typographyId)
+        setRegistryId(res.data.registryId)
+
         if (!res.data.acts) {
           return
         }
@@ -43,7 +49,6 @@ const Acts = () => {
   }, [])
 
   useEffect(() => {
-    // Filter acts based on your criteria
     const filterActs = () => {
       const filtered = acts.filter((act, i) => {
         switch (actKey) {
@@ -63,6 +68,7 @@ const Acts = () => {
     }
 
     filterActs()
+    // eslint-disable-next-line
   }, [acts, search, actKey])
 
   const addAct = async (act) => {
@@ -123,15 +129,15 @@ const Acts = () => {
         />
         <Button
           className='btn btn-light my-3'
-          onClick={() => {
-            console.log(acts)
-          }}
+          onClick={() => navigate(`/reports`)}
         >
-          asdasdad
+          Rapoarte
         </Button>
         <Button
           className='btn btn-light my-3'
-          onClick={() => navigate(`/confirmations`)}
+          onClick={() =>
+            navigate(`/confirmations/${typographyId}/${registryId}`)
+          }
         >
           Confirmări
         </Button>
@@ -158,38 +164,16 @@ const Acts = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredActs
-              // Search logic
-              // .filter((act, i) => {
-              //   switch (actKey) {
-              //     case 'date':
-              //       return act.date.toString().toLowerCase().includes(search)
-              //     case 'firstname':
-              //       return act.firstname
-              //         .toString()
-              //         .toLowerCase()
-              //         .includes(search)
-              //     case 'lastname':
-              //       return act.lastname
-              //         .toString()
-              //         .toLowerCase()
-              //         .includes(search)
-              //     case 'idnp':
-              //       return act.idnp.toString().toLowerCase().includes(search)
-              //     default:
-              //       return act.actId.toString().includes(search)
-              //   }
-              // })
-              .map((act, i) => {
-                return (
-                  <ActItem
-                    key={i}
-                    act={act}
-                    editAct={editAct}
-                    deleteAct={deleteAct}
-                  />
-                )
-              })}
+            {filteredActs.map((act, i) => {
+              return (
+                <ActItem
+                  key={i}
+                  act={act}
+                  editAct={editAct}
+                  deleteAct={deleteAct}
+                />
+              )
+            })}
           </tbody>
         </Table>
       </div>

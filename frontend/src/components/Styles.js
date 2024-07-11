@@ -12,7 +12,7 @@ export const searchItemStyle = {
   alignItems: 'center',
 }
 
-export const styles = StyleSheet.create({
+export const confirmationStyles = StyleSheet.create({
   page: {
     display: 'flex',
     fontFamily: 'RobotoLight',
@@ -56,5 +56,37 @@ export const styles = StyleSheet.create({
   footer: {
     fontFamily: 'RobotoMedium',
     marginTop: 70,
+  },
+})
+
+export const reportStyles = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+    padding: 10,
+    fontFamily: 'RobotoLight',
+    fontSize: 10,
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    flexGrow: 1,
+  },
+  table: {
+    display: 'table',
+    width: '100%',
+    height: 'auto',
+  },
+  tableRow: {
+    flexDirection: 'row',
+    width: '100%',
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+  },
+  tableCol: {
+    width: '90px',
+  },
+  tableCell: {
+    margin: 'auto',
+    padding: 5,
   },
 })
