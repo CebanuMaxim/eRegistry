@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import axios from '../api/axios'
+import { useState, useContext } from 'react'
+import { FilteredActsContext } from '../context/Context'
 import {
   Page,
   Text,
@@ -77,42 +76,15 @@ const confirmation = (act, i, typographyId, registryId) => {
   )
 }
 
-// Create Document Component
 const MyDocument = () => {
-  const [acts, setActs] = useState([])
-  const { id } = useParams()
-  const [typographyId, setTypographyId] = useState(null)
-  const [registryId, setRegistryId] = useState(null)
-
-  useEffect(() => {
-    async function getActs() {
-      try {
-        const res = await axios.get(`/registries/${id}`)
-        setTypographyId(res.data.typographyId)
-        setRegistryId(res.data.registryId)
-        if (!res.data.acts) {
-          return
-        }
-        setActs(
-          res.data.acts
-            .sort(function (a, b) {
-              return a.actId - b.actId
-            })
-            .reverse()
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
-    getActs()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { filteredActs } = useContext(FilteredActsContext)
+  const [typographyId] = useState(null)
+  const [registryId] = useState(null)
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
       <Document>
-        {acts
+        {filteredActs
           .slice()
           .reverse()
           .map((act, i) => {

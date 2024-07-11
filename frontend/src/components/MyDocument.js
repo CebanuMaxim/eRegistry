@@ -109,7 +109,6 @@ const MyDocument = () => {
 
     getActs()
   }, [])
-  console.log(typographyId, registryId)
 
   return (
     <PDFViewer style={{ width: window.innerWidth, height: window.innerHeight }}>

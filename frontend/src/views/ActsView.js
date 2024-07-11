@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Table, Button } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
@@ -7,9 +7,11 @@ import axios from '../api/axios'
 import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+import { FilteredActsContext } from '../context/Context'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
+  const { filteredActs, setFilteredActs } = useContext(FilteredActsContext)
   const [search, setSearch] = useState('')
   const [actKey, setActKey] = useState('')
   const [toggle, setToggle] = useState(true)
@@ -39,6 +41,29 @@ const Acts = () => {
     getActs()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    // Filter acts based on your criteria
+    const filterActs = () => {
+      const filtered = acts.filter((act, i) => {
+        switch (actKey) {
+          case 'date':
+            return act.date.toString().toLowerCase().includes(search)
+          case 'firstname':
+            return act.firstname.toString().toLowerCase().includes(search)
+          case 'lastname':
+            return act.lastname.toString().toLowerCase().includes(search)
+          case 'idnp':
+            return act.idnp.toString().toLowerCase().includes(search)
+          default:
+            return act.actId.toString().includes(search)
+        }
+      })
+      setFilteredActs(filtered)
+    }
+
+    filterActs()
+  }, [acts, search, actKey])
 
   const addAct = async (act) => {
     try {
@@ -98,7 +123,15 @@ const Acts = () => {
         />
         <Button
           className='btn btn-light my-3'
-          onClick={() => navigate(`/confirmations/${id}`)}
+          onClick={() => {
+            console.log(acts)
+          }}
+        >
+          asdasdad
+        </Button>
+        <Button
+          className='btn btn-light my-3'
+          onClick={() => navigate(`/confirmations`)}
         >
           Confirmări
         </Button>
@@ -125,28 +158,28 @@ const Acts = () => {
             </tr>
           </thead>
           <tbody>
-            {acts
+            {filteredActs
               // Search logic
-              .filter((act, i) => {
-                switch (actKey) {
-                  case 'date':
-                    return act.date.toString().toLowerCase().includes(search)
-                  case 'firstname':
-                    return act.firstname
-                      .toString()
-                      .toLowerCase()
-                      .includes(search)
-                  case 'lastname':
-                    return act.lastname
-                      .toString()
-                      .toLowerCase()
-                      .includes(search)
-                  case 'idnp':
-                    return act.idnp.toString().toLowerCase().includes(search)
-                  default:
-                    return act.actId.toString().includes(search)
-                }
-              })
+              // .filter((act, i) => {
+              //   switch (actKey) {
+              //     case 'date':
+              //       return act.date.toString().toLowerCase().includes(search)
+              //     case 'firstname':
+              //       return act.firstname
+              //         .toString()
+              //         .toLowerCase()
+              //         .includes(search)
+              //     case 'lastname':
+              //       return act.lastname
+              //         .toString()
+              //         .toLowerCase()
+              //         .includes(search)
+              //     case 'idnp':
+              //       return act.idnp.toString().toLowerCase().includes(search)
+              //     default:
+              //       return act.actId.toString().includes(search)
+              //   }
+              // })
               .map((act, i) => {
                 return (
                   <ActItem

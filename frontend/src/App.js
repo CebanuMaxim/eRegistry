@@ -6,23 +6,26 @@ import 'react-toastify/dist/ReactToastify.css'
 import {
   RegistryValidationProvider,
   ActValidationProvider,
+  FilteredActsProvider,
 } from './context/Provider'
 
 const App = () => {
   const loginView = useLocation().pathname === '/'
 
   return (
-    <RegistryValidationProvider>
-      <ActValidationProvider>
-        <div style={{ height: '100vh' }}>
-          <ToastContainer autoClose={3000} />
-          <Container fluid='lg'>
-            {!loginView && <Header />}
-            <Outlet />
-          </Container>
-        </div>
-      </ActValidationProvider>
-    </RegistryValidationProvider>
+    <FilteredActsProvider>
+      <RegistryValidationProvider>
+        <ActValidationProvider>
+          <div style={{ height: '100vh' }}>
+            <ToastContainer autoClose={3000} />
+            <Container fluid='lg'>
+              {!loginView && <Header />}
+              <Outlet />
+            </Container>
+          </div>
+        </ActValidationProvider>
+      </RegistryValidationProvider>
+    </FilteredActsProvider>
   )
 }
 
