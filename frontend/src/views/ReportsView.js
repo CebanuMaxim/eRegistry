@@ -26,58 +26,42 @@ Font.register({
   src: RobotoMedium,
 })
 
-// Data to be displayed in the table
-const tableData = [
-  {
-    data: 1,
-    actions: 441,
-    authentications: 18,
-    legalisations: 0,
-    others: 0,
-    stateFee: 90,
-    notaryFee: 7360,
-  },
-  {
-    data: 1,
-    actions: 441,
-    authentications: 18,
-    legalisations: 0,
-    others: 0,
-    stateFee: 90,
-    notaryFee: 7360,
-  },
-  {
-    data: 1,
-    actions: 441,
-    authentications: 18,
-    legalisations: 0,
-    others: 0,
-    stateFee: 90,
-    notaryFee: 7360,
-  },
-  {
-    data: 1,
-    actions: 441,
-    authentications: 18,
-    legalisations: 0,
-    others: 0,
-    stateFee: 90,
-    notaryFee: 7360,
-  },
-  {
-    data: 1,
-    actions: 441,
-    authentications: 18,
-    legalisations: 0,
-    others: 0,
-    stateFee: 90,
-    notaryFee: 7360,
-  },
-  // Add more rows as needed
-]
-
 const Reports = () => {
   const { filteredActs } = useContext(FilteredActsContext)
+
+  console.log(
+    filteredActs.reduce((acc, val) => {
+      return 'val.notaryFee'
+    })
+  )
+
+  // const groupedByDate = filteredActs.reduce((acc, obj) => {
+  //   const date = obj.date
+  //   if (!acc[date]) {
+  //     acc[date] = []
+  //   }
+  //   acc[date].push(obj)
+  //   return acc
+  // }, {})
+
+  // for (const date in groupedByDate) {
+  //   groupedByDate[date].forEach((obj) => {
+  //     console.log(`Date: ${obj.date}`)
+  //   })
+  // }
+
+  const tableData = [
+    {
+      data: 1,
+      actions: 441,
+      authentications: 18,
+      legalisations: 0,
+      others: 0,
+      stateFee: 90,
+      notaryFee: 7360,
+    },
+  ]
+
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
       <Document>
