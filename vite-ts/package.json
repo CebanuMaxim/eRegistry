@@ -4,9 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "client": "vite",
-    "server": "nodemon ../eRegistry/backend/server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "vite": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
