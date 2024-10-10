@@ -94,7 +94,7 @@ const editAct = async (req, res) => {
 }
 
 // @desc      Delete last act from registry
-// @route     DELETE /api/acts/:actId
+// @route     DELETE /api/acts/:registryId/:actId
 const deleteAct = async (req, res) => {
   await Registry.updateOne(
     { _id: req.params.registryId },

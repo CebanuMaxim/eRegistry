@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 import inputValidation from '../validation/inputValidation'
 import { errorStyle } from './Styles'
+import { Act, ActItemProps } from '../types'
 
-const ActItem = ({ act, editAct, deleteAct }) => {
+const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
   const [show, setShow] = useState(false)
-  const [newAct, setNewAct] = useState({})
-  const [errors, setErrors] = useState({})
+  const [newAct, setNewAct] = useState<Act>({ ...act })
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const handleOpenModal = () => {
     setNewAct({ ...act })
@@ -18,18 +19,18 @@ const ActItem = ({ act, editAct, deleteAct }) => {
       alert(Object.values(errors).join('\n'))
       return
     }
-    setNewAct({})
+    setNewAct(act)
     setErrors({})
     setShow(false)
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     inputValidation(name, value, errors, setErrors)
     setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
@@ -37,7 +38,7 @@ const ActItem = ({ act, editAct, deleteAct }) => {
     }
 
     await editAct(newAct)
-      .then(handleCloseModal())
+      .then(handleCloseModal)
       .catch((error) => console.log('error.response: ', error.response))
   }
 
@@ -70,7 +71,11 @@ const ActItem = ({ act, editAct, deleteAct }) => {
                   >
                     <Form.Control
                       name={key}
-                      value={newAct[key]}
+                      value={
+                        typeof newAct[key] === 'boolean'
+                          ? String(newAct[key])
+                          : newAct[key] || ''
+                      }
                       onChange={handleChange}
                     />
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
@@ -92,7 +97,7 @@ const ActItem = ({ act, editAct, deleteAct }) => {
       <td>
         <div
           style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteAct(act._id, act.actId, act.registry)}
+          onClick={() => deleteAct(act.actNumber, act._id, act.registry)}
         >
           x
         </div>

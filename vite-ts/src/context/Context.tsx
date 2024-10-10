@@ -1,7 +1,11 @@
-import React from 'react'
+import { createContext } from 'react'
+import { FilteredActsContextType } from '../types'
 
-export const ActValidationContext = React.createContext()
+export const ActValidationContext = createContext()
 
-export const RegistryValidationContext = React.createContext()
+export const RegistryValidationContext = createContext()
 
-export const FilteredActsContext = React.createContext()
+export const FilteredActsContext = createContext<FilteredActsContextType>({
+  filteredActs: [],
+  setFilteredActs: () => {},
+})

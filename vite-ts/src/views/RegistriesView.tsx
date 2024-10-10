@@ -6,12 +6,12 @@ import AddRegistry from '../components/AddRegistry'
 // import { toast } from 'react-toastify'
 
 interface Registry {
-  [key: string]: string | number
   _id: string
   typographyId: number
   registryId: number
   startDate: string
   endDate: string
+  [key: string]: string | number
 }
 
 const Registries = () => {

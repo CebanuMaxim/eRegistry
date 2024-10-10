@@ -8,9 +8,10 @@ import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 import { FilteredActsContext } from '../context/Context'
+import { Act } from '../types'
 
 const Acts = () => {
-  const [acts, setActs] = useState([])
+  const [acts, setActs] = useState<Act[]>([])
   const { filteredActs, setFilteredActs } = useContext(FilteredActsContext)
   const [typographyId, setTypographyId] = useState('')
   const [registryId, setRegistryId] = useState('')
@@ -34,8 +35,8 @@ const Acts = () => {
         }
         setActs(
           res.data.acts
-            .sort(function (a, b) {
-              return a.actId - b.actId
+            .sort(function (a: Act, b: Act) {
+              return Number(a.actId) - Number(b.actId)
             })
             .reverse()
         )
@@ -50,7 +51,7 @@ const Acts = () => {
 
   useEffect(() => {
     const filterActs = () => {
-      const filtered = acts.filter((act) => {
+      const filtered = acts.filter((act: Act) => {
         switch (actKey) {
           case 'date':
             return act.date.toString().toLowerCase().includes(search)
@@ -61,7 +62,7 @@ const Acts = () => {
           case 'idnp':
             return act.idnp.toString().toLowerCase().includes(search)
           default:
-            return act.actId.toString().includes(search)
+            return act.actNumber.toString().includes(search)
         }
       })
       setFilteredActs(filtered)
@@ -71,18 +72,27 @@ const Acts = () => {
     // eslint-disable-next-line
   }, [acts, search, actKey])
 
-  const addAct = async (act) => {
+  const addAct = async (act: Act) => {
     try {
       await axios.post(`/acts/${id}`, act)
       setActs((prevActs) => [act, ...prevActs])
     } catch (err) {
-      console.log(err)
-      toast.error(err.response.data)
+      if (typeof err === 'object' && err !== null && 'response' in err) {
+        const axiosError = err as { response: { data: string } }
+        toast.error(axiosError.response.data)
+      } else {
+        console.error(err)
+      }
     }
   }
 
-  const editAct = async (updatedAct) => {
+  const editAct = async (updatedAct: Act) => {
     const act = acts.find((act) => act._id === updatedAct._id)
+
+    if (!act) {
+      console.error('Act not found')
+      return
+    }
 
     for (const [key, value] of Object.entries(updatedAct)) {
       if (value) act[key] = value
@@ -95,13 +105,17 @@ const Acts = () => {
     }
   }
 
-  const deleteAct = async (actId, actNumber, registryId) => {
+  const deleteAct = async (
+    _id: string,
+    actNumber: string,
+    registryId: string
+  ) => {
     const checkActNumber = prompt('Please enter act number:')
 
-    if (checkActNumber === actNumber.toString()) {
-      setActs(acts.filter((item) => item._id !== actId))
+    if (checkActNumber === actNumber) {
+      setActs(acts.filter((item) => item._id !== _id))
       try {
-        await axios.delete(`/acts/${registryId}/${actId}`)
+        await axios.delete(`/acts/${registryId}/${_id}`)
       } catch (err) {
         console.error(err)
       }
@@ -112,7 +126,11 @@ const Acts = () => {
 
   const toggleSort = () => {
     setActs(
-      acts.sort((a, b) => (toggle ? a.actId - b.actId : b.actId - a.actId))
+      acts.sort((a, b) =>
+        toggle
+          ? Number(a.actId) - Number(b.actId)
+          : Number(b.actId) - Number(a.actId)
+      )
     )
     setToggle(!toggle)
   }

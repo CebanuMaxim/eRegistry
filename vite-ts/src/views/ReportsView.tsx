@@ -29,11 +29,7 @@ Font.register({
 const Reports = () => {
   const { filteredActs } = useContext(FilteredActsContext)
 
-  console.log(
-    filteredActs.reduce((acc, val) => {
-      return 'val.notaryFee'
-    })
-  )
+  console.log(filteredActs)
 
   // const groupedByDate = filteredActs.reduce((acc, obj) => {
   //   const date = obj.date
