@@ -3,16 +3,12 @@ import axios from '../api/axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
-// import { toast } from 'react-toastify'
-
-interface Registry {
-  _id: string
-  typographyId: number
-  registryId: number
-  startDate: string
-  endDate: string
-  [key: string]: string | number
-}
+import { Registry } from '../types'
+import {
+  addRegistryService,
+  editRegistryService,
+  deleteRegistryService,
+} from '../services/registryServices'
 
 const Registries = () => {
   const [registries, setRegistries] = useState<Registry[]>([])
@@ -29,7 +25,7 @@ const Registries = () => {
         setRegistries(
           response.data
             .sort(function (a: Registry, b: Registry) {
-              return a.registryId - b.registryId
+              return Number(a.registryId) - Number(b.registryId)
             })
             .reverse()
         )
@@ -40,53 +36,12 @@ const Registries = () => {
     getRegistries()
   }, [])
 
-  const addRegistry = async (registry: Registry) => {
-    if (registry.endDate === '') {
-      registry.endDate = registry.startDate
-    }
-
-    try {
-      const { data } = await axios.post('/registries', registry)
-
-      setRegistries((prevRegistries) => [data, ...prevRegistries])
-    } catch (err) {
-      console.error(err)
-      // toast.error(err.response.data)
-    }
-  }
-
-  const editRegistry = async (updatedRegistry: Registry) => {
-    const registry = registries.find(
-      (registry) => registry._id === updatedRegistry._id
-    )
-    if (!registry) return
-
-    for (const [key, value] of Object.entries(updatedRegistry)) {
-      if (value) registry[key] = value
-    }
-
-    try {
-      await axios.put(`/registries/${registry._id}`, registry)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  const deleteRegistry = (_id: string, registryId: number) => {
-    const check = prompt('Enter registry id:')
-    if (Number(check) === registryId) {
-      try {
-        axios.delete(`/registries/${_id}`)
-      } catch (err) {
-        console.error(err)
-      }
-      setRegistries((prevRegistries) =>
-        prevRegistries.filter((item) => item._id !== _id)
-      )
-    } else {
-      alert('Wrong id')
-    }
-  }
+  const addRegistry = (registry: Registry) =>
+    addRegistryService(registry, setRegistries)
+  const editRegistry = (updatedRegistry: Registry) =>
+    editRegistryService(updatedRegistry, registries)
+  const deleteRegistry = (_id: string, registryId: string) =>
+    deleteRegistryService(_id, registryId, setRegistries)
 
   return (
     <>

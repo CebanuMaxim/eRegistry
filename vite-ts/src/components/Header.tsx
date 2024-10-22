@@ -4,8 +4,10 @@ import axios from '../api/axios'
 
 const Header = () => {
   const navigate = useNavigate()
-  const id = JSON.parse(localStorage.getItem('userInfo')).id
-  const isAdmin = JSON.parse(localStorage.getItem('userInfo')).isAdmin
+  const userInfo = localStorage.getItem('userInfo')
+  const parsedUserInfo = userInfo ? JSON.parse(userInfo) : null
+  const id = parsedUserInfo?.id
+  const isAdmin = parsedUserInfo?.isAdmin
 
   const logout = async () => {
     try {

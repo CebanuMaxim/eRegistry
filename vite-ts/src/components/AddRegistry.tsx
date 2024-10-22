@@ -13,6 +13,7 @@ const AddRegistry = ({ addRegistry }) => {
   const { registry, setRegistry, errors, setErrors } = useContext(
     RegistryValidationContext
   )
+  console.log(registry)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -27,6 +28,7 @@ const AddRegistry = ({ addRegistry }) => {
       return
     }
     try {
+      console.log(registry)
       await RegistrySchema.validate(registry, { abortEarly: false })
         .then((valid) => {
           console.log('Input is valid:', valid)
@@ -51,8 +53,8 @@ const AddRegistry = ({ addRegistry }) => {
         <Form onSubmit={onSubmit}>
           <Row className='my-3'>
             {Object.keys(registry).map((key, index) => {
-              if ([key === '_id', 'typography', '__v'].includes(key))
-                return null
+              if (['_id', 'typography', '__v'].includes(key)) return null
+
               return (
                 <Col key={index}>
                   <Form.Control

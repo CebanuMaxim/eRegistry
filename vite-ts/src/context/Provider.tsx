@@ -4,8 +4,11 @@ import {
   RegistryValidationContext,
   FilteredActsContext,
 } from './Context'
+import { Act, Registry, ProviderProps } from '../types'
 
-export const ActValidationProvider = ({ children }) => {
+export const ActValidationProvider: React.FC<ProviderProps> = ({
+  children,
+}) => {
   const [act, setAct] = useState({
     actId: '',
     date: '',
@@ -35,8 +38,8 @@ export const ActValidationProvider = ({ children }) => {
   )
 }
 
-export const FilteredActsProvider = ({ children }) => {
-  const [filteredActs, setFilteredActs] = useState([])
+export const FilteredActsProvider: React.FC<ProviderProps> = ({ children }) => {
+  const [filteredActs, setFilteredActs] = useState<Act[]>([])
 
   return (
     <FilteredActsContext.Provider value={{ filteredActs, setFilteredActs }}>
@@ -45,8 +48,10 @@ export const FilteredActsProvider = ({ children }) => {
   )
 }
 
-export const RegistryValidationProvider = ({ children }) => {
-  const [registry, setRegistry] = useState({
+export const RegistryValidationProvider: React.FC<ProviderProps> = ({
+  children,
+}) => {
+  const [registry, setRegistry] = useState<Registry>({
     typographyId: '',
     registryId: '',
     startDate: '',
