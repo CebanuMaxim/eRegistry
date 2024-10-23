@@ -1,13 +1,17 @@
 import * as yup from 'yup'
 import moment from 'moment'
+import { CreateErrorOptions, TestContext } from 'yup'
 
-const customDateValidator = (value, context) => {
+const customDateValidator = (
+  value: string | undefined,
+  context: TestContext
+) => {
   const date = moment(value, 'DD.MM.YYYY', true)
   if (!date.isValid()) {
     return context.createError({
       message: 'This must be a valid date in DD.MM.YYYY format',
       path: context.path,
-    })
+    } as CreateErrorOptions)
   }
   return true
 }

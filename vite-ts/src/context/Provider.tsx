@@ -58,12 +58,7 @@ export const RegistryValidationProvider: React.FC<ProviderProps> = ({
     endDate: '',
   })
 
-  const [errors, setErrors] = useState({
-    typographyId: '',
-    registryId: '',
-    startDate: '',
-    endDate: '',
-  })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   return (
     <RegistryValidationContext.Provider
       value={{ registry, setRegistry, errors, setErrors }}

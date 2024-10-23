@@ -1,5 +1,7 @@
 // import { Dispatch, SetStateAction } from 'react'
 
+import { Dispatch, SetStateAction } from 'react'
+
 export interface Registry {
   typographyId: string
   registryId: string
@@ -7,13 +9,13 @@ export interface Registry {
   [key: string]: string | number | boolean | undefined
 }
 
-// export interface FilteredActsContextType {
-//   filteredActs: Act[]
-//   setFilteredActs: Dispatch<SetStateAction<Act[]>>
-// }
+export interface RegistryValidationContextType {
+  registry: Registry
+  setRegistry: Dispatch<SetStateAction<Registry>>
+  errors: Record<string, string>
+  setErrors: Dispatch<SetStateAction<Record<string, string>>>
+}
 
-// export interface ActItemProps {
-//   act: Act
-//   editAct: (act: Act) => Promise<void>
-//   deleteAct: (_id: string, actNumber: string, registryId: string) => void
-// }
+export interface AddRegistryProps {
+  addRegistry: (registry: Registry) => Promise<void>
+}

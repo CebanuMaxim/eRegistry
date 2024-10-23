@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { ChangeEvent, FormEvent, useContext } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
@@ -7,28 +7,32 @@ import Button from 'react-bootstrap/Button'
 import RegistrySchema from '../validation/RegistryYupSchema'
 import { RegistryValidationContext } from '../context/Context'
 import inputValidation from '../validation/inputValidation'
+import { AddRegistryProps, Registry } from '../types'
 import { errorStyle } from './Styles'
 
-const AddRegistry = ({ addRegistry }) => {
+const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
   const { registry, setRegistry, errors, setErrors } = useContext(
     RegistryValidationContext
   )
-  console.log(registry)
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     inputValidation(name, value, errors, setErrors)
-    setRegistry((prevRegistry) => ({ ...prevRegistry, [name]: value }))
+    setRegistry((prevRegistry: Registry) => ({
+      ...prevRegistry,
+      [name]: value,
+    }))
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
       return
     }
     try {
-      console.log(registry)
+      console.log('onSubmit: ', registry)
+
       await RegistrySchema.validate(registry, { abortEarly: false })
         .then((valid) => {
           console.log('Input is valid:', valid)
@@ -36,14 +40,21 @@ const AddRegistry = ({ addRegistry }) => {
         .catch((error) => {
           console.error('Validation error:', error.message)
         })
-      setErrors({})
-      await addRegistry(registry)
-    } catch (validationErrors) {
-      const allErrors = {}
-      validationErrors.inner.forEach((error) => {
-        allErrors[error.path] = error.message
+      setErrors({
+        typographyId: '',
+        registryId: '',
+        startDate: '',
+        endDate: '',
       })
-      setErrors(allErrors)
+      await addRegistry(registry)
+    } catch (err) {
+      const error = err as Error
+      console.error(error.message)
+      // const allErrors: Record<string, string> = {}
+      // err.inner.forEach((error) => {
+      //   allErrors[error.path] = error.message
+      // })
+      // setErrors(allErrors)
     }
   }
 

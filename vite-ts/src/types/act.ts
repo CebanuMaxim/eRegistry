@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 
 export interface Act {
   [key: string]: string | number | boolean | undefined
-  actNumber: string
+  actId: string
   date: string
   actName: string
   firstname: string

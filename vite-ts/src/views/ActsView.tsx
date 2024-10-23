@@ -6,16 +6,20 @@ import AddAct from '../components/AddAct'
 import axios from '../api/axios'
 import SearchItem from '../components/SearchItem'
 import { FaSort } from 'react-icons/fa'
-import { toast } from 'react-toastify'
 import { FilteredActsContext } from '../context/Context'
 import { Act } from '../types'
+import {
+  addActService,
+  deleteActService,
+  editActService,
+} from '../services/actServices'
 
 const Acts = () => {
   const [acts, setActs] = useState<Act[]>([])
   const { filteredActs, setFilteredActs } = useContext(FilteredActsContext)
   const [typographyId, setTypographyId] = useState('')
   const [registryId, setRegistryId] = useState('')
-  const [search, setSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [actKey, setActKey] = useState('')
   const [toggle, setToggle] = useState(true)
 
@@ -40,6 +44,8 @@ const Acts = () => {
             })
             .reverse()
         )
+        console.log(res.data.acts)
+        console.log(acts)
       } catch (err) {
         console.error(err)
       }
@@ -52,17 +58,24 @@ const Acts = () => {
   useEffect(() => {
     const filterActs = () => {
       const filtered = acts.filter((act: Act) => {
+        const compareBy = (property: string, searchTerm: string) => {
+          return property
+            .toString()
+            .toLocaleLowerCase()
+            .includes(searchTerm.toLocaleLowerCase())
+        }
+
         switch (actKey) {
           case 'date':
-            return act.date.toString().toLowerCase().includes(search)
+            return compareBy(act.date, searchTerm)
           case 'firstname':
-            return act.firstname.toString().toLowerCase().includes(search)
+            return compareBy(act.firstname, searchTerm)
           case 'lastname':
-            return act.lastname.toString().toLowerCase().includes(search)
+            return compareBy(act.lastname, searchTerm)
           case 'idnp':
-            return act.idnp.toString().toLowerCase().includes(search)
+            return compareBy(act.idnp, searchTerm)
           default:
-            return act.actNumber.toString().includes(search)
+            return compareBy(act.actId, searchTerm)
         }
       })
       setFilteredActs(filtered)
@@ -70,63 +83,19 @@ const Acts = () => {
 
     filterActs()
     // eslint-disable-next-line
-  }, [acts, search, actKey])
+  }, [acts, searchTerm, actKey])
 
-  const addAct = async (act: Act) => {
-    try {
-      await axios.post(`/acts/${id}`, act)
-      setActs((prevActs) => [act, ...prevActs])
-    } catch (err) {
-      if (typeof err === 'object' && err !== null && 'response' in err) {
-        const axiosError = err as { response: { data: string } }
-        toast.error(axiosError.response.data)
-      } else {
-        console.error(err)
-      }
-    }
-  }
-
-  const editAct = async (updatedAct: Act) => {
-    const act = acts.find((act) => act._id === updatedAct._id)
-
-    if (!act) {
-      console.error('Act not found')
-      return
-    }
-
-    for (const [key, value] of Object.entries(updatedAct)) {
-      if (value) act[key] = value
-    }
-
-    try {
-      await axios.put(`/acts/${act._id}`, act)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
+  const addAct = (act: Act, id: string) => addActService(act, setActs, id)
+  const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
   const deleteAct = async (
     _id: string,
     actNumber: string,
     registryId: string
-  ) => {
-    const checkActNumber = prompt('Please enter act number:')
-
-    if (checkActNumber === actNumber) {
-      setActs(acts.filter((item) => item._id !== _id))
-      try {
-        await axios.delete(`/acts/${registryId}/${_id}`)
-      } catch (err) {
-        console.error(err)
-      }
-    } else {
-      alert('Wrong id')
-    }
-  }
+  ) => deleteActService(_id, actNumber, registryId, acts, setActs)
 
   const toggleSort = () => {
     setActs(
-      acts.sort((a, b) =>
+      [...acts].sort((a, b) =>
         toggle
           ? Number(a.actId) - Number(b.actId)
           : Number(b.actId) - Number(a.actId)
@@ -140,8 +109,8 @@ const Acts = () => {
       <AddAct addAct={addAct} />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <SearchItem
-          search={search}
-          setSearch={setSearch}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           actKey={actKey}
           setActKey={setActKey}
         />
@@ -182,10 +151,10 @@ const Acts = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredActs.map((act, i) => {
+            {filteredActs.map((act) => {
               return (
                 <ActItem
-                  key={i}
+                  key={act.actId}
                   act={act}
                   editAct={editAct}
                   deleteAct={deleteAct}

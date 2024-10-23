@@ -59,6 +59,7 @@ export const RegistryValidationProvider = ({ children }) => {
     startDate: '',
     endDate: '',
   })
+
   return (
     <RegistryValidationContext.Provider
       value={{ registry, setRegistry, errors, setErrors }}
