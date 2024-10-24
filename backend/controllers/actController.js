@@ -12,6 +12,28 @@ const getAllActs = async (req, res) => {
   res.status(200).send(foundActs)
 }
 
+// @desc      Get acts by date range
+//@route      GET /api/acts
+const getActsByDateRange = async (req, res) => {
+  const { startDate, endDate } = req.query
+  if (!startDate || !endDate) {
+    return res.status(400).send('Start date and end date are required')
+  }
+
+  try {
+    const acts = await Act.find({
+      date: {
+        $gte: startDate,
+        $lte: endDate,
+      },
+    })
+    res.json(acts)
+  } catch (error) {
+    console.error('Error fetching acts by date range:', error)
+    res.status(500).send('Server error')
+  }
+}
+
 // @desc      Fetch an act
 // @route     GET /api/acts/:actId
 const getAct = async (req, res) => {
@@ -72,7 +94,7 @@ const editAct = async (req, res) => {
 }
 
 // @desc      Delete last act from registry
-// @route     DELETE /api/acts/:actId
+// @route     DELETE /api/acts/:registryId/:actId
 const deleteAct = async (req, res) => {
   await Registry.updateOne(
     { _id: req.params.registryId },
@@ -86,4 +108,11 @@ const deleteAct = async (req, res) => {
   res.send({ success: true })
 }
 
-module.exports = { getAllActs, getAct, createAct, editAct, deleteAct }
+module.exports = {
+  getAllActs,
+  getAct,
+  getActsByDateRange,
+  createAct,
+  editAct,
+  deleteAct,
+}

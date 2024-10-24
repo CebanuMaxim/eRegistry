@@ -24,7 +24,6 @@ const ActItem = ({ act, editAct, deleteAct }) => {
   }
 
   const handleChange = (e) => {
-    console.log('name, value: ', e.target)
     const { name, value } = e.target
     inputValidation(name, value, errors, setErrors)
     setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
@@ -46,6 +45,7 @@ const ActItem = ({ act, editAct, deleteAct }) => {
     <tr className='border-bottom p-3'>
       {Object.entries(act).map(([key, value], index) => {
         if (['_id', 'registry', '__v'].includes(key)) return null
+
         return <td key={index}>{value}</td>
       })}
 

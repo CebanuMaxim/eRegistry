@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from '../api/axios'
+import { FilteredActsContext } from '../context/Context'
 import {
   Page,
   Text,
@@ -9,7 +9,7 @@ import {
   PDFViewer,
   Font,
 } from '@react-pdf/renderer'
-import { styles } from '../components/Styles'
+import { confirmationStyles as styles } from '../components/Styles'
 import RobotoLight from '../fonts/Roboto-Light.ttf'
 import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
@@ -27,16 +27,10 @@ Font.register({
   src: RobotoMedium,
 })
 
-const underline = (text) => (
-  <Text style={{ textDecoration: 'underline', textDecorationColor: 'gray' }}>
-    {text}
-  </Text>
-)
 const indentation = (text) => <Text style={{ color: 'white' }}>{text}</Text>
 
 const confirmation = (act, i, typographyId, registryId) => {
   const totalFee = act.stateFee + act.notaryFee
-
   return (
     <Page key={i} size='A5' orientation='landscape' style={styles.page}>
       <View style={styles.header}>
@@ -60,12 +54,17 @@ const confirmation = (act, i, typographyId, registryId) => {
         <View style={styles.indentation} />
         <Text>
           {indentation('_____')}Prin prezenta se confirmă, că la data de{' '}
-          {act.date}, pentru acordarea asistenței notariale cu nr. de
-          înregistrare {act.number} din registrul actelor notariale nr.{' '}
-          {typographyId}/{registryId}, a fost achitată plata pentru asistență
-          notarială {act.notaryFee} lei și taxa de stat {act.stateFee} lei, în
-          total {totalFee} lei, achitați de cet. {act.lastname} {act.firstname},
-          numărul de identificare 0980710426302.
+          <Text style={{ color: 'red' }}>{act.date}</Text>, pentru acordarea
+          asistenței notariale cu nr. de înregistrare{' '}
+          <Text style={styles.underline}>2-{act.actId}</Text> din registrul
+          actelor notariale nr. {typographyId}/{registryId}, a fost achitată
+          plata pentru asistență notarială{' '}
+          <Text style={styles.underline}>{act.notaryFee}</Text> lei și taxa de
+          stat {act.stateFee} lei, în total {totalFee} lei, achitați de cet.{' '}
+          <Text style={styles.underline}>
+            {act.lastname} {act.firstname}
+          </Text>
+          , numărul de identificare 0980710426302.
         </Text>
       </View>
       <View style={styles.footer}>
@@ -78,46 +77,22 @@ const confirmation = (act, i, typographyId, registryId) => {
   )
 }
 
-// Create Document Component
-const MyDocument = () => {
-  const [acts, setActs] = useState([])
-  const { id } = useParams()
-  const [typographyId, setTypographyId] = useState(null)
-  const [registryId, setRegistryId] = useState(null)
-
-  useEffect(() => {
-    async function getActs() {
-      try {
-        const res = await axios.get(`/registries/${id}`)
-        setTypographyId(res.data.typographyId)
-        setRegistryId(res.data.registryId)
-        if (!res.data.acts) {
-          return
-        }
-        setActs(
-          res.data.acts
-            .sort(function (a, b) {
-              return a.actId - b.actId
-            })
-            .reverse()
-        )
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
-    getActs()
-  }, [])
+const Confirmations = () => {
+  const { filteredActs } = useContext(FilteredActsContext)
+  const { typographyId, registryId } = useParams()
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
       <Document>
-        {acts.map((act, i) => {
-          return confirmation(act, i, typographyId, registryId)
-        })}
+        {filteredActs
+          .slice()
+          .reverse()
+          .map((act, i) => {
+            return confirmation(act, i, typographyId, registryId)
+          })}
       </Document>
     </PDFViewer>
   )
 }
 
-export default MyDocument
+export default Confirmations

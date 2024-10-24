@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
-    "client": "npm start --prefix frontend",
+    "client": "npm run vite --prefix vite-ts",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
@@ -33,6 +33,8 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "dotenv": "^16.3.2",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.2"
   }
 }
