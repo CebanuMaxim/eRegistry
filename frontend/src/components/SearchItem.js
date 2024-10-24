@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import { searchItemStyle } from './Styles'
 
-const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
+const SearchItem = ({ searchTerm, setSearchTerm, actKey, setActKey }) => {
   return (
     <Row>
       <span style={searchItemStyle}>Caută după: </span>
@@ -24,8 +24,8 @@ const SearchItem = ({ search, setSearch, actKey, setActKey }) => {
             <Form.Control
               style={{ width: '150px' }}
               placeholder='search'
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </Col>
         </Row>

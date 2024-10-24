@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 
 const Acts = () => {
   const [acts, setActs] = useState([])
-  const [search, setSearch] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const [actKey, setActKey] = useState('')
   const [toggle, setToggle] = useState(true)
 
@@ -91,8 +91,8 @@ const Acts = () => {
       <AddAct addAct={addAct} />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <SearchItem
-          search={search}
-          setSearch={setSearch}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
           actKey={actKey}
           setActKey={setActKey}
         />
@@ -130,21 +130,27 @@ const Acts = () => {
               .filter((act, i) => {
                 switch (actKey) {
                   case 'date':
-                    return act.date.toString().toLowerCase().includes(search)
+                    return act.date
+                      .toString()
+                      .toLowerCase()
+                      .includes(searchTerm)
                   case 'firstname':
                     return act.firstname
                       .toString()
                       .toLowerCase()
-                      .includes(search)
+                      .includes(searchTerm)
                   case 'lastname':
                     return act.lastname
                       .toString()
                       .toLowerCase()
-                      .includes(search)
+                      .includes(searchTerm)
                   case 'idnp':
-                    return act.idnp.toString().toLowerCase().includes(search)
+                    return act.idnp
+                      .toString()
+                      .toLowerCase()
+                      .includes(searchTerm)
                   default:
-                    return act.actId.toString().includes(search)
+                    return act.actId.toString().includes(searchTerm)
                 }
               })
               .map((act, i) => {
