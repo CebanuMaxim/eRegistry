@@ -24,3 +24,15 @@ export interface ActItemProps {
   editAct: (act: Act) => Promise<void>
   deleteAct: (_id: string, actNumber: string, registryId: string) => void
 }
+
+export interface AddActProps {
+  addAct: (act: Act, id: string) => Promise<void>
+  id: string
+}
+
+export interface ActValidationContextType {
+  act: Act
+  setAct: Dispatch<SetStateAction<Act>>
+  errors: Record<string, string>
+  setErrors: Dispatch<SetStateAction<object>>
+}

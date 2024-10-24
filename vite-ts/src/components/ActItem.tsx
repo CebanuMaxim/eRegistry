@@ -30,7 +30,7 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
     setNewAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
@@ -60,7 +60,7 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={onSubmit}>
               {Object.keys(act).map((key, index) => {
                 if (['_id', 'registry', '__v'].includes(key)) return null
                 return (
@@ -97,7 +97,7 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
       <td>
         <div
           style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteAct(act.actNumber, act._id, act.registry)}
+          onClick={() => deleteAct(act.actId, act._id, act.registry)}
         >
           x
         </div>

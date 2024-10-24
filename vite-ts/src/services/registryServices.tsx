@@ -10,7 +10,6 @@ export const addRegistryService = async (
   }
 
   try {
-    console.log('addRegistryService', registry)
     const { data } = await axios.post('/registries', registry)
 
     setRegistries((prevRegistries: Registry[]) => [data, ...prevRegistries])

@@ -1,5 +1,10 @@
-export default function actValidation(name, value, errors, setErrors) {
-  const checkInput = (inputName, pattern, message) => {
+export default function actValidation(
+  name: string,
+  value: string,
+  errors: Record<string, string>,
+  setErrors: React.Dispatch<React.SetStateAction<object>>
+) {
+  const checkInput = (inputName: string, pattern: RegExp, message: string) => {
     if (name === inputName) {
       if (!pattern.test(value) && value !== '') {
         setErrors((prevErrors) => ({ ...prevErrors, [inputName]: message }))
@@ -33,12 +38,12 @@ export default function actValidation(name, value, errors, setErrors) {
       break
     // Act conditions
     case 'actId':
-      checkInput(name, /^\d+$/, 'actId must be 4-digits string')
+      checkInput(name, /^\d{4}$/, 'actId must be 4-digits string')
       break
     case 'date':
       checkInput(
         name,
-        /^\d{2}.\d{2}.\d{4}$/,
+        /^\d{2}.\d{2}.(20)\d{2}$/,
         'date must be DD.MM.YYYY format valid calendar day'
       )
       break
@@ -65,5 +70,6 @@ export default function actValidation(name, value, errors, setErrors) {
     default:
       break
   }
+
   return errors
 }

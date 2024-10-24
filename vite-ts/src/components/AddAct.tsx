@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import React, { ChangeEvent, FormEvent, useContext } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
@@ -8,17 +8,22 @@ import ActSchema from '../validation/ActYupSchema'
 import inputValidation from '../validation/inputValidation'
 import { ActValidationContext } from '../context/Context'
 import { errorStyle } from './Styles'
+import { ActValidationContextType, AddActProps } from '../types'
 
-const AddAct = ({ addAct }) => {
-  const { act, setAct, errors, setErrors } = useContext(ActValidationContext)
-  const handleChange = async (e) => {
+const AddAct: React.FC<AddActProps> = ({ addAct, id }) => {
+  console.log('sdsadada', id)
+
+  const { act, setAct, errors, setErrors } =
+    useContext<ActValidationContextType>(ActValidationContext)
+  const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+
     inputValidation(name, value, errors, setErrors)
 
     setAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if (!Object.values(errors).every((value) => value === '')) {
@@ -27,21 +32,16 @@ const AddAct = ({ addAct }) => {
     }
     try {
       await ActSchema.validate(act, { abortEarly: false })
-        .then((valid) => {
-          // console.log('Input is valid:', valid)
+        .then(() => {
+          setErrors({})
         })
         .catch((error) => {
           console.error('Validation error:', error.message)
         })
-      setErrors({})
 
-      await addAct(act)
-    } catch (validationErrors) {
-      const allErrors = {}
-      validationErrors.inner.forEach((error) => {
-        allErrors[error.path] = error.message
-      })
-      setErrors(allErrors)
+      await addAct(act, id)
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -59,7 +59,7 @@ const AddAct = ({ addAct }) => {
                     <Form.Control
                       as='select'
                       name={key}
-                      onChange={handleChange}
+                      onChange={onChange}
                       required
                     >
                       <option value='0'>Select act</option>
@@ -92,8 +92,8 @@ const AddAct = ({ addAct }) => {
                     <Form.Control
                       placeholder={key}
                       name={key}
-                      value={value}
-                      onChange={handleChange}
+                      value={value?.toString()}
+                      onChange={onChange}
                       required
                     />
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}

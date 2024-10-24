@@ -7,6 +7,8 @@ export const addActService = async (
   setActs: React.Dispatch<React.SetStateAction<Act[]>>,
   id: string
 ) => {
+  console.log('ID: ', id)
+
   try {
     await axios.post(`/acts/${id}`, act)
     setActs((prevActs) => [act, ...prevActs])

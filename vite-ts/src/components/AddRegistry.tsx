@@ -24,15 +24,13 @@ const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
     }))
   }
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!Object.values(errors).every((value) => value === '')) {
       alert(Object.values(errors).join('\n'))
       return
     }
     try {
-      console.log('onSubmit: ', registry)
-
       await RegistrySchema.validate(registry, { abortEarly: false })
         .then((valid) => {
           console.log('Input is valid:', valid)
@@ -49,15 +47,14 @@ const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
       await addRegistry(registry)
     } catch (err) {
       const error = err as Error
-      console.error(error.message)
+      console.error(error)
       // const allErrors: Record<string, string> = {}
-      // err.inner.forEach((error) => {
+      // error.inner.forEach((error) => {
       //   allErrors[error.path] = error.message
       // })
       // setErrors(allErrors)
     }
   }
-
   return (
     <Card className='mt-5 mb-3'>
       <Card.Body>

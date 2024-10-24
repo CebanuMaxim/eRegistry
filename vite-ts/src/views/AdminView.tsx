@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import axios from '../api/axios'
 import { Form, Button, Table } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
@@ -11,10 +11,17 @@ const Admin = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [users, setUsers] = useState([])
 
+  interface User {
+    _id: string
+    username: string
+    isAdmin: boolean
+  }
+
   useEffect(() => {
     const getUsers = async () => {
       try {
         const response = await axios.get('/users')
+
         setUsers(response.data)
       } catch (err) {
         console.error(err)
@@ -23,7 +30,8 @@ const Admin = () => {
     getUsers()
   }, [])
 
-  const submitHandler = async (e) => {
+  const createUser = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
       return
@@ -34,17 +42,22 @@ const Admin = () => {
         password,
         isAdmin,
       })
+      setUsers([...users])
     } catch (err) {
       console.error(err)
     }
   }
 
-  const deleteUser = async (id) => {
-    try {
-      await axios.delete(`/users/${id}`)
-      setUsers(users.filter((user) => user._id !== id))
-    } catch (err) {
-      console.error(err)
+  const deleteUser = async (id: string) => {
+    const deletePrompt = prompt('Delete user ? y/n')
+
+    if (deletePrompt === 'y') {
+      try {
+        await axios.delete(`/users/${id}`)
+        setUsers(users.filter((user: User) => user._id !== id))
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 
@@ -59,7 +72,7 @@ const Admin = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, i) => {
+          {users.map((user: User, i) => {
             return (
               <tr key={i}>
                 <td>{user.username}</td>
@@ -80,7 +93,7 @@ const Admin = () => {
       </Table>
       <FormContainer>
         <h2>Register new user</h2>
-        <Form onSubmit={submitHandler}>
+        <Form onSubmit={createUser}>
           <Form.Group className='my-3' controlId='username'>
             <Form.Control
               type='text'
@@ -115,7 +128,7 @@ const Admin = () => {
             <Form.Check
               type='checkbox'
               label='Is Admin'
-              value={isAdmin}
+              checked={isAdmin}
               onChange={() => setIsAdmin(!isAdmin)}
             />
           </Form.Group>

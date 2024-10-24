@@ -25,14 +25,18 @@ const Acts = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
+  console.log('params: ', id)
+  let regId = ''
 
   useEffect(() => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
+        console.log(res.data)
 
         setTypographyId(res.data.typographyId)
         setRegistryId(res.data.registryId)
+        regId = res.data._id
 
         if (!res.data.acts) {
           return
@@ -44,16 +48,13 @@ const Acts = () => {
             })
             .reverse()
         )
-        console.log(res.data.acts)
-        console.log(acts)
       } catch (err) {
         console.error(err)
       }
     }
 
     getActs()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [id])
 
   useEffect(() => {
     const filterActs = () => {
@@ -85,7 +86,10 @@ const Acts = () => {
     // eslint-disable-next-line
   }, [acts, searchTerm, actKey])
 
-  const addAct = (act: Act, id: string) => addActService(act, setActs, id)
+  console.log(id, typeof id)
+  console.log(regId, typeof regId)
+
+  const addAct = (act: Act, id: string) => addActService(act, setActs, regId)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
   const deleteAct = async (
     _id: string,
@@ -106,7 +110,7 @@ const Acts = () => {
 
   return (
     <>
-      <AddAct addAct={addAct} />
+      <AddAct addAct={addAct} id={regId} />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <SearchItem
           searchTerm={searchTerm}

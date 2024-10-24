@@ -1,10 +1,27 @@
 import { createContext } from 'react'
 import {
+  ActValidationContextType,
   FilteredActsContextType,
   RegistryValidationContextType,
 } from '../types'
 
-export const ActValidationContext = createContext({})
+export const ActValidationContext = createContext<ActValidationContextType>({
+  act: {
+    actId: '',
+    date: '',
+    actName: '',
+    firstname: '',
+    lastname: '',
+    idnp: '',
+    stateFee: Number(''),
+    notaryFee: Number(''),
+    registry: '',
+    _id: '',
+  },
+  setAct: () => {},
+  errors: { actId: '', date: '' },
+  setErrors: () => {},
+})
 
 export const RegistryValidationContext =
   createContext<RegistryValidationContextType>({
