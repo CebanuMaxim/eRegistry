@@ -59,7 +59,7 @@ const Acts = () => {
   useEffect(() => {
     const filterActs = () => {
       const filtered = acts.filter((act: Act) => {
-        const compareBy = (property: string, searchTerm: string) => {
+        const compare = (property: string, searchTerm: string) => {
           return property
             .toString()
             .toLocaleLowerCase()
@@ -68,15 +68,15 @@ const Acts = () => {
 
         switch (actKey) {
           case 'date':
-            return compareBy(act.date, searchTerm)
+            return compare(act.date, searchTerm)
           case 'firstname':
-            return compareBy(act.firstname, searchTerm)
+            return compare(act.firstname, searchTerm)
           case 'lastname':
-            return compareBy(act.lastname, searchTerm)
+            return compare(act.lastname, searchTerm)
           case 'idnp':
-            return compareBy(act.idnp, searchTerm)
+            return compare(act.idnp, searchTerm)
           default:
-            return compareBy(act.actId, searchTerm)
+            return compare(act.actId, searchTerm)
         }
       })
       setFilteredActs(filtered)
@@ -89,7 +89,7 @@ const Acts = () => {
   console.log(id, typeof id)
   console.log(regId, typeof regId)
 
-  const addAct = (act: Act, id: string) => addActService(act, setActs, regId)
+  const addAct = (act: Act) => addActService(act, setActs, regId)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
   const deleteAct = async (
     _id: string,
