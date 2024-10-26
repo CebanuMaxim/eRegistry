@@ -97,7 +97,7 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
       <td>
         <div
           style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteAct(act.actId, act._id, act.registry)}
+          onClick={() => deleteAct(act._id, act.actId, act.registry)}
         >
           x
         </div>

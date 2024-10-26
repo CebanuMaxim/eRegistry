@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import axios from '../api/axios'
-import { toast } from 'react-toastify'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -17,7 +16,7 @@ const Login = () => {
     // eslint-disable-next-line
   }, [])
 
-  const submitHandler = async (e) => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault()
 
     try {
@@ -35,7 +34,8 @@ const Login = () => {
 
       navigate('/registries')
     } catch (err) {
-      toast.error(err.response.data.message)
+      // toast.error(err.response.data.message)
+      console.error(err)
     }
   }
 

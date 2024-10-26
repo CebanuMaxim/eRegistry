@@ -7,7 +7,9 @@
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",
     "client": "npm run vite --prefix vite-ts",
+    "client2": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev2": "concurrently \"npm run server\" \"npm run client2\"",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
     "git": "git add . && git commit -m \"'\" && git push"

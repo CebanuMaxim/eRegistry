@@ -2,7 +2,7 @@ export default function actValidation(
   name: string,
   value: string,
   errors: Record<string, string>,
-  setErrors: React.Dispatch<React.SetStateAction<object>>
+  setErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>
 ) {
   const checkInput = (inputName: string, pattern: RegExp, message: string) => {
     if (name === inputName) {

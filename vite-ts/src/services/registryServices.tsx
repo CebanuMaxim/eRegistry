@@ -32,7 +32,13 @@ export const editRegistryService = async (
   }
 
   try {
-    await axios.put(`/registries/${registry._id}`, registry)
+    // await axios.put(`/registries/${registry._id}`, registry)
+
+    await fetch(`/api/registries/${registry._id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(registry),
+    })
   } catch (err) {
     console.error(err)
   }
@@ -46,7 +52,11 @@ export const deleteRegistryService = (
   const check = prompt('Enter registry id:')
   if (check === registryId) {
     try {
-      axios.delete(`/registries/${_id}`)
+      // axios.delete(`/registries/${_id}`)
+      fetch(`/api/registries/${_id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      })
     } catch (err) {
       console.error(err)
     }

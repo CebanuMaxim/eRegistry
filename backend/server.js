@@ -13,7 +13,9 @@ connectDB()
 app.use(
   cors({
     origin: 'http://localhost:3000',
-    credentials: true, // Allow credentials (cookies, authorization headers)
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
   })
 )
 app.use(cookieParser())

@@ -25,18 +25,14 @@ const Acts = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
-  console.log('params: ', id)
-  let regId = ''
 
   useEffect(() => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
-        console.log(res.data)
 
         setTypographyId(res.data.typographyId)
         setRegistryId(res.data.registryId)
-        regId = res.data._id
 
         if (!res.data.acts) {
           return
@@ -86,10 +82,7 @@ const Acts = () => {
     // eslint-disable-next-line
   }, [acts, searchTerm, actKey])
 
-  console.log(id, typeof id)
-  console.log(regId, typeof regId)
-
-  const addAct = (act: Act) => addActService(act, setActs, regId)
+  const addAct = (act: Act) => addActService(act, setActs, id as string)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
   const deleteAct = async (
     _id: string,
@@ -110,7 +103,7 @@ const Acts = () => {
 
   return (
     <>
-      <AddAct addAct={addAct} id={regId} />
+      <AddAct addAct={addAct} />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <SearchItem
           searchTerm={searchTerm}

@@ -10,9 +10,7 @@ import { ActValidationContext } from '../context/Context'
 import { errorStyle } from './Styles'
 import { ActValidationContextType, AddActProps } from '../types'
 
-const AddAct: React.FC<AddActProps> = ({ addAct, id }) => {
-  console.log('sdsadada', id)
-
+const AddAct: React.FC<AddActProps> = ({ addAct }) => {
   const { act, setAct, errors, setErrors } =
     useContext<ActValidationContextType>(ActValidationContext)
   const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +37,7 @@ const AddAct: React.FC<AddActProps> = ({ addAct, id }) => {
           console.error('Validation error:', error.message)
         })
 
-      await addAct(act, id)
+      await addAct(act)
     } catch (err) {
       console.log(err)
     }

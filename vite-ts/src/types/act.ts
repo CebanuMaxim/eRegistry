@@ -26,13 +26,12 @@ export interface ActItemProps {
 }
 
 export interface AddActProps {
-  addAct: (act: Act, id: string) => Promise<void>
-  id: string
+  addAct: (act: Act) => Promise<void>
 }
 
 export interface ActValidationContextType {
   act: Act
   setAct: Dispatch<SetStateAction<Act>>
   errors: Record<string, string>
-  setErrors: Dispatch<SetStateAction<object>>
+  setErrors: Dispatch<SetStateAction<Record<string, string>>>
 }

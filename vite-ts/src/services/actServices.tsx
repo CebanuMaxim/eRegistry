@@ -7,17 +7,15 @@ export const addActService = async (
   setActs: React.Dispatch<React.SetStateAction<Act[]>>,
   id: string
 ) => {
-  console.log('ID: ', id)
-
   try {
     await axios.post(`/acts/${id}`, act)
+
     setActs((prevActs) => [act, ...prevActs])
-  } catch (err) {
+  } catch (err: unknown) {
+    console.log(err)
     if (typeof err === 'object' && err !== null && 'response' in err) {
       const axiosError = err as { response: { data: string } }
       toast.error(axiosError.response.data)
-    } else {
-      console.error(err)
     }
   }
 }
@@ -48,7 +46,9 @@ export const deleteActService = async (
   acts: Act[],
   setActs: React.Dispatch<React.SetStateAction<Act[]>>
 ) => {
+  console.log(_id, actNumber, registryId)
   const checkActNumber = prompt('Please enter act number:')
+  console.log(checkActNumber, actNumber)
 
   if (checkActNumber === actNumber) {
     setActs(acts.filter((item) => item._id !== _id))
