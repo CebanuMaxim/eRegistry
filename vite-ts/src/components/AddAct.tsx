@@ -13,11 +13,10 @@ import { ActValidationContextType, AddActProps } from '../types'
 const AddAct: React.FC<AddActProps> = ({ addAct }) => {
   const { act, setAct, errors, setErrors } =
     useContext<ActValidationContextType>(ActValidationContext)
-  const onChange = async (e: ChangeEvent<HTMLInputElement>) => {
+
+  const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-
     inputValidation(name, value, errors, setErrors)
-
     setAct((prevAct) => ({ ...prevAct, [name]: value }))
   }
 
@@ -30,16 +29,10 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
     }
     try {
       await ActSchema.validate(act, { abortEarly: false })
-        .then(() => {
-          setErrors({})
-        })
-        .catch((error) => {
-          console.error('Validation error:', error.message)
-        })
-
+      setErrors({})
       await addAct(act)
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -57,29 +50,14 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
                     <Form.Control
                       as='select'
                       name={key}
-                      onChange={onChange}
+                      onChange={onInputChange}
                       required
                     >
                       <option value='0'>Select act</option>
                       <option value='Procură. Mijloc de transport.'>
-                        Procură. Mijloc de transport.
+                        Act autentificat
                       </option>
-                      <option value='Legalizarea copiei.'>
-                        Legalizarea copiei.
-                      </option>
-                      <option value='legalizarea semnaturii traducatorului'>
-                        Legalizarea semnăturii traducătorului.
-                      </option>
-                      <option value='Declarație. Plecare temporară.'>
-                        Legalizarea semnăturii pe acord la plecare/multiple
-                        plecări.
-                      </option>
-                      <option value='Declarație. Multiple plecări.'>
-                        Declarație autentificată la plecare/multiple plecări.
-                      </option>
-                      <option value='Procură. Să cumpere/vămuiască auto.'>
-                        Procură cumpărare/vămuire mijloc de transport.
-                      </option>
+                      <option value='Legalizarea copiei.'>Act legalizat</option>
                     </Form.Control>
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
                   </Col>
@@ -91,7 +69,7 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
                       placeholder={key}
                       name={key}
                       value={value?.toString()}
-                      onChange={onChange}
+                      onChange={onInputChange}
                       required
                     />
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}

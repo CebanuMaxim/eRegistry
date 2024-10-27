@@ -29,7 +29,7 @@ const RegistryItem: React.FC<RegistryItemProps> = ({
     setShow(false)
   }
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     inputValidation(name, value, errors, setErrors)
     setNewRegistry((prevRegistry) => ({ ...prevRegistry, [name]: value }))
@@ -89,7 +89,7 @@ const RegistryItem: React.FC<RegistryItemProps> = ({
                     <Form.Control
                       name={key}
                       value={newRegistry[key] || ''}
-                      onChange={handleChange}
+                      onChange={onInputChange}
                     />
                     {errors.typographyId && (
                       <div style={errorStyle}>{errors[key]}</div>

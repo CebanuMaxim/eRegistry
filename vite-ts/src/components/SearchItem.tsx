@@ -1,20 +1,13 @@
-import React from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import { searchItemStyle } from './Styles'
+import { SearchItemProps } from '../types'
 
-interface SearchItem {
-  searchTerm: string
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>
-  actKey: string
-  setActKey: React.Dispatch<React.SetStateAction<string>>
-}
-
-const SearchItem: React.FC<SearchItem> = ({
+const SearchItem = ({
   searchTerm,
   setSearchTerm,
   actKey,
   setActKey,
-}) => {
+}: SearchItemProps) => {
   return (
     <Row>
       <span style={searchItemStyle}>Caută după: </span>

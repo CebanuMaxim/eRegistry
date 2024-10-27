@@ -72,7 +72,7 @@ export const reportStyles = StyleSheet.create({
     flexGrow: 1,
   },
   table: {
-    display: 'table',
+    display: 'flex',
     width: '100%',
     height: 'auto',
   },
