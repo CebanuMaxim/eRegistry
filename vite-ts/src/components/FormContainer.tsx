@@ -1,9 +1,5 @@
 import { Container, Row, Col } from 'react-bootstrap'
-import { ReactNode } from 'react'
-
-interface FormContainerProps {
-  children: ReactNode
-}
+import { FormContainerProps } from '../types'
 
 const FormContainer = ({ children }: FormContainerProps) => {
   return (

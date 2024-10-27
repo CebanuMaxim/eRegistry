@@ -3,19 +3,14 @@ import axios from '../api/axios'
 import { Form, Button, Table } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import { toast } from 'react-toastify'
+import { User } from '../types'
 
 const Admin = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isAdmin, setIsAdmin] = useState(false)
-  const [users, setUsers] = useState([])
-
-  interface User {
-    _id: string
-    username: string
-    isAdmin: boolean
-  }
+  const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
     const getUsers = async () => {
@@ -54,7 +49,7 @@ const Admin = () => {
     if (deletePrompt === 'y') {
       try {
         await axios.delete(`/users/${id}`)
-        setUsers(users.filter((user: User) => user._id !== id))
+        setUsers(users.filter((user) => user._id !== id))
       } catch (err) {
         console.error(err)
       }
@@ -72,7 +67,7 @@ const Admin = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user: User, i) => {
+          {users.map((user, i) => {
             return (
               <tr key={i}>
                 <td>{user.username}</td>

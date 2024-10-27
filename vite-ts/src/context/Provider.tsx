@@ -9,7 +9,7 @@ import { Act, Registry, ProviderProps } from '../types'
 export const ActValidationProvider: React.FC<ProviderProps> = ({
   children,
 }) => {
-  const [act, setAct] = useState({
+  const [act, setAct] = useState<Act>({
     actId: '',
     date: '',
     actName: '',
@@ -18,9 +18,11 @@ export const ActValidationProvider: React.FC<ProviderProps> = ({
     idnp: '',
     stateFee: '',
     notaryFee: '',
+    registry: '',
+    _id: '',
   })
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<Record<string, string>>({
     actId: '',
     date: '',
     lastname: '',

@@ -8,8 +8,8 @@ export interface Act {
   firstname: string
   lastname: string
   idnp: string
-  stateFee: number
-  notaryFee: number
+  stateFee: number | string
+  notaryFee: number | string
   registry: string
   _id: string
 }

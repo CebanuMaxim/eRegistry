@@ -84,11 +84,8 @@ const Acts = () => {
 
   const addAct = (act: Act) => addActService(act, setActs, id as string)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
-  const deleteAct = async (
-    _id: string,
-    actNumber: string,
-    registryId: string
-  ) => deleteActService(_id, actNumber, registryId, acts, setActs)
+  const deleteAct = (_id: string, actNumber: string, registryId: string) =>
+    deleteActService(_id, actNumber, registryId, acts, setActs)
 
   const toggleSort = () => {
     setActs(

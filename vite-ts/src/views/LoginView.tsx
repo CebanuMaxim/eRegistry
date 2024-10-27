@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import axios from '../api/axios'
+import { toast } from 'react-toastify'
+import { AxiosError } from 'axios'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -34,7 +36,10 @@ const Login = () => {
 
       navigate('/registries')
     } catch (err) {
-      // toast.error(err.response.data.message)
+      const axiosError = err as AxiosError<{ message: string }>
+      toast.error(
+        axiosError.response?.data?.message || 'An unexpected error occurred'
+      )
       console.error(err)
     }
   }
