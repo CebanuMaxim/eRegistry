@@ -32,12 +32,6 @@ const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
     }
     try {
       await RegistrySchema.validate(registry, { abortEarly: false })
-        .then((valid) => {
-          console.log('Input is valid:', valid)
-        })
-        .catch((error) => {
-          console.error('Validation error:', error.message)
-        })
       setErrors({
         typographyId: '',
         registryId: '',

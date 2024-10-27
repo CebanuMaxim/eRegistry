@@ -1,19 +1,18 @@
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import inputValidation from '../validation/inputValidation'
 import { errorStyle } from './Styles'
-import moment from 'moment'
+import { RegistryItemProps } from '../types'
 
-const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
+const RegistryItem: React.FC<RegistryItemProps> = ({
+  registry,
+  editRegistry,
+  deleteRegistry,
+}) => {
   const [show, setShow] = useState(false)
-  const [newRegistry, setNewRegistry] = useState({})
-  const [errors, setErrors] = useState({
-    typographyId: '',
-    registryId: '',
-    startDate: '',
-    endDate: '',
-  })
+  const [newRegistry, setNewRegistry] = useState<Record<string, string>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const handleOpenModal = () => {
     setNewRegistry({ ...registry })
@@ -30,75 +29,13 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
     setShow(false)
   }
 
-  function isValidDateMoment(dateString) {
-    // 'DD.MM.YYYY' specifies the expected date format
-    return moment(dateString, 'DD.MM.YYYY', true).isValid()
-  }
-
-  const checkInput = (name, value, inputName, pattern, message) => {
-    if (name === inputName && !pattern.test(value)) {
-      if (
-        (name === 'startDate' || name === 'endDate') &&
-        !isValidDateMoment(value)
-      ) {
-        console.log('notValidDate')
-      }
-      setErrors((prevErrors) => ({ ...prevErrors, [inputName]: message }))
-    } else {
-      setErrors((prevErrors) => ({ ...prevErrors, [inputName]: '' }))
-    }
-  }
-
-  const modalValidation = (name, value) => {
-    switch (name) {
-      case 'typographyId':
-        checkInput(
-          name,
-          value,
-          'typographyId',
-          /^\d{7}$/,
-          'typographyId must be 7-digits string'
-        )
-        break
-      case 'registryId':
-        checkInput(
-          name,
-          value,
-          'registryId',
-          /^\d{4}$/,
-          'registryId must be 4-digits string'
-        )
-        break
-      case 'startDate':
-        checkInput(
-          name,
-          value,
-          'startDate',
-          /^\d{2}.\d{2}.\d{4}$/,
-          'Invalid date format. Please use DD.MM.YYYY'
-        )
-        break
-      case 'endDate':
-        checkInput(
-          name,
-          value,
-          'endDate',
-          /^\d{2}.\d{2}.\d{4}$/,
-          'Invalid date format. Please use DD.MM.YYYY'
-        )
-        break
-      default:
-        break
-    }
-  }
-
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     inputValidation(name, value, errors, setErrors)
     setNewRegistry((prevRegistry) => ({ ...prevRegistry, [name]: value }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
     if (!Object.values(errors).every((value) => value === '')) {
@@ -151,7 +88,7 @@ const RegistryItem = ({ registry, editRegistry, deleteRegistry }) => {
                   >
                     <Form.Control
                       name={key}
-                      value={newRegistry[key]}
+                      value={newRegistry[key] || ''}
                       onChange={handleChange}
                     />
                     {errors.typographyId && (

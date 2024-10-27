@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../api/axios'
 import { Act } from '../types'
 import { toast } from 'react-toastify'
 
@@ -46,9 +46,7 @@ export const deleteActService = async (
   acts: Act[],
   setActs: React.Dispatch<React.SetStateAction<Act[]>>
 ) => {
-  console.log(_id, actNumber, registryId)
   const checkActNumber = prompt('Please enter act number:')
-  console.log(checkActNumber, actNumber)
 
   if (checkActNumber === actNumber) {
     setActs(acts.filter((item) => item._id !== _id))

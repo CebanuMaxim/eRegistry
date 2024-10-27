@@ -1,12 +1,10 @@
-// import { Dispatch, SetStateAction } from 'react'
-
 import { Dispatch, SetStateAction } from 'react'
 
 export interface Registry {
   typographyId: string
   registryId: string
   startDate: string
-  [key: string]: string | number | boolean | undefined
+  [key: string]: string
 }
 
 export interface RegistryValidationContextType {
@@ -18,4 +16,10 @@ export interface RegistryValidationContextType {
 
 export interface AddRegistryProps {
   addRegistry: (registry: Registry) => Promise<void>
+}
+
+export interface RegistryItemProps {
+  registry: Registry
+  editRegistry: (registry: Registry) => Promise<void>
+  deleteRegistry: (_id: string, registryId: string) => Promise<void>
 }

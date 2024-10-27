@@ -49,8 +49,6 @@ const getRegistryById = async (req, res) => {
 // @desc      Edit registry
 // @route     POST /api/registries/:id
 const editRegistry = async (req, res) => {
-  console.log(req.body)
-
   const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
