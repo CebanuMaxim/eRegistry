@@ -2,20 +2,15 @@ import { Act } from '../types'
 import { Page, Text, View } from '@react-pdf/renderer'
 import { confirmationStyles as styles } from './Styles'
 
-const Confirmation = (
-  act: Act,
-  i: number,
-  typographyId: string,
-  registryId: string
-) => {
-  const totalFee = act.stateFee + act.notaryFee
+const Confirmation = (act: Act, typographyId: string, registryId: string) => {
+  const totalFee = Number(act.stateFee) + Number(act.notaryFee)
 
   const indentation = (text: string) => (
     <Text style={{ color: 'white' }}>{text}</Text>
   )
 
   return (
-    <Page key={i} size='A5' orientation='landscape' style={styles.page}>
+    <Page key={act.actId} size='A5' orientation='landscape' style={styles.page}>
       <View style={styles.header}>
         <Text>LAZU AURELIA Notar, Cod fiscal 16146019</Text>
         <Text>

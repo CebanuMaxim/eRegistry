@@ -30,8 +30,8 @@ const Confirmations = () => {
         {filteredActs
           .slice()
           .reverse()
-          .map((act, i) => {
-            return Confirmation(act, i, typographyId ?? '', registryId ?? '')
+          .map((act) => {
+            return Confirmation(act, typographyId ?? '', registryId ?? '')
           })}
       </Document>
     </PDFViewer>
