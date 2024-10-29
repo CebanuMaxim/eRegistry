@@ -6,7 +6,6 @@ import { Document, PDFViewer, Font } from '@react-pdf/renderer'
 import RobotoLight from '../fonts/Roboto-Light.ttf'
 import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
-import { Act } from '../types'
 
 Font.register({
   family: 'RobotoLight',
@@ -25,33 +24,22 @@ const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
   const { typographyId, registryId } = useParams()
 
-  type Item = {
-    id: number
-    name: string
-    value: number
-  }
-
-  const sumDuplicatesByProperty = <T extends Record<string, any>>(
-    array: T[],
-    keyToCheck: keyof T,
-    keyToSum: keyof T
-  ): T[] => {
-    const counts: Record<string, T> = {}
-
-    array.forEach((item) => {
-      const id = item[keyToCheck] as string
-      if (!counts[id]) {
-        counts[id] = { ...item }
+  const reduceProperty = () => {
+    const newArray = []
+    let counter = 1
+    newArray[0] = filteredActs[0].notaryFee
+    for (let i = 1; i < filteredActs.length; i++) {
+      if (filteredActs[i].idnp === filteredActs[i - 1].idnp) {
+        newArray[counter - 1] =
+          Number(newArray[counter - 1]) + Number(filteredActs[i].notaryFee)
       } else {
-        // Ensure the value to sum is a number
-        counts[id][keyToSum] =
-          (counts[id][keyToSum] as number) + (item[keyToSum] as number)
+        newArray[counter] = filteredActs[i].notaryFee
+        counter++
       }
-    })
-
-    return Object.values(counts)
+    }
+    console.log(newArray)
   }
-  console.log(sumDuplicatesByProperty(array, 'id', 'value'))
+  reduceProperty()
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
