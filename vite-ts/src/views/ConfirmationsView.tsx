@@ -6,6 +6,7 @@ import { Document, PDFViewer, Font } from '@react-pdf/renderer'
 import RobotoLight from '../fonts/Roboto-Light.ttf'
 import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
+import { Act } from '../types'
 
 Font.register({
   family: 'RobotoLight',
@@ -24,27 +25,30 @@ const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
   const { typographyId, registryId } = useParams()
 
-  const reduceProperty = () => {
-    const newArray = []
+  const reduceObjectbyProperty = (array: Act[], id: string) => {
+    const newArray: Act[] = []
     let counter = 1
-    newArray[0] = filteredActs[0].notaryFee
-    for (let i = 1; i < filteredActs.length; i++) {
-      if (filteredActs[i].idnp === filteredActs[i - 1].idnp) {
-        newArray[counter - 1] =
-          Number(newArray[counter - 1]) + Number(filteredActs[i].notaryFee)
+    newArray[0] = { ...array[0] }
+
+    for (let i = 1; i < array.length; i++) {
+      if (array[i][id] === array[i - 1][id]) {
+        newArray[counter - 1].stateFee =
+          Number(newArray[counter - 1].stateFee) + Number(array[i].stateFee)
+        newArray[counter - 1].notaryFee =
+          Number(newArray[counter - 1].notaryFee) + Number(array[i].notaryFee)
       } else {
-        newArray[counter] = filteredActs[i].notaryFee
+        newArray[counter] = { ...array[i] }
         counter++
       }
     }
-    console.log(newArray)
+    return newArray
   }
-  reduceProperty()
+  const newFilteredActs = reduceObjectbyProperty(filteredActs, 'idnp')
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
       <Document>
-        {filteredActs
+        {newFilteredActs
           .slice()
           .reverse()
           .map((act) => {
