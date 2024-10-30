@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import axios from '../api/axios'
+import { headerStyle } from './Styles'
 
 const Header = () => {
   const navigate = useNavigate()
@@ -21,19 +22,16 @@ const Header = () => {
   const currentLocation = useLocation().pathname
 
   return (
-    <header
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        borderBottom: '1px solid gray',
-      }}
-    >
+    <header style={headerStyle}>
       <div>
-        {currentLocation !== '/registries' && (
-          <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
-            Go back
+        {
+          <Button
+            className='btn btn-light my-3'
+            onClick={() => navigate('/registries')}
+          >
+            Home
           </Button>
-        )}
+        }
       </div>
 
       <div>
