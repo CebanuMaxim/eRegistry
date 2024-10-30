@@ -35,21 +35,14 @@ const Confirmations = () => {
       newArray[counter - 1][prop] =
         Number(newArray[counter - 1][prop]) + Number(array[i][prop])
     }
-    const actIds = []
 
     // Reduce array to new array, accumulating properties for duplicate idnp's
     for (let i = 1; i < array.length; i++) {
       if (array[i][id] === array[i - 1][id]) {
         accumulateProperty('stateFee', i)
         accumulateProperty('notaryFee', i)
-
-        actIds.push(array[i - 1].actId)
-        actIds.push(array[i].actId)
-
-        const obj = newArray.find((item) => item.idnp === array[i][id])
-        if (obj) {
-          obj.actId = `${actIds[actIds.length - 1]} - 2-${actIds[0]}`
-        }
+        newArray[counter - 1].actId =
+          String(array[i].actId) + ' - 2-' + String(newArray[counter - 1].actId)
       } else {
         newArray[counter] = { ...array[i] }
         counter++
