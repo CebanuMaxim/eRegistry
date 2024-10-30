@@ -42,7 +42,7 @@ const Confirmation = (act: Act, typographyId: string, registryId: string) => {
           <Text style={styles.underline}>
             {act.lastname} {act.firstname}
           </Text>
-          , numărul de identificare 0980710426302.
+          , numărul de identificare {act.idnp}.
         </Text>
       </View>
       <View style={styles.footer}>

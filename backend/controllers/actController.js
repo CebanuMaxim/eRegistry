@@ -51,10 +51,13 @@ const getAct = async (req, res) => {
 // @desc      Create new act
 // @route     POST /api/acts/:registryId
 const createAct = async (req, res) => {
-  const { error } = await validateAct(req.body)
-  if (error) return res.status(400).send(error.details[0].message)
-
   req.body.registry = req.params.registryId
+  console.log(req.body)
+
+  const { error } = await validateAct(req.body)
+  console.log(error)
+
+  if (error) return res.status(400).send(error.details[0].message)
 
   try {
     const act = new Act(req.body)

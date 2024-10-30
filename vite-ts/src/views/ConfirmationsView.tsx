@@ -25,17 +25,31 @@ const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
   const { typographyId, registryId } = useParams()
 
-  const reduceObjectbyProperty = (array: Act[], id: string) => {
+  const reduceObjectByProperty = (array: Act[], id: string) => {
     const newArray: Act[] = []
     let counter = 1
     newArray[0] = { ...array[0] }
 
+    // Helper function to accumulate property values for duplicate idnp's
+    const accumulateProperty = (prop: string, i: number) => {
+      newArray[counter - 1][prop] =
+        Number(newArray[counter - 1][prop]) + Number(array[i][prop])
+    }
+    const actIds = []
+
+    // Reduce array to new array, accumulating properties for duplicate idnp's
     for (let i = 1; i < array.length; i++) {
       if (array[i][id] === array[i - 1][id]) {
-        newArray[counter - 1].stateFee =
-          Number(newArray[counter - 1].stateFee) + Number(array[i].stateFee)
-        newArray[counter - 1].notaryFee =
-          Number(newArray[counter - 1].notaryFee) + Number(array[i].notaryFee)
+        accumulateProperty('stateFee', i)
+        accumulateProperty('notaryFee', i)
+
+        actIds.push(array[i - 1].actId)
+        actIds.push(array[i].actId)
+
+        const obj = newArray.find((item) => item.idnp === array[i][id])
+        if (obj) {
+          obj.actId = `${actIds[actIds.length - 1]} - 2-${actIds[0]}`
+        }
       } else {
         newArray[counter] = { ...array[i] }
         counter++
@@ -43,7 +57,7 @@ const Confirmations = () => {
     }
     return newArray
   }
-  const newFilteredActs = reduceObjectbyProperty(filteredActs, 'idnp')
+  const newFilteredActs = reduceObjectByProperty(filteredActs, 'idnp')
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>

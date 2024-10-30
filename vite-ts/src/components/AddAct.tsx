@@ -13,6 +13,7 @@ import { ActValidationContextType, AddActProps } from '../types'
 const AddAct: React.FC<AddActProps> = ({ addAct }) => {
   const { act, setAct, errors, setErrors } =
     useContext<ActValidationContextType>(ActValidationContext)
+  delete act._id
 
   const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

@@ -11,7 +11,7 @@ export interface Act {
   stateFee: number | string
   notaryFee: number | string
   registry: string
-  _id: string
+  _id?: string
 }
 
 export interface FilteredActsContextType {
