@@ -55,10 +55,9 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
                       required
                     >
                       <option value='0'>Select act</option>
-                      <option value='Procură. Mijloc de transport.'>
-                        Act autentificat
-                      </option>
-                      <option value='Legalizarea copiei.'>Act legalizat</option>
+                      <option value='Act autentificat'>Act autentificat</option>
+                      <option value='Act legalizat'>Act legalizat</option>
+                      <option value='Alte acte'>Alte acte</option>
                     </Form.Control>
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
                   </Col>

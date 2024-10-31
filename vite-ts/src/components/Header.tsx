@@ -27,7 +27,12 @@ const Header = () => {
         {
           <Button
             className='btn btn-light my-3'
-            onClick={() => navigate('/registries')}
+            onClick={() =>
+              currentLocation.includes('confirmations') ||
+              currentLocation.includes('reports')
+                ? navigate(-1)
+                : navigate('/registries')
+            }
           >
             Home
           </Button>

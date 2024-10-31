@@ -12,13 +12,14 @@
     "dev2": "concurrently \"npm run server\" \"npm run client2\"",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
-    "git": "git add . && git commit -m \"'\" && git push"
+    "git": "git add . && git commit -m \"'\" && git push",
+    "backup": "mongodump --uri=\"mongodb://localhost:27017/registryapi\" --out=/backups",
+    "restore": "mongorestore --uri=\"mongodb://localhost:27017/registryapi\" --dir=/backups/registryapi"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@react-pdf/renderer": "^3.4.2",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
