@@ -37,7 +37,6 @@ const getRegistries = asyncHandler(async (req, res) => {
 // @route     GET /api/registries/:id
 const getRegistryById = async (req, res) => {
   const registry = await Registry.findById(req.params.id).populate('acts')
-
   if (!registry)
     return res.status(404).send('The registry with the given ID was not found.')
 

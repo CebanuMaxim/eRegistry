@@ -28,10 +28,10 @@ const router = createBrowserRouter(
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin' element={<Admin />} />
         <Route
-          path='/confirmations/:typographyId/:registryId'
+          path='/confirmations/:id/:typographyId/:registryId'
           element={<ConfirmationsView />}
         />
-        <Route path='/reports' element={<Reports />} />
+        <Route path='/reports/:id' element={<Reports />} />
       </Route>
       <Route path='*' element={<h1>Page Not Found</h1>} />
     </Route>

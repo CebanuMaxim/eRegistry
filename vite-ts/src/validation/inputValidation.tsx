@@ -62,7 +62,7 @@ export default function actValidation(
     case 'notaryFee':
       checkInput(
         name,
-        /^(0|30|59|395|399|400|445)$/,
+        /^(0|30|59|60|395|399|400|445)$/,
         'Possible values: 0, 30, 59, 395, 399, 400, 445'
       )
       break

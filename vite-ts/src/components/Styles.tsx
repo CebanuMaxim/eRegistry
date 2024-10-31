@@ -28,6 +28,7 @@ export const confirmationStyles = StyleSheet.create({
   header: {
     textAlign: 'center',
     fontFamily: 'RobotoMedium',
+    paddingTop: 10,
   },
   verticalLine: {
     height: 1,

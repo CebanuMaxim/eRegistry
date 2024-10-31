@@ -30,7 +30,6 @@ const Acts = () => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
-
         setTypographyId(res.data.typographyId)
         setRegistryId(res.data.registryId)
 
@@ -110,14 +109,14 @@ const Acts = () => {
         />
         <Button
           className='btn btn-light my-3'
-          onClick={() => navigate(`/reports`)}
+          onClick={() => navigate(`/reports/${id}`)}
         >
           Rapoarte
         </Button>
         <Button
           className='btn btn-light my-3'
           onClick={() =>
-            navigate(`/confirmations/${typographyId}/${registryId}`)
+            navigate(`/confirmations/${id}/${typographyId}/${registryId}`)
           }
         >
           Confirmări

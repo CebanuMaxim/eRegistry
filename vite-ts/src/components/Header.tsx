@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import axios from '../api/axios'
 import { headerStyle } from './Styles'
@@ -9,6 +9,7 @@ const Header = () => {
   const parsedUserInfo = userInfo ? JSON.parse(userInfo) : null
   const id = parsedUserInfo?.id
   const isAdmin = parsedUserInfo?.isAdmin
+  const params = useParams()
 
   const logout = async () => {
     try {
@@ -30,7 +31,7 @@ const Header = () => {
             onClick={() =>
               currentLocation.includes('confirmations') ||
               currentLocation.includes('reports')
-                ? navigate(-1)
+                ? navigate(`/regisrtry/${params.id}`)
                 : navigate('/registries')
             }
           >

@@ -5,8 +5,8 @@ export interface Act {
   actId: string
   date: string
   actName: string
-  firstname: string
   lastname: string
+  firstname: string
   idnp: string
   stateFee: number | string
   notaryFee: number | string

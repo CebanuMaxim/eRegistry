@@ -46,7 +46,6 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
     <tr className='border-bottom p-3'>
       {Object.entries(act).map(([key, value], index) => {
         if (['_id', 'registry', '__v'].includes(key)) return null
-
         return <td key={index}>{value}</td>
       })}
 
@@ -97,7 +96,7 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
       <td>
         <div
           style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteAct(act._id, act.actId, act.registry)}
+          onClick={() => deleteAct(act._id as string, act.actId, act.registry)}
         >
           x
         </div>

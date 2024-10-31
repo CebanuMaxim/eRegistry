@@ -12,6 +12,7 @@ import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
 import { reportStyles } from '../components/Styles'
 import { FilteredActsContext } from '../context/Context'
+import { Act } from '../types'
 
 Font.register({
   family: 'RobotoLight',
@@ -29,34 +30,33 @@ Font.register({
 const Reports = () => {
   const { filteredActs } = useContext(FilteredActsContext)
 
-  console.log(filteredActs)
+  const reduceObjectByProperty = (array: Act[], id: string) => {
+    const newArray: Act[] = []
+    let counter = 1
+    newArray[0] = { ...array[0] }
 
-  // const groupedByDate = filteredActs.reduce((acc, obj) => {
-  //   const date = obj.date
-  //   if (!acc[date]) {
-  //     acc[date] = []
-  //   }
-  //   acc[date].push(obj)
-  //   return acc
-  // }, {})
+    // Helper function to accumulate property values for duplicate idnp's
+    const accumulateProperty = (prop: string, i: number) => {
+      newArray[counter - 1][prop] =
+        Number(newArray[counter - 1][prop]) + Number(array[i][prop])
+    }
 
-  // for (const date in groupedByDate) {
-  //   groupedByDate[date].forEach((obj) => {
-  //     console.log(`Date: ${obj.date}`)
-  //   })
-  // }
-
-  const tableData = [
-    {
-      data: 1,
-      actions: 441,
-      authentications: 18,
-      legalisations: 0,
-      others: 0,
-      stateFee: 90,
-      notaryFee: 7360,
-    },
-  ]
+    // Reduce array to new array, accumulating properties for duplicate idnp's
+    for (let i = 1; i < array.length; i++) {
+      if (array[i][id] === array[i - 1][id]) {
+        accumulateProperty('stateFee', i)
+        accumulateProperty('stateFee', i)
+        accumulateProperty('notaryFee', i)
+      } else {
+        newArray[counter] = { ...array[i] }
+        counter++
+      }
+    }
+    return newArray
+  }
+  const newFilteredActs = reduceObjectByProperty(filteredActs, 'date')
+  newFilteredActs.reverse()
+  const totalActions = 12
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
@@ -86,35 +86,37 @@ const Reports = () => {
                 <Text style={reportStyles.tableCell}>Taxa notarială</Text>
               </View>
             </View>
-            {tableData.map((row, i) => (
-              <View key={i} style={reportStyles.tableRow}>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>{row.data}</Text>
+            {newFilteredActs.map((row, i) => {
+              return (
+                <View key={i} style={reportStyles.tableRow}>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{row.date}</Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{totalActions}</Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>
+                      {row.authentications}
+                    </Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>
+                      {row.legalisations}
+                    </Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{row.others}</Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{row.stateFee}</Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{row.notaryFee}</Text>
+                  </View>
                 </View>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>{row.actions}</Text>
-                </View>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>
-                    {row.authentications}
-                  </Text>
-                </View>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>
-                    {row.legalisations}
-                  </Text>
-                </View>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>{row.others}</Text>
-                </View>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>{row.stateFee}</Text>
-                </View>
-                <View style={reportStyles.tableCol}>
-                  <Text style={reportStyles.tableCell}>{row.notaryFee}</Text>
-                </View>
-              </View>
-            ))}
+              )
+            })}
           </View>
         </Page>
       </Document>

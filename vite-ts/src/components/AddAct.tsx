@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useContext } from 'react'
+import React, { ChangeEvent, FormEvent, useContext, useRef } from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Row from 'react-bootstrap/Row'
@@ -9,10 +9,14 @@ import inputValidation from '../validation/inputValidation'
 import { ActValidationContext } from '../context/Context'
 import { errorStyle } from './Styles'
 import { ActValidationContextType, AddActProps } from '../types'
+import { useParams } from 'react-router-dom'
 
 const AddAct: React.FC<AddActProps> = ({ addAct }) => {
   const { act, setAct, errors, setErrors } =
     useContext<ActValidationContextType>(ActValidationContext)
+  const firstInputRef = useRef<HTMLInputElement | null>(null)
+  const params = useParams()
+  act.registry = params.id as string
   delete act._id
 
   const onInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +39,9 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
     } catch (err) {
       console.error(err)
     }
+    if (firstInputRef.current) {
+      firstInputRef.current.focus()
+    }
   }
 
   return (
@@ -45,7 +52,21 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
             {Object.entries(act).map(([key, value], index) => {
               if (key === '_id' || key === 'registry' || key === '__v')
                 return null
-              if (key === 'actName') {
+              if (key === 'actId') {
+                return (
+                  <Col className='mb-4' key={index} md={3} lg={3} xl={3}>
+                    <Form.Control
+                      placeholder={key}
+                      name={key}
+                      value={value?.toString()}
+                      onChange={onInputChange}
+                      ref={firstInputRef}
+                      required
+                    />
+                    {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
+                  </Col>
+                )
+              } else if (key === 'actName') {
                 return (
                   <Col className='mb-4' key={index} md={3} lg={3} xl={3}>
                     <Form.Control
