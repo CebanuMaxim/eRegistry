@@ -8,9 +8,9 @@ export const addActService = async (
   id: string
 ) => {
   try {
-    await axios.post(`/acts/${id}`, act)
+    const res = await axios.post(`/acts/${id}`, act)
 
-    setActs((prevActs) => [act, ...prevActs])
+    setActs((prevActs) => [res.data, ...prevActs])
   } catch (err: unknown) {
     console.log(err)
     if (typeof err === 'object' && err !== null && 'response' in err) {

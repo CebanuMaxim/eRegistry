@@ -137,7 +137,7 @@ const Acts = () => {
               <td>Denumirea actului</td>
               <td>Nume</td>
               <td>Prenume</td>
-              <td>IDNP</td>
+              <td>IDNP/CNP</td>
               <td>Taxa de stat</td>
               <td>Taxa notarială</td>
               <td></td>
@@ -147,7 +147,7 @@ const Acts = () => {
             {filteredActs.map((act) => {
               return (
                 <ActItem
-                  key={act.actId}
+                  key={act._id}
                   act={act}
                   editAct={editAct}
                   deleteAct={deleteAct}

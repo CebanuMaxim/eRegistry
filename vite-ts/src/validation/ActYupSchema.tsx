@@ -35,8 +35,11 @@ const ActSchema = yup.object().shape({
   lastname: yup.string().required(),
   firstname: yup.string().required(),
   idnp: yup.string().matches(/^\d{13}$/, 'IDNP must be a 13-digit number'),
-  stateFee: yup.number().required().oneOf([0, 0.5, 1, 5]),
-  notaryFee: yup.number().required().oneOf([0, 30, 59, 60, 395, 399, 400, 445]),
+  stateFee: yup.number().required().oneOf([0, 0.5, 1, 2, 2.5, 5]),
+  notaryFee: yup
+    .number()
+    .required()
+    .oneOf([0, 30, 59, 60, 120, 150, 395, 399, 400, 445]),
   registry: yup.string(),
   _id: yup.string(),
   __v: yup.number(),

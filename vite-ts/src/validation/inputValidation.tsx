@@ -48,22 +48,34 @@ export default function actValidation(
       )
       break
     case 'firstname':
-      checkInput(name, /^[\p{L}\p{M}]+$/u, 'Username must contain only letters')
+      checkInput(
+        name,
+        /^[\p{L}\p{M}-]+$/u,
+        'Username must contain only letters'
+      )
       break
     case 'lastname':
-      checkInput(name, /^[\p{L}\p{M}]+$/u, 'Lastname must contain only letters')
+      checkInput(
+        name,
+        /^[\p{L}\p{M}-]+$/u,
+        'Lastname must contain only letters'
+      )
       break
     case 'idnp':
       checkInput(name, /^\d{13}$/, 'idnp must be a 13-digit number')
       break
     case 'stateFee':
-      checkInput(name, /^(0|0.5|1|5)$/, 'Possible values: 0, 0.5, 1, 5')
+      checkInput(
+        name,
+        /^(0|0.5|1|2|2.5|5)$/,
+        'Possible values: 0, 0.5, 1, 2, 2.5, 5'
+      )
       break
     case 'notaryFee':
       checkInput(
         name,
-        /^(0|30|59|60|395|399|400|445)$/,
-        'Possible values: 0, 30, 59, 395, 399, 400, 445'
+        /^(0|30|59|60|120|150|395|399|400|445)$/,
+        'Possible values: 0, 30, 59, 120, 150, 395, 399, 400, 445'
       )
       break
     case 'actName':
