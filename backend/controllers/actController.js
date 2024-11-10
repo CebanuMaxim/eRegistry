@@ -1,42 +1,37 @@
 const { Act, validateAct } = require('../models/actModel')
 const { Registry } = require('../models/registryModel')
+const asyncHandler = require('express-async-handler')
 
 // @desc      Fetch all acts
 // @route     GET /api/acts/
-const getAllActs = async (req, res) => {
+const getAllActs = asyncHandler(async (req, res) => {
   const foundActs = await Act.find()
 
   if (!foundActs || foundActs.length === 0)
     return res.status(404).send('No acts')
 
   res.status(200).send(foundActs)
-}
+})
 
 // @desc      Get acts by date range
 //@route      GET /api/acts
-const getActsByDateRange = async (req, res) => {
+const getActsByDateRange = asyncHandler(async (req, res) => {
   const { startDate, endDate } = req.query
   if (!startDate || !endDate) {
     return res.status(400).send('Start date and end date are required')
   }
-
-  try {
-    const acts = await Act.find({
-      date: {
-        $gte: startDate,
-        $lte: endDate,
-      },
-    })
-    res.json(acts)
-  } catch (error) {
-    console.error('Error fetching acts by date range:', error)
-    res.status(500).send('Server error')
-  }
-}
+  const acts = await Act.find({
+    date: {
+      $gte: startDate,
+      $lte: endDate,
+    },
+  })
+  res.json(acts)
+})
 
 // @desc      Fetch an act
 // @route     GET /api/acts/:actId
-const getAct = async (req, res) => {
+const getAct = asyncHandler(async (req, res) => {
   const foundAct = await Act.findById(req.params.actId).populate({
     path: 'registry',
     select: 'typographyId registryId',
@@ -46,54 +41,43 @@ const getAct = async (req, res) => {
     return res.status(404).send({ success: false })
 
   res.status(200).send(foundAct)
-}
+})
 
 // @desc      Create new act
 // @route     POST /api/acts/:registryId
-const createAct = async (req, res) => {
+const createAct = asyncHandler(async (req, res) => {
   const { error } = await validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
+  const act = new Act(req.body)
+  const createdAct = await act.save()
 
-  try {
-    const act = new Act(req.body)
-    const createdAct = await act.save()
+  await Registry.updateOne(
+    { _id: req.params.registryId },
+    { $push: { acts: createdAct._id } }
+  )
 
-    await Registry.updateOne(
-      { _id: req.params.registryId },
-      { $push: { acts: createdAct._id } }
-    )
-
-    res.status(200).send(createdAct)
-  } catch (error) {
-    res.send(error.message)
-  }
-}
+  res.status(200).send(createdAct)
+})
 
 // @desc      Edit act
 // @route     PUT /api/acts/:actId
-const editAct = async (req, res) => {
+const editAct = asyncHandler(async (req, res) => {
   const { error } = validateAct(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
-  try {
-    const act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
-      new: true,
-    })
+  const act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
+    new: true,
+  })
 
-    if (!act) {
-      return res.status(404).send('The act with the given ID was not found.')
-    }
-
-    res.status(200).send(act)
-  } catch (err) {
-    console.log(err)
-    return res.status(400).send(err)
+  if (!act) {
+    return res.status(404).send('The act with the given ID was not found.')
   }
-}
+  res.status(200).send(act)
+})
 
 // @desc      Delete last act from registry
 // @route     DELETE /api/acts/:registryId/:actId
-const deleteAct = async (req, res) => {
+const deleteAct = asyncHandler(async (req, res) => {
   await Registry.updateOne(
     { _id: req.params.registryId },
     {
@@ -104,7 +88,7 @@ const deleteAct = async (req, res) => {
   await Act.findByIdAndDelete(req.params.actId)
 
   res.send({ success: true })
-}
+})
 
 module.exports = {
   getAllActs,

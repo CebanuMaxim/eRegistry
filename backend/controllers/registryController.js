@@ -10,13 +10,7 @@ const createRegistry = asyncHandler(async (req, res) => {
 
   const registry = new Registry(req.body)
 
-  try {
-    await registry.save()
-  } catch (error) {
-    console.log(error)
-    res.status(400).send(error.errors)
-    return
-  }
+  await registry.save()
 
   res.status(201).send(registry)
 })
@@ -35,7 +29,7 @@ const getRegistries = asyncHandler(async (req, res) => {
 
 // @desc      Fetch registry by id
 // @route     GET /api/registries/:id
-const getRegistryById = async (req, res) => {
+const getRegistryById = asyncHandler(async (req, res) => {
   const registry = await Registry.findById(req.params.id).populate('acts')
   if (!registry)
     return res.status(404).send('The registry with the given ID was not found.')
@@ -43,11 +37,11 @@ const getRegistryById = async (req, res) => {
   if (registry.acts.length === 0) return res.send('No acts in this registry')
 
   res.send(registry)
-}
+})
 
 // @desc      Edit registry
 // @route     POST /api/registries/:id
-const editRegistry = async (req, res) => {
+const editRegistry = asyncHandler(async (req, res) => {
   const { error } = validateRegistry(req.body)
   if (error) return res.status(400).send(error.details[0].message)
 
@@ -59,11 +53,11 @@ const editRegistry = async (req, res) => {
     return res.status(404).send('The registry with the given ID was not found.')
 
   res.status(200).send(registry)
-}
+})
 
 // @desc      Delete registry
 // @route     POST /api/registries/:id
-const deleteRegistry = async (req, res) => {
+const deleteRegistry = asyncHandler(async (req, res) => {
   const registry = await Registry.findByIdAndDelete(req.params.id)
   await Act.deleteMany({ registry: req.params.id })
 
@@ -71,7 +65,7 @@ const deleteRegistry = async (req, res) => {
     return res.status(404).send('The registry with the given ID was not found.')
 
   res.send(registry)
-}
+})
 
 module.exports = {
   getRegistries,
