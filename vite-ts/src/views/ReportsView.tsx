@@ -12,6 +12,7 @@ import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
 import { reportStyles } from '../components/Styles'
 import { FilteredActsContext } from '../context/Context'
+import { Act } from '../types'
 
 Font.register({
   family: 'RobotoLight',
@@ -29,7 +30,7 @@ Font.register({
 const Reports = () => {
   const { filteredActs } = useContext(FilteredActsContext)
 
-  type Result = {
+  type GroupedData = {
     [date: string]: {
       totalStateFee: number
       totalNotaryFee: number
@@ -40,8 +41,9 @@ const Reports = () => {
     }
   }
 
-  const groupedData = filteredActs.reduce<Result>((result, act) => {
+  const groupedData = filteredActs.reduce<GroupedData>((result, act: Act) => {
     const date = act.date
+
     if (!result[date]) {
       result[date] = {
         totalStateFee: 0,
@@ -53,9 +55,13 @@ const Reports = () => {
       }
     }
 
-    result[date].totalStateFee += Number(act.stateFee)
-    result[date].totalNotaryFee += Number(act.notaryFee)
+    const stateFee = Number(act.stateFee) || 0
+    const notaryFee = Number(act.notaryFee) || 0
+
+    result[date].totalStateFee += stateFee
+    result[date].totalNotaryFee += notaryFee
     result[date].totalActs++
+
     if (act.actName === 'Act legalizat') {
       result[date].legalizedActs++
     } else if (act.actName === 'Act autentificat') {
@@ -66,6 +72,45 @@ const Reports = () => {
 
     return result
   }, {})
+
+  type TotalData = {
+    stateFee: number
+    notaryFee: number
+    totalFee: number
+    legalizedActs: number
+    authenticatedActs: number
+    otherActs: number
+    allActs: number
+  }
+
+  const totalData = filteredActs.reduce<TotalData>(
+    (acc, act) => {
+      acc.stateFee += Number(act.stateFee)
+      acc.notaryFee += Number(act.notaryFee)
+      acc.totalFee += Number(act.stateFee) + Number(act.notaryFee)
+
+      if (act.actName === 'Act legalizat') {
+        acc.legalizedActs++
+      } else if (act.actName === 'Act autentificat') {
+        acc.authenticatedActs++
+      } else if (act.actName === 'Alte acte') {
+        acc.otherActs++
+      }
+      acc.allActs++
+
+      return acc
+    },
+    {
+      stateFee: 0,
+      notaryFee: 0,
+      totalFee: 0,
+      legalizedActs: 0,
+      authenticatedActs: 0,
+      otherActs: 0,
+      allActs: 0,
+    }
+  )
+  console.log(totalData)
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
