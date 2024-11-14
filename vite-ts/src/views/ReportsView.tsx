@@ -12,7 +12,6 @@ import RobotoRegular from '../fonts/Roboto-Regular.ttf'
 import RobotoMedium from '../fonts/Roboto-Medium.ttf'
 import { reportStyles } from '../components/Styles'
 import { FilteredActsContext } from '../context/Context'
-import { Act } from '../types'
 
 Font.register({
   family: 'RobotoLight',
@@ -30,33 +29,43 @@ Font.register({
 const Reports = () => {
   const { filteredActs } = useContext(FilteredActsContext)
 
-  const reduceObjectByProperty = (array: Act[], id: string) => {
-    const newArray: Act[] = []
-    let counter = 1
-    newArray[0] = { ...array[0] }
-
-    // Helper function to accumulate property values for duplicate idnp's
-    const accumulateProperty = (prop: string, i: number) => {
-      newArray[counter - 1][prop] =
-        Number(newArray[counter - 1][prop]) + Number(array[i][prop])
+  type Result = {
+    [date: string]: {
+      totalStateFee: number
+      totalNotaryFee: number
+      legalizedActs: number
+      authenticatedActs: number
+      totalActs: number
+      otherActs: number
     }
+  }
 
-    // Reduce array to new array, accumulating properties for duplicate idnp's
-    for (let i = 1; i < array.length; i++) {
-      if (array[i][id] === array[i - 1][id]) {
-        accumulateProperty('stateFee', i)
-        accumulateProperty('stateFee', i)
-        accumulateProperty('notaryFee', i)
-      } else {
-        newArray[counter] = { ...array[i] }
-        counter++
+  const groupedData = filteredActs.reduce<Result>((result, act) => {
+    const date = act.date
+    if (!result[date]) {
+      result[date] = {
+        totalStateFee: 0,
+        totalNotaryFee: 0,
+        legalizedActs: 0,
+        authenticatedActs: 0,
+        totalActs: 0,
+        otherActs: 0,
       }
     }
-    return newArray
-  }
-  const newFilteredActs = reduceObjectByProperty(filteredActs, 'date')
-  newFilteredActs.reverse()
-  const totalActions = 12
+
+    result[date].totalStateFee += Number(act.stateFee)
+    result[date].totalNotaryFee += Number(act.notaryFee)
+    result[date].totalActs++
+    if (act.actName === 'Act legalizat') {
+      result[date].legalizedActs++
+    } else if (act.actName === 'Act autentificat') {
+      result[date].authenticatedActs++
+    } else if (act.actName === 'Alte acte') {
+      result[date].otherActs++
+    }
+
+    return result
+  }, {})
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>
@@ -86,37 +95,49 @@ const Reports = () => {
                 <Text style={reportStyles.tableCell}>Taxa notarială</Text>
               </View>
             </View>
-            {newFilteredActs.map((row, i) => {
-              return (
-                <View key={i} style={reportStyles.tableRow}>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>{row.date}</Text>
+
+            {Object.entries(groupedData)
+              .reverse()
+              .map((row, i) => {
+                const [date, data] = row
+                return (
+                  <View key={i} style={reportStyles.tableRow}>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>{date}</Text>
+                    </View>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>
+                        {data.totalActs}
+                      </Text>
+                    </View>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>
+                        {data.authenticatedActs}
+                      </Text>
+                    </View>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>
+                        {data.legalizedActs}
+                      </Text>
+                    </View>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>
+                        {data.otherActs}
+                      </Text>
+                    </View>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>
+                        {data.totalStateFee}
+                      </Text>
+                    </View>
+                    <View style={reportStyles.tableCol}>
+                      <Text style={reportStyles.tableCell}>
+                        {data.totalNotaryFee}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>{totalActions}</Text>
-                  </View>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>
-                      {row.authentications}
-                    </Text>
-                  </View>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>
-                      {row.legalisations}
-                    </Text>
-                  </View>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>{row.others}</Text>
-                  </View>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>{row.stateFee}</Text>
-                  </View>
-                  <View style={reportStyles.tableCol}>
-                    <Text style={reportStyles.tableCell}>{row.notaryFee}</Text>
-                  </View>
-                </View>
-              )
-            })}
+                )
+              })}
           </View>
         </Page>
       </Document>
