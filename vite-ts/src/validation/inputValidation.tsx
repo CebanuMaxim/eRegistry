@@ -38,7 +38,7 @@ export default function actValidation(
       break
     // Act conditions
     case 'actId':
-      checkInput(name, /^\d{4}$/, 'actId must be 4-digits string')
+      checkInput(name, /^\d+$/, 'only digits are allowed')
       break
     case 'date':
       checkInput(
@@ -62,21 +62,13 @@ export default function actValidation(
       )
       break
     case 'idnp':
-      checkInput(name, /^\d{13}$/, 'idnp must be a 13-digit number')
+      checkInput(name, /^\d{13}$/, 'idnp must be a 13-digit string')
       break
     case 'stateFee':
-      checkInput(
-        name,
-        /^(0|0.5|1|2|2.5|5)$/,
-        'Possible values: 0, 0.5, 1, 2, 2.5, 5'
-      )
+      checkInput(name, /^[\d.]+$/, 'only digits are allowed')
       break
     case 'notaryFee':
-      checkInput(
-        name,
-        /^(0|30|59|60|120|150|395|399|400|445)$/,
-        'Possible values: 0, 30, 59, 120, 150, 395, 399, 400, 445'
-      )
+      checkInput(name, /^[\d]+$/, 'only digits are allowed')
       break
     case 'actName':
     default:

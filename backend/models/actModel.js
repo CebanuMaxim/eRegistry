@@ -38,12 +38,10 @@ const Act = mongoose.model(
     stateFee: {
       type: Number,
       required: true,
-      enum: [0, 0.5, 1, 2, 2.5, 5],
     },
     notaryFee: {
       type: Number,
       required: true,
-      enum: [0, 30, 59, 60, 120, 150, 350, 395, 399, 400, 445],
     },
     registry: {
       type: mongoose.Schema.Types.ObjectId,
@@ -89,10 +87,8 @@ function validateAct(act) {
         'string.pattern.base': 'idnp must be a 13-digit number',
         'any.required': 'idnp is required',
       }),
-    stateFee: Joi.number().required().valid(0, 0.5, 1, 2, 2.5, 5),
-    notaryFee: Joi.number()
-      .required()
-      .valid(0, 30, 59, 60, 120, 150, 395, 399, 400, 445),
+    stateFee: Joi.number().required(),
+    notaryFee: Joi.number().required(),
     registry: Joi.string(),
     _id: Joi.string(),
     __v: Joi.number(),
