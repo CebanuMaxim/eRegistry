@@ -89,6 +89,13 @@ export const reportStyles = StyleSheet.create({
     borderStyle: 'solid',
     borderBottomWidth: 1,
   },
+  lastTableRow: {
+    backgroundColor: 'lightblue',
+    flexDirection: 'row',
+    width: '100%',
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+  },
   tableCol: {
     width: '90px',
   },

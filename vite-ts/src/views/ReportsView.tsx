@@ -119,7 +119,7 @@ const Reports = () => {
           <View style={reportStyles.table}>
             <View style={reportStyles.tableRow}>
               <View style={reportStyles.tableCol}>
-                <Text style={reportStyles.tableCell}>iulie 24</Text>
+                <Text style={reportStyles.tableCell}>Data</Text>
               </View>
               <View style={reportStyles.tableCol}>
                 <Text style={reportStyles.tableCell}>Acțiuni</Text>
@@ -183,6 +183,37 @@ const Reports = () => {
                   </View>
                 )
               })}
+            <View style={reportStyles.lastTableRow}>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>Totaluri</Text>
+              </View>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>{totalData.allActs}</Text>
+              </View>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>
+                  {totalData.authenticatedActs}
+                </Text>
+              </View>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>
+                  {totalData.legalizedActs}
+                </Text>
+              </View>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>
+                  {totalData.otherActs}
+                </Text>
+              </View>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>{totalData.stateFee}</Text>
+              </View>
+              <View style={reportStyles.tableCol}>
+                <Text style={reportStyles.tableCell}>
+                  {totalData.notaryFee}
+                </Text>
+              </View>
+            </View>
           </View>
         </Page>
       </Document>
