@@ -14,7 +14,7 @@ import Admin from './views/AdminView'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminRoute from './components/AdminRoute'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import ConfirmationsView from './views/ConfirmationsView'
+import Confirmations from './views/ConfirmationsView'
 import Reports from './views/ReportsView'
 
 const router = createBrowserRouter(
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
         <Route path='/admin' element={<Admin />} />
         <Route
           path='/confirmations/:id/:typographyId/:registryId'
-          element={<ConfirmationsView />}
+          element={<Confirmations />}
         />
         <Route path='/reports/:id' element={<Reports />} />
       </Route>
