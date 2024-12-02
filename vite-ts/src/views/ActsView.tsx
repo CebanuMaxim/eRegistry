@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Table, Button } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
@@ -38,9 +38,7 @@ const Acts = () => {
         }
         setActs(
           res.data.acts
-            .sort(function (a: Act, b: Act) {
-              return Number(a.actId) - Number(b.actId)
-            })
+            .sort((a: Act, b: Act) => Number(a.actId) - Number(b.actId))
             .reverse()
         )
       } catch (err) {
@@ -51,51 +49,51 @@ const Acts = () => {
     getActs()
   }, [id])
 
-  useEffect(() => {
-    const filterActs = () => {
-      const filtered = acts.filter((act: Act) => {
-        const compare = (property: string, searchTerm: string) => {
-          return property
-            .toString()
-            .toLocaleLowerCase()
-            .includes(searchTerm.toLocaleLowerCase())
-        }
+  const filteredActsMemo = useMemo(() => {
+    return acts.filter((act: Act) => {
+      const compare = (property: string, searchTerm: string) => {
+        return property
+          .toString()
+          .toLocaleLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
+      }
 
-        switch (actKey) {
-          case 'date':
-            return compare(act.date, searchTerm)
-          case 'firstname':
-            return compare(act.firstname, searchTerm)
-          case 'lastname':
-            return compare(act.lastname, searchTerm)
-          case 'idnp':
-            return compare(act.idnp, searchTerm)
-          default:
-            return compare(act.actId, searchTerm)
-        }
-      })
-      setFilteredActs(filtered)
-    }
-
-    filterActs()
-    // eslint-disable-next-line
+      switch (actKey) {
+        case 'date':
+          return compare(act.date, searchTerm)
+        case 'firstname':
+          return compare(act.firstname, searchTerm)
+        case 'lastname':
+          return compare(act.lastname, searchTerm)
+        case 'idnp':
+          return compare(act.idnp, searchTerm)
+        default:
+          return compare(act.actId, searchTerm)
+      }
+    })
   }, [acts, searchTerm, actKey])
+
+  useEffect(() => {
+    setFilteredActs(filteredActsMemo)
+  }, [filteredActsMemo, setFilteredActs])
+
+  const sortedActs = useMemo(() => {
+    return [...acts].sort((a, b) =>
+      toggle
+        ? Number(a.actId) - Number(b.actId)
+        : Number(b.actId) - Number(a.actId)
+    )
+  }, [acts, toggle])
+
+  const toggleSort = () => {
+    setActs(sortedActs)
+    setToggle(!toggle)
+  }
 
   const addAct = (act: Act) => addActService(act, setActs, id as string)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
   const deleteAct = (_id: string, actNumber: string, registryId: string) =>
     deleteActService(_id, actNumber, registryId, acts, setActs)
-
-  const toggleSort = () => {
-    setActs(
-      [...acts].sort((a, b) =>
-        toggle
-          ? Number(a.actId) - Number(b.actId)
-          : Number(b.actId) - Number(a.actId)
-      )
-    )
-    setToggle(!toggle)
-  }
 
   return (
     <>
