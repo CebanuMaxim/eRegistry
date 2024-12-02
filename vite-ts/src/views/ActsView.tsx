@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Table, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import ActItem from '../components/ActItem'
 import AddAct from '../components/AddAct'
 import axios from '../api/axios'
@@ -121,7 +121,7 @@ const Acts = () => {
         </Button>
       </div>
       <div style={{ height: '500px', overflowY: 'auto' }}>
-        <Table striped style={{ overflowY: 'auto' }}>
+        <table style={{ overflowY: 'auto' }}>
           <thead>
             <tr className='border-bottom p-3 fw-bolder'>
               <td>
@@ -153,7 +153,7 @@ const Acts = () => {
               )
             })}
           </tbody>
-        </Table>
+        </table>
       </div>
     </>
   )
