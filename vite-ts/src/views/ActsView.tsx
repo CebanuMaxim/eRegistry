@@ -15,13 +15,18 @@ import {
 } from '../services/actServices'
 
 const Acts = () => {
+  // Existing state variables
   const [acts, setActs] = useState<Act[]>([])
-  const { filteredActs, setFilteredActs } = useContext(FilteredActsContext)
+  const { setFilteredActs } = useContext(FilteredActsContext)
   const [typographyId, setTypographyId] = useState('')
   const [registryId, setRegistryId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [actKey, setActKey] = useState('')
   const [toggle, setToggle] = useState(true)
+
+  // Pagination state variables
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 20 // You can adjust this number as needed
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -49,6 +54,7 @@ const Acts = () => {
     getActs()
   }, [id])
 
+  // Memoized filtered acts based on search term and actKey
   const filteredActsMemo = useMemo(() => {
     return acts.filter((act: Act) => {
       const compare = (property: string, searchTerm: string) => {
@@ -75,8 +81,10 @@ const Acts = () => {
 
   useEffect(() => {
     setFilteredActs(filteredActsMemo)
+    setCurrentPage(1) // Reset to first page when filters change
   }, [filteredActsMemo, setFilteredActs])
 
+  // Sorting logic
   const sortedActs = useMemo(() => {
     return [...acts].sort((a, b) =>
       toggle
@@ -90,6 +98,27 @@ const Acts = () => {
     setToggle(!toggle)
   }
 
+  // Pagination calculations
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredActsMemo.length / itemsPerPage)
+  }, [filteredActsMemo.length, itemsPerPage])
+
+  const paginatedActs = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    return filteredActsMemo.slice(startIndex, endIndex)
+  }, [filteredActsMemo, currentPage, itemsPerPage])
+
+  // Pagination control functions
+  const nextPage = () => {
+    if (currentPage < totalPages) setCurrentPage((prevPage) => prevPage + 1)
+  }
+
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage((prevPage) => prevPage - 1)
+  }
+
+  // Service functions
   const addAct = (act: Act) => addActService(act, setActs, id as string)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
   const deleteAct = (_id: string, actNumber: string, registryId: string) =>
@@ -121,7 +150,7 @@ const Acts = () => {
         </Button>
       </div>
       <div style={{ height: '500px', overflowY: 'auto' }}>
-        <Table striped style={{ overflowY: 'auto' }}>
+        <Table striped>
           <thead>
             <tr className='border-bottom p-3 fw-bolder'>
               <td>
@@ -142,18 +171,44 @@ const Acts = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredActs.map((act) => {
-              return (
-                <ActItem
-                  key={act._id}
-                  act={act}
-                  editAct={editAct}
-                  deleteAct={deleteAct}
-                />
-              )
-            })}
+            {paginatedActs.map((act) => (
+              <ActItem
+                key={act._id}
+                act={act}
+                editAct={editAct}
+                deleteAct={deleteAct}
+              />
+            ))}
           </tbody>
         </Table>
+      </div>
+      {/* Pagination Controls */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '10px',
+        }}
+      >
+        <Button variant='light' disabled={currentPage === 1} onClick={prevPage}>
+          Previous
+        </Button>
+        {/* {[...Array(totalPages)].map((_, index) => (
+          <Button
+            key={index}
+            variant={currentPage === index + 1 ? 'primary' : 'light'}
+            onClick={() => goToPage(index + 1)}
+          >
+            {index + 1}
+          </Button>
+        ))} */}
+        <Button
+          variant='light'
+          disabled={currentPage === totalPages}
+          onClick={nextPage}
+        >
+          Next
+        </Button>
       </div>
     </>
   )
