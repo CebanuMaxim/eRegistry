@@ -149,16 +149,14 @@ const Acts = () => {
               height={500}
               width={1000}
             >
-              {({ index }) =>
-                filteredActs[index] && (
-                  <ActItem
-                    key={filteredActs[index]._id}
-                    act={filteredActs[index]}
-                    editAct={editAct}
-                    deleteAct={deleteAct}
-                  />
-                )
-              }
+              {({ index }) => (
+                <ActItem
+                  key={filteredActs[index]._id}
+                  act={filteredActs[index]}
+                  editAct={editAct}
+                  deleteAct={deleteAct}
+                />
+              )}
             </List>
           </tbody>
         </table>
