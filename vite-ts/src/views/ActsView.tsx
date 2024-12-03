@@ -14,7 +14,6 @@ import {
   editActService,
 } from '../services/actServices'
 import { FixedSizeList as List } from 'react-window'
-import React from 'react'
 
 const Acts = () => {
   const [acts, setActs] = useState<Act[]>([])
