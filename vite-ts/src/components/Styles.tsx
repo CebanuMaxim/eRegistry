@@ -6,6 +6,12 @@ export const headerStyle: React.CSSProperties = {
   borderBottom: '1px solid lightgray',
 }
 
+export const actItemStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  borderBottom: '1px solid lightgray',
+}
+
 export const errorStyle = {
   color: 'red',
   fontSize: '0.8rem',

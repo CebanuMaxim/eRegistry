@@ -23,6 +23,7 @@ export interface ActItemProps {
   act: Act
   editAct: (act: Act) => Promise<void>
   deleteAct: (_id: string, actNumber: string, registryId: string) => void
+  style: React.CSSProperties
 }
 
 export interface AddActProps {

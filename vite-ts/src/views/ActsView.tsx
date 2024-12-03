@@ -14,6 +14,7 @@ import {
   editActService,
 } from '../services/actServices'
 import { FixedSizeList as List } from 'react-window'
+import React from 'react'
 
 const Acts = () => {
   const [acts, setActs] = useState<Act[]>([])
@@ -121,7 +122,7 @@ const Acts = () => {
           Confirmări
         </Button>
       </div>
-      <div style={{ height: '500px', overflowY: 'auto' }}>
+      <div>
         <table style={{ overflowY: 'auto' }}>
           <thead>
             <tr className='border-bottom p-3 fw-bolder'>
@@ -142,24 +143,23 @@ const Acts = () => {
               <td></td>
             </tr>
           </thead>
-          <tbody>
-            <List
-              itemSize={40}
-              itemCount={filteredActs.length}
-              height={500}
-              width={1000}
-            >
-              {({ index }) => (
-                <ActItem
-                  key={filteredActs[index]._id}
-                  act={filteredActs[index]}
-                  editAct={editAct}
-                  deleteAct={deleteAct}
-                />
-              )}
-            </List>
-          </tbody>
         </table>
+        <List
+          itemSize={50}
+          itemCount={filteredActs.length}
+          height={500}
+          width={'100%'}
+        >
+          {({ index, style }) => (
+            <ActItem
+              key={filteredActs[index]._id}
+              act={filteredActs[index]}
+              editAct={editAct}
+              deleteAct={deleteAct}
+              style={style}
+            />
+          )}
+        </List>
       </div>
     </>
   )
