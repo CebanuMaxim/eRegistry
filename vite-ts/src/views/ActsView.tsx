@@ -13,6 +13,7 @@ import {
   deleteActService,
   editActService,
 } from '../services/actServices'
+import { FixedSizeList as List } from 'react-window'
 
 const Acts = () => {
   const [acts, setActs] = useState<Act[]>([])
@@ -142,16 +143,23 @@ const Acts = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredActs.map((act) => {
-              return (
-                <ActItem
-                  key={act._id}
-                  act={act}
-                  editAct={editAct}
-                  deleteAct={deleteAct}
-                />
-              )
-            })}
+            <List
+              itemSize={40}
+              itemCount={filteredActs.length}
+              height={500}
+              width={1000}
+            >
+              {({ index }) =>
+                filteredActs[index] && (
+                  <ActItem
+                    key={filteredActs[index]._id}
+                    act={filteredActs[index]}
+                    editAct={editAct}
+                    deleteAct={deleteAct}
+                  />
+                )
+              }
+            </List>
           </tbody>
         </table>
       </div>
