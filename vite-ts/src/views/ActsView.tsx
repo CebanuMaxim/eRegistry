@@ -118,6 +118,11 @@ const Acts = () => {
     if (currentPage > 1) setCurrentPage((prevPage) => prevPage - 1)
   }
 
+  // DO NOT DELETE !!!
+  // const goToPage = (page: number) => {
+  //   if (page >= 1 && page <= totalPages) setCurrentPage(page)
+  // }
+
   // Service functions
   const addAct = (act: Act) => addActService(act, setActs, id as string)
   const editAct = (updatedAct: Act) => editActService(updatedAct, acts)
@@ -186,11 +191,15 @@ const Acts = () => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-evenly',
           marginTop: '10px',
         }}
       >
-        <Button variant='light' disabled={currentPage === 1} onClick={prevPage}>
+        <Button
+          className='btn btn-light my-3'
+          disabled={currentPage === 1}
+          onClick={prevPage}
+        >
           Previous
         </Button>
         {/* {[...Array(totalPages)].map((_, index) => (
@@ -203,7 +212,7 @@ const Acts = () => {
           </Button>
         ))} */}
         <Button
-          variant='light'
+          className='btn btn-light my-3'
           disabled={currentPage === totalPages}
           onClick={nextPage}
         >
