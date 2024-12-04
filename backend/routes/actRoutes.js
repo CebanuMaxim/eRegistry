@@ -10,7 +10,7 @@ const {
 
 router.route('/').get(getAllActs)
 
-router.route('/confirmations').get(getActsByDateRange)
+router.route('/reports').get(getActsByDateRange)
 
 router.route('/:actId').get(getAct).put(editAct)
 

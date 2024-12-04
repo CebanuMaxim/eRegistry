@@ -110,7 +110,6 @@ const Reports = () => {
       allActs: 0,
     }
   )
-  console.log(totalData)
 
   return (
     <PDFViewer style={{ width: '100%', height: window.innerHeight }}>

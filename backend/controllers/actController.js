@@ -14,11 +14,11 @@ const getAllActs = asyncHandler(async (req, res) => {
 })
 
 // @desc      Get acts by date range
-//@route      GET /api/confirmations?startDate=:startDate&endDate=:endDate
+//@route      GET /api/acts/reports
 const getActsByDateRange = asyncHandler(async (req, res) => {
-  console.log(req.query)
+  console.log(req.body)
 
-  const { startDate, endDate } = req.query
+  const { startDate, endDate } = req.bodys
   if (!startDate || !endDate) {
     return res.status(400).send('Start date and end date are required')
   }
