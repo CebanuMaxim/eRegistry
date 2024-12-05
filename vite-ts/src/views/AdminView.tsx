@@ -81,15 +81,25 @@ const Admin: React.FC = () => {
     return `${year}-${monthPadded}-${dayPadded}`
   }
 
+  // Custom function to format dates to 'yyyy-mm-dd' without time zone issues
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear()
+    const month = ('0' + (date.getMonth() + 1)).slice(-2)
+    const day = ('0' + date.getDate()).slice(-2)
+    return `${year}-${month}-${day}`
+  }
+
   // Updated generateData function to aggregate data per day
   const generateData = async (): Promise<ChartDataPoint[]> => {
     const response = await axios.get<Act[]>('/acts')
-    // Object to hold aggregated data
+
+    // Object to hold aggregated data per day
     const aggregatedData: { [date: string]: number } = {}
 
     response.data.forEach((act: Act) => {
       const date = convertDate(act.date)
       const value = Number(act.notaryFee)
+
       if (isNaN(value)) {
         console.warn(
           `Invalid notaryFee value for act ID ${act._id}:`,
@@ -97,6 +107,7 @@ const Admin: React.FC = () => {
         )
         return
       }
+
       // Aggregate values per date
       if (aggregatedData[date]) {
         aggregatedData[date] += value
@@ -105,18 +116,225 @@ const Admin: React.FC = () => {
       }
     })
 
+    // Get the date range from the data
+    let dates = Object.keys(aggregatedData)
+
+    if (dates.length === 0) return []
+
+    // Sort the dates
+    dates = dates.sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+
+    const startDate = new Date(dates[0])
+    const endDate = new Date(dates[dates.length - 1])
+
+    // Fill in missing dates with zero values
+    const data: ChartDataPoint[] = fillMissingDays(
+      startDate,
+      endDate,
+      aggregatedData
+    )
+
+    return data
+  }
+
+  // Function to fill missing days in the data
+  const fillMissingDays = (
+    startDate: Date,
+    endDate: Date,
+    aggregatedData: { [date: string]: number }
+  ): ChartDataPoint[] => {
+    const data: ChartDataPoint[] = []
+    const currentDate = new Date(startDate)
+
+    while (currentDate <= endDate) {
+      const dateStr = formatDate(currentDate)
+
+      data.push({
+        date: dateStr,
+        value: aggregatedData[dateStr] || 0,
+      })
+
+      // Move to next day
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
+
+    return data
+  }
+
+  // Function to get the start date of the week (Monday)
+  const getStartOfWeek = (date: Date): string => {
+    const newDate = new Date(date)
+    const day = newDate.getDay()
+    const diff = newDate.getDate() - day + (day === 0 ? -6 : 1)
+    newDate.setDate(diff)
+    newDate.setHours(0, 0, 0, 0)
+    return formatDate(newDate)
+  }
+
+  // Function to group data by week
+  const groupDataByWeek = (data: ChartDataPoint[]): ChartDataPoint[] => {
+    const aggregatedData: { [weekStartDate: string]: number } = {}
+
+    data.forEach((item) => {
+      const date = new Date(item.date)
+      const weekStartDate = getStartOfWeek(date)
+      if (aggregatedData[weekStartDate]) {
+        aggregatedData[weekStartDate] += item.value
+      } else {
+        aggregatedData[weekStartDate] = item.value
+      }
+    })
+
     // Convert aggregated data to ChartDataPoint[]
-    const data: ChartDataPoint[] = Object.entries(aggregatedData).map(
+    const result: ChartDataPoint[] = Object.entries(aggregatedData).map(
       ([date, value]) => ({
         date,
         value,
       })
     )
 
-    // Sort data by date
-    data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    // Sort the result by date
+    result.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
 
-    return data
+    return result
+  }
+
+  // Function to fill missing weeks in the data
+  const fillMissingWeeks = (
+    startDate: Date,
+    endDate: Date,
+    data: ChartDataPoint[]
+  ): ChartDataPoint[] => {
+    const weekMap: { [weekStartDate: string]: number } = {}
+    data.forEach((item) => {
+      weekMap[item.date] = item.value
+    })
+
+    const result: ChartDataPoint[] = []
+    const currentDate = new Date(getStartOfWeek(startDate))
+
+    while (currentDate <= endDate) {
+      const weekStartDateStr = formatDate(currentDate)
+      const value = weekMap[weekStartDateStr] || 0
+      result.push({ date: weekStartDateStr, value })
+      currentDate.setDate(currentDate.getDate() + 7)
+    }
+
+    return result
+  }
+
+  // Updated filterDataByRange function
+  const filterDataByRange = (
+    data: ChartDataPoint[],
+    range: TimeRangeValue
+  ): ChartDataPoint[] => {
+    const now = new Date()
+    let startDate: Date
+
+    switch (range) {
+      case 'week': {
+        startDate = new Date(now)
+        startDate.setDate(now.getDate() - 7)
+        break
+      }
+      case 'month': {
+        startDate = new Date(now)
+        startDate.setMonth(now.getMonth() - 1)
+        break
+      }
+      case '6months': {
+        startDate = new Date(now)
+        startDate.setMonth(now.getMonth() - 6)
+        break
+      }
+      case 'year': {
+        startDate = new Date(now)
+        startDate.setFullYear(now.getFullYear() - 1)
+        break
+      }
+      case 'all':
+      default: {
+        if (data.length > 0) {
+          startDate = new Date(data[0].date)
+        } else {
+          startDate = new Date()
+        }
+        break
+      }
+    }
+
+    // Filter data within date range
+    const filteredData = data.filter((item) => {
+      const itemDate = new Date(item.date)
+      return itemDate >= startDate && itemDate <= now
+    })
+
+    // Determine whether to aggregate per week or per day
+    let aggregatedData: ChartDataPoint[]
+
+    if (range === '6months' || range === 'year' || range === 'all') {
+      // Aggregate per week
+      const groupedData = groupDataByWeek(filteredData)
+      aggregatedData = fillMissingWeeks(startDate, now, groupedData)
+    } else {
+      // Aggregate per day (data is already per day)
+      aggregatedData = fillMissingDays(
+        startDate,
+        now,
+        aggregatedDataToMap(filteredData)
+      )
+    }
+
+    return aggregatedData
+  }
+
+  // Helper function to convert ChartDataPoint[] to aggregatedData map
+  const aggregatedDataToMap = (
+    data: ChartDataPoint[]
+  ): { [date: string]: number } => {
+    const map: { [date: string]: number } = {}
+    data.forEach((item) => {
+      map[item.date] = item.value
+    })
+    return map
+  }
+
+  // Conditional rendering to ensure data is loaded
+  if (chartData.length === 0) {
+    return <p>Loading chart data...</p>
+  }
+
+  const filteredChartData: ChartDataPoint[] = filterDataByRange(
+    chartData,
+    selectedRange
+  )
+
+  // Optional: Format X-axis labels
+  const formatXAxis = (tickItem: string): string => {
+    const date = new Date(tickItem)
+    return date.toLocaleDateString(undefined, {
+      day: 'numeric',
+      month: 'short',
+    })
+  }
+
+  // Optional: Format Tooltip labels
+  const formatTooltipLabel = (value: string): string => {
+    const date = new Date(value)
+    if (
+      selectedRange === '6months' ||
+      selectedRange === 'year' ||
+      selectedRange === 'all'
+    ) {
+      // Show date range for the week
+      const endDate = new Date(date)
+      endDate.setDate(endDate.getDate() + 6)
+      return `Week: ${date.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+    } else {
+      return `Date: ${date.toLocaleDateString()}`
+    }
   }
 
   const createUser = async (e: FormEvent<HTMLFormElement>) => {
@@ -150,75 +368,6 @@ const Admin: React.FC = () => {
         console.error(err)
       }
     }
-  }
-
-  // Function to filter chart data based on selected time range
-  const filterDataByRange = (
-    data: ChartDataPoint[],
-    range: TimeRangeValue
-  ): ChartDataPoint[] => {
-    const now = new Date()
-    let filteredData: ChartDataPoint[] = []
-
-    switch (range) {
-      case 'week': {
-        const weekAgo = new Date(now)
-        weekAgo.setDate(now.getDate() - 7)
-        filteredData = data.filter((item) => {
-          const itemDate = new Date(item.date)
-          return itemDate >= weekAgo && itemDate <= now
-        })
-        break
-      }
-      case 'month': {
-        const monthAgo = new Date(now)
-        monthAgo.setMonth(now.getMonth() - 1)
-        filteredData = data.filter((item) => {
-          const itemDate = new Date(item.date)
-          return itemDate >= monthAgo && itemDate <= now
-        })
-        break
-      }
-      case '6months': {
-        const sixMonthsAgo = new Date(now)
-        sixMonthsAgo.setMonth(now.getMonth() - 6)
-        filteredData = data.filter((item) => {
-          const itemDate = new Date(item.date)
-          return itemDate >= sixMonthsAgo && itemDate <= now
-        })
-        break
-      }
-      case 'year': {
-        const yearAgo = new Date(now)
-        yearAgo.setFullYear(now.getFullYear() - 1)
-        filteredData = data.filter((item) => {
-          const itemDate = new Date(item.date)
-          return itemDate >= yearAgo && itemDate <= now
-        })
-        break
-      }
-      case 'all':
-      default: {
-        filteredData = data
-        break
-      }
-    }
-    return filteredData
-  }
-
-  const filteredChartData: ChartDataPoint[] = filterDataByRange(
-    chartData,
-    selectedRange
-  )
-
-  // Optional: Format X-axis labels
-  const formatXAxis = (tickItem: string): string => {
-    return new Date(tickItem).toLocaleDateString()
-  }
-
-  // Optional: Format Tooltip labels
-  const formatTooltipLabel = (value: string): string => {
-    return `Date: ${new Date(value).toLocaleDateString()}`
   }
 
   return (
