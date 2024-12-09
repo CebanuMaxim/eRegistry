@@ -62,7 +62,11 @@ export default function actValidation(
       )
       break
     case 'idnp':
-      checkInput(name, /^\d{13}$/, 'idnp must be a 13-digit string')
+      checkInput(
+        name,
+        /^\d{13}$|^UKR-[A-Z]{2}-\d{6}$/,
+        'idnp must be a 13-digit string'
+      )
       break
     case 'stateFee':
       checkInput(name, /^[\d.]+$/, 'only digits are allowed')

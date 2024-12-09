@@ -65,8 +65,8 @@ const Acts = () => {
       }
 
       switch (actKey) {
-        case 'date':
-          return compare(act.date, searchTerm)
+        case 'actId':
+          return compare(act.actId, searchTerm)
         case 'firstname':
           return compare(act.firstname, searchTerm)
         case 'lastname':
@@ -74,7 +74,7 @@ const Acts = () => {
         case 'idnp':
           return compare(act.idnp, searchTerm)
         default:
-          return compare(act.actId, searchTerm)
+          return compare(act.date, searchTerm)
       }
     })
   }, [acts, searchTerm, actKey])

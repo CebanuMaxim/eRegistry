@@ -18,8 +18,8 @@ const SearchItem = ({
               value={actKey}
               onChange={(e) => setActKey(e.target.value)}
             >
-              <option value='actId'>Nr. actului</option>
               <option value='date'>Dată</option>
+              <option value='actId'>Nr. actului</option>
               <option value='lastname'>Numele de familie</option>
               <option value='firstname'>Prenume</option>
               <option value='idnp'>IDNP</option>
