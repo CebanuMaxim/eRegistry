@@ -196,11 +196,11 @@ const Acts = () => {
         }}
       >
         <Button
-          className='btn btn-light my-3'
+          className='btn btn-secondary my-3'
           disabled={currentPage === 1}
           onClick={prevPage}
         >
-          Previous
+          <strong>&lt;</strong>
         </Button>
         {/* {[...Array(totalPages)].map((_, index) => (
           <Button
@@ -212,11 +212,11 @@ const Acts = () => {
           </Button>
         ))} */}
         <Button
-          className='btn btn-light my-3'
+          className='btn btn-secondary my-3'
           disabled={currentPage === totalPages}
           onClick={nextPage}
         >
-          Next
+          <strong>&gt;</strong>
         </Button>
       </div>
     </>
