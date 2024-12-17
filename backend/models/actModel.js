@@ -29,12 +29,6 @@ const Act = mongoose.model(
       idnp: {
         type: String,
         required: true,
-        validate: {
-          validator: function (val) {
-            return val.length === 13
-          },
-          message: (val) => `${val.value} has to be 13 digits`,
-        },
       },
       stateFee: {
         type: Number,
@@ -87,7 +81,7 @@ function validateAct(act) {
         'any.required': 'firstname is required',
       }),
     idnp: Joi.string()
-      .pattern(/^\d{13}$|^UKR-[A-Z]{2}-\d{6}$/)
+      .pattern(/^\d{13}$|^[A-Z]{3}-[A-Z]{1,2}-\d{1,8}$/)
       .messages({
         'string.pattern.base': 'idnp must be a 13-digit number',
         'any.required': 'idnp is required',

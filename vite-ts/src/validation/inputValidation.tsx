@@ -64,7 +64,7 @@ export default function actValidation(
     case 'idnp':
       checkInput(
         name,
-        /^\d{13}$|^UKR-[A-Z]{2}-\d{6}$/,
+        /^\d{13}$|^[A-Z]{3}-[A-Z]{1,2}-\d{1,8}$/,
         'idnp must be a 13-digit string'
       )
       break
