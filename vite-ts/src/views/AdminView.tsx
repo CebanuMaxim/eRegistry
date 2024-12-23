@@ -165,6 +165,7 @@ const Admin: React.FC = () => {
   const getStartOfWeek = (date: Date): string => {
     const newDate = new Date(date)
     const day = newDate.getDay()
+
     const diff = newDate.getDate() - day + (day === 0 ? -6 : 1)
     newDate.setDate(diff)
     newDate.setHours(0, 0, 0, 0)
@@ -268,7 +269,12 @@ const Admin: React.FC = () => {
     // Filter data within date range
     const filteredData = data.filter((item) => {
       const itemDate = new Date(item.date)
-      return itemDate >= startDate && itemDate <= now
+
+      // Subtract one day from the startDate
+      const adjustedStartDate = new Date(startDate)
+      adjustedStartDate.setDate(adjustedStartDate.getDate() - 1)
+
+      return itemDate >= adjustedStartDate && itemDate <= now
     })
 
     // Determine whether to aggregate per week or per day
@@ -295,9 +301,11 @@ const Admin: React.FC = () => {
     data: ChartDataPoint[]
   ): { [date: string]: number } => {
     const map: { [date: string]: number } = {}
+
     data.forEach((item) => {
       map[item.date] = item.value
     })
+
     return map
   }
 
