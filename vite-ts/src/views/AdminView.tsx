@@ -71,6 +71,7 @@ const Admin: React.FC = () => {
       }
     }
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Function to convert date from 'dd.mm.yyyy' to 'yyyy-mm-dd'
