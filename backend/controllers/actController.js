@@ -31,6 +31,26 @@ const getActsByDateRange = asyncHandler(async (req, res) => {
   res.json(acts)
 })
 
+const getActsByMonthYear = asyncHandler(async (req, res) => {
+  const { monthYear } = req.params // Expecting a date in mm.yyyy format
+  if (!monthYear) {
+    return res.status(400).send('Month and year are required')
+  }
+
+  const [month, year] = monthYear.split('.') // Split the monthYear into month and year
+  if (!month || !year || month.length !== 2 || year.length !== 4) {
+    return res.status(400).send('Invalid month and year format. Use mm.yyyy')
+  }
+
+  const acts = await Act.find({
+    date: {
+      $regex: `^\\d{2}\\.${month}\\.${year}$`,
+    },
+  }).sort({ date: 1 })
+
+  res.json(acts)
+})
+
 // @desc      Fetch an act
 // @route     GET /api/acts/:actId
 const getAct = asyncHandler(async (req, res) => {
@@ -96,6 +116,7 @@ module.exports = {
   getAllActs,
   getAct,
   getActsByDateRange,
+  getActsByMonthYear,
   createAct,
   editAct,
   deleteAct,

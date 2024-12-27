@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {
   Document,
   Page,
@@ -13,6 +13,7 @@ import RobotoMedium from '../fonts/Roboto-Medium.ttf'
 import { reportStyles } from '../components/Styles'
 import { FilteredActsContext } from '../context/Context'
 import { Act } from '../types'
+import axios from 'axios'
 
 Font.register({
   family: 'RobotoLight',
@@ -28,6 +29,23 @@ Font.register({
 })
 
 const Reports = () => {
+  const [acts, setActs] = useState([])
+  useEffect(() => {
+    const getActs = async () => {
+      try {
+        const response = await axios.get(`/acts/reports/05.2024`)
+        setActs(response.data)
+        console.log(response)
+        if (!response.data.acts) {
+          return
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getActs()
+  })
+
   const { filteredActs } = useContext(FilteredActsContext)
 
   type GroupedData = {

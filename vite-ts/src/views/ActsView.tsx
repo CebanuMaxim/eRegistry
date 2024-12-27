@@ -30,11 +30,13 @@ const Acts = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
+  console.log(searchTerm)
 
   useEffect(() => {
     async function getActs() {
       try {
         const res = await axios.get(`/registries/${id}`)
+
         setTypographyId(res.data.typographyId)
         setRegistryId(res.data.registryId)
 

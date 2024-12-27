@@ -65,6 +65,7 @@ const Admin: React.FC = () => {
     const fetchData = async () => {
       try {
         const data = await generateData()
+
         setChartData(data)
       } catch (error) {
         console.error('Error fetching chart data:', error)
@@ -93,6 +94,7 @@ const Admin: React.FC = () => {
   // Updated generateData function to aggregate data per day
   const generateData = async (): Promise<ChartDataPoint[]> => {
     const response = await axios.get<Act[]>('/acts')
+    console.log(response)
 
     // Object to hold aggregated data per day
     const aggregatedData: { [date: string]: number } = {}
