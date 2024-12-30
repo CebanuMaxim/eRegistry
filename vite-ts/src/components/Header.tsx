@@ -28,12 +28,7 @@ const Header = () => {
         {
           <Button
             className='btn btn-light my-3'
-            onClick={() =>
-              currentLocation.includes('confirmations') ||
-              currentLocation.includes('reports')
-                ? navigate(`/regisrtry/${params.id}`)
-                : navigate('/registries')
-            }
+            onClick={() => navigate('/registries')}
           >
             Home
           </Button>

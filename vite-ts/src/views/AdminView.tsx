@@ -16,6 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
+import Reports from '../components/Reports'
 
 // Define interfaces and types
 interface ChartDataPoint {
@@ -32,6 +33,7 @@ interface TimeRangeOption {
 
 const Admin: React.FC = () => {
   // State variables with explicit types
+  const [acts, setActs] = useState<Act[]>([])
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
@@ -94,7 +96,7 @@ const Admin: React.FC = () => {
   // Updated generateData function to aggregate data per day
   const generateData = async (): Promise<ChartDataPoint[]> => {
     const response = await axios.get<Act[]>('/acts')
-    console.log(response)
+    setActs(response.data)
 
     // Object to hold aggregated data per day
     const aggregatedData: { [date: string]: number } = {}
@@ -383,38 +385,10 @@ const Admin: React.FC = () => {
 
   return (
     <>
-      <Table striped>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Is Admin</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user: User) => {
-            return (
-              <tr key={user._id}>
-                <td>{user.username}</td>
-                <td>{String(user.isAdmin)}</td>
-                <td>
-                  <Button
-                    onClick={() => deleteUser(user._id)}
-                    variant='link'
-                    size='sm'
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
-
+      <Reports acts={acts} />
       {/* Chart and time range selection */}
       <div>
-        <h2>Notary Fees Over Time</h2>
+        <h2 style={{ padding: '20px 10px' }}>Notary Fees Over Time</h2>
         <div style={{ marginBottom: '20px' }}>
           {timeRanges.map((range: TimeRangeOption) => (
             <button
@@ -446,6 +420,35 @@ const Admin: React.FC = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      <Table striped>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Is Admin</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user: User) => {
+            return (
+              <tr key={user._id}>
+                <td>{user.username}</td>
+                <td>{String(user.isAdmin)}</td>
+                <td>
+                  <Button
+                    onClick={() => deleteUser(user._id)}
+                    variant='link'
+                    size='sm'
+                  >
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </Table>
 
       <FormContainer>
         <h2>Register New User</h2>

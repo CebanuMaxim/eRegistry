@@ -30,7 +30,7 @@ const Acts = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
-  console.log(searchTerm)
+  console.log('debouncing', searchTerm)
 
   useEffect(() => {
     async function getActs() {

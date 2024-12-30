@@ -31,7 +31,7 @@ const router = createBrowserRouter(
           path='/confirmations/:id/:typographyId/:registryId'
           element={<Confirmations />}
         />
-        <Route path='/reports/:id' element={<Reports />} />
+        <Route path='/reports/:date' element={<Reports />} />
       </Route>
       <Route path='*' element={<h1>Page Not Found</h1>} />
     </Route>

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
   Document,
   Page,
@@ -29,22 +30,18 @@ Font.register({
 })
 
 const Reports = () => {
-  const [acts, setActs] = useState([])
-  useEffect(() => {
-    const getActs = async () => {
-      try {
-        const response = await axios.get(`/acts/reports/05.2024`)
-        setActs(response.data)
-        console.log(response)
-        if (!response.data.acts) {
-          return
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    getActs()
-  })
+  // const [acts, setActs] = useState([])
+  // const par = useParams()
+
+  // useEffect(() => {
+  //   const getActs = async () => {
+  //     try {
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+  //   getActs()
+  // })
 
   const { filteredActs } = useContext(FilteredActsContext)
 

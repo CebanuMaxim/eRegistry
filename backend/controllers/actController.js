@@ -15,39 +15,16 @@ const getAllActs = asyncHandler(async (req, res) => {
 
 // @desc      Get acts by date range
 //@route      GET /api/acts/reports
-const getActsByDateRange = asyncHandler(async (req, res) => {
-  console.log(req.body)
+const getActsByMonth = asyncHandler(async (req, res) => {
+  const response = req.params
 
-  const { startDate, endDate } = req.bodys
-  if (!startDate || !endDate) {
-    return res.status(400).send('Start date and end date are required')
-  }
-  const acts = await Act.find({
-    date: {
-      $gte: startDate,
-      $lte: endDate,
-    },
-  })
-  res.json(acts)
-})
-
-const getActsByMonthYear = asyncHandler(async (req, res) => {
-  const { monthYear } = req.params // Expecting a date in mm.yyyy format
-  if (!monthYear) {
-    return res.status(400).send('Month and year are required')
-  }
-
-  const [month, year] = monthYear.split('.') // Split the monthYear into month and year
-  if (!month || !year || month.length !== 2 || year.length !== 4) {
-    return res.status(400).send('Invalid month and year format. Use mm.yyyy')
-  }
+  const [month, year] = response.date.split('.')
 
   const acts = await Act.find({
     date: {
       $regex: `^\\d{2}\\.${month}\\.${year}$`,
     },
   }).sort({ date: 1 })
-
   res.json(acts)
 })
 
@@ -115,8 +92,7 @@ const deleteAct = asyncHandler(async (req, res) => {
 module.exports = {
   getAllActs,
   getAct,
-  getActsByDateRange,
-  getActsByMonthYear,
+  getActsByMonth,
   createAct,
   editAct,
   deleteAct,

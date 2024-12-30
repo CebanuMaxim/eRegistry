@@ -5,15 +5,12 @@ const {
   createAct,
   editAct,
   deleteAct,
-  getActsByDateRange,
-  getActsByMonthYear,
+  getActsByMonth,
 } = require('../controllers/actController')
 
 router.route('/').get(getAllActs)
 
-router.route('/reports').get(getActsByDateRange)
-
-router.route('/reports/:monthYear').get(getActsByMonthYear)
+router.route('/reports/:date').get(getActsByMonth)
 
 router.route('/:actId').get(getAct).put(editAct)
 
