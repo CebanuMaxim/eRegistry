@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useContext } from 'react'
 import {
   Document,
   Page,
@@ -14,7 +13,6 @@ import RobotoMedium from '../fonts/Roboto-Medium.ttf'
 import { reportStyles } from '../components/Styles'
 import { FilteredActsContext } from '../context/Context'
 import { Act } from '../types'
-import axios from 'axios'
 
 Font.register({
   family: 'RobotoLight',
@@ -30,19 +28,6 @@ Font.register({
 })
 
 const Reports = () => {
-  // const [acts, setActs] = useState([])
-  // const par = useParams()
-
-  // useEffect(() => {
-  //   const getActs = async () => {
-  //     try {
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }
-  //   getActs()
-  // })
-
   const { filteredActs } = useContext(FilteredActsContext)
 
   type GroupedData = {
@@ -155,48 +140,42 @@ const Reports = () => {
               </View>
             </View>
 
-            {Object.entries(groupedData)
-              .reverse()
-              .map((row, i) => {
-                const [date, data] = row
-                return (
-                  <View key={i} style={reportStyles.tableRow}>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>{date}</Text>
-                    </View>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>
-                        {data.totalActs}
-                      </Text>
-                    </View>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>
-                        {data.authenticatedActs}
-                      </Text>
-                    </View>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>
-                        {data.legalizedActs}
-                      </Text>
-                    </View>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>
-                        {data.otherActs}
-                      </Text>
-                    </View>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>
-                        {data.totalStateFee}
-                      </Text>
-                    </View>
-                    <View style={reportStyles.tableCol}>
-                      <Text style={reportStyles.tableCell}>
-                        {data.totalNotaryFee}
-                      </Text>
-                    </View>
+            {Object.entries(groupedData).map((row, i) => {
+              const [date, data] = row
+              return (
+                <View key={i} style={reportStyles.tableRow}>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{date}</Text>
                   </View>
-                )
-              })}
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{data.totalActs}</Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>
+                      {data.authenticatedActs}
+                    </Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>
+                      {data.legalizedActs}
+                    </Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>{data.otherActs}</Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>
+                      {data.totalStateFee}
+                    </Text>
+                  </View>
+                  <View style={reportStyles.tableCol}>
+                    <Text style={reportStyles.tableCell}>
+                      {data.totalNotaryFee}
+                    </Text>
+                  </View>
+                </View>
+              )
+            })}
             <View style={reportStyles.lastTableRow}>
               <View style={reportStyles.tableCol}>
                 <Text style={reportStyles.tableCell}>Totaluri</Text>

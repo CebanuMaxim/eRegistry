@@ -30,7 +30,6 @@ const Acts = () => {
 
   const { id } = useParams()
   const navigate = useNavigate()
-  console.log('debouncing', searchTerm)
 
   useEffect(() => {
     async function getActs() {
@@ -143,7 +142,7 @@ const Acts = () => {
         />
         <Button
           className='btn btn-light my-3'
-          onClick={() => navigate(`/reports/${id}`)}
+          onClick={() => navigate(`/reports`)}
         >
           Rapoarte
         </Button>

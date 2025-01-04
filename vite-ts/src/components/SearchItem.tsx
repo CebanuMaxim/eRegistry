@@ -1,4 +1,5 @@
 import { Col, Form, Row } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
 import { searchItemStyle } from './Styles'
 import { SearchItemProps } from '../types'
 
@@ -8,6 +9,18 @@ const SearchItem = ({
   actKey,
   setActKey,
 }: SearchItemProps) => {
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearchTerm(localSearchTerm)
+    }, 500)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [localSearchTerm, setSearchTerm])
+
   return (
     <Row>
       <span style={searchItemStyle}>Caută după: </span>
@@ -29,8 +42,8 @@ const SearchItem = ({
             <Form.Control
               style={{ width: '150px' }}
               placeholder='search'
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={localSearchTerm}
+              onChange={(e) => setLocalSearchTerm(e.target.value)}
             />
           </Col>
         </Row>

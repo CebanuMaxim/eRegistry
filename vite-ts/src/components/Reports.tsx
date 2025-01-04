@@ -1,26 +1,27 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import { Act } from '../types'
 import axios from '../api/axios'
 import { useNavigate } from 'react-router-dom'
+import { FilteredActsContext } from '../context/Context'
 
 interface ReportsProps {
   acts: Act[]
 }
 
-const Reports: React.FC<ReportsProps> = (acts) => {
+const Reports: React.FC<ReportsProps> = () => {
   const [date, setDate] = useState('')
   const navigate = useNavigate()
-  console.log(acts)
+  const { setFilteredActs } = useContext(FilteredActsContext)
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
       const res = await axios.get(`/acts/reports/${date}`)
-      console.log(res.data)
+      setFilteredActs(res.data)
 
-      navigate(`/reports/${date}`)
+      navigate(`/reports`)
     } catch (error) {
       console.error(error)
     }

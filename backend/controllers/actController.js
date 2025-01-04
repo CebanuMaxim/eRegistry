@@ -17,7 +17,6 @@ const getAllActs = asyncHandler(async (req, res) => {
 //@route      GET /api/acts/reports
 const getActsByMonth = asyncHandler(async (req, res) => {
   const response = req.params
-
   const [month, year] = response.date.split('.')
 
   const acts = await Act.find({
