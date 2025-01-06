@@ -26,7 +26,7 @@ const Acts = () => {
 
   // Pagination state variables
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 20 // You can adjust this number as needed
+  const itemsPerPage = 9 // You can adjust this number as needed
 
   const { id } = useParams()
   const navigate = useNavigate()
@@ -44,7 +44,7 @@ const Acts = () => {
         }
         setActs(
           res.data.acts
-            .sort((a: Act, b: Act) => Number(a.actId) - Number(b.actId))
+            .sort((a: Act, b: Act) => Number(a.date) - Number(b.date))
             .reverse()
         )
       } catch (err) {
@@ -140,12 +140,6 @@ const Acts = () => {
           actKey={actKey}
           setActKey={setActKey}
         />
-        <Button
-          className='btn btn-light my-3'
-          onClick={() => navigate(`/reports`)}
-        >
-          Rapoarte
-        </Button>
         <Button
           className='btn btn-light my-3'
           onClick={() =>

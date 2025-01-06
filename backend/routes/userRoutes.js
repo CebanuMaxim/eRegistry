@@ -22,7 +22,7 @@ router.route('/logout').post(logoutUser)
 
 app.use(admin)
 
-router.route('/').post(registerUser).get(getUsers)
+router.route('/').post(registerUser).get(protect, getUsers)
 router.route('/:id').put(updateUser).delete(deleteUser).get(getUserById)
 
 module.exports = router

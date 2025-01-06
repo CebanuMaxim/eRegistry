@@ -25,9 +25,7 @@ const Confirmation = (act: Act, typographyId: string, registryId: string) => {
         <Text>conform art. 11 (4) (7) (8) Legii Contabilității</Text>
         <Text>și raportării financiare nr. 287 din 15.12.2017</Text>
       </View>
-      <Text style={styles.title}>
-        C O N F I R M A R E {indentation('_')} n r . _______
-      </Text>
+      <Text style={styles.title}>C O N F I R M A R E</Text>
       <View style={styles.content}>
         <View />
         <Text>

@@ -73,6 +73,22 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 })
 
+// Function to convert a UNIX timestamp to local time
+function convertToLocalTime(timestamp) {
+  const date = new Date(timestamp * 1000) // Multiply by 1000 to convert seconds to milliseconds
+  const options = {
+    timeZone: 'Europe/Chisinau',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  }
+  return date.toLocaleString('en-US', options)
+}
+
 // @desc    Login user & get token
 // @route   POST /api/users/login
 const loginUser = asyncHandler(async (req, res) => {
@@ -84,17 +100,20 @@ const loginUser = asyncHandler(async (req, res) => {
       { id: user._id, username: user.username },
       process.env.JWT_SECRET,
       {
-        expiresIn: '5m',
+        expiresIn: '5h',
       }
     )
     res.cookie('jwt', token, {
       httpOnly: true,
     })
 
+    const exp = jwt.decode(token).exp
+    const expLocalTime = convertToLocalTime(exp)
+
     res.json({
       id: user._id,
       isAdmin: user.isAdmin,
-      message: 'Login successful',
+      message: `Login successful. Expires: ${expLocalTime}`,
     })
   } else {
     res.status(401).json({ message: 'Invalid username or password...' })
@@ -104,6 +123,8 @@ const loginUser = asyncHandler(async (req, res) => {
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 const logoutUser = (req, res) => {
+  console.log('QQQ')
+
   res.clearCookie('jwt')
   res.status(200).json({ message: 'Logged out successfully' })
 }

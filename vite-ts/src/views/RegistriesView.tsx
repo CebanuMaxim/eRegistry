@@ -9,8 +9,10 @@ import {
   editRegistryService,
   deleteRegistryService,
 } from '../services/registryServices'
+import { useSession } from '../hooks/useSession'
 
 const Registries = () => {
+  useSession()
   const [registries, setRegistries] = useState<Registry[]>([])
 
   useEffect(() => {

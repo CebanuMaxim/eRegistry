@@ -9,12 +9,12 @@ const {
 
 const { protect } = require('../middleware/authMiddleware.js')
 
-router.route('/').get(protect, getRegistries).post(createRegistry)
+router.route('/').get(protect, getRegistries).post(protect, createRegistry)
 
 router
   .route('/:id')
-  .put(editRegistry)
-  .delete(deleteRegistry)
-  .get(getRegistryById)
+  .put(protect, editRegistry)
+  .delete(protect, deleteRegistry)
+  .get(protect, getRegistryById)
 
 module.exports = router
