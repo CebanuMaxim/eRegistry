@@ -1,3 +1,6 @@
+const express = require('express')
+const app = express()
+
 const router = require('express').Router()
 const {
   getAllActs,
@@ -8,14 +11,13 @@ const {
   getActsByMonth,
 } = require('../controllers/actController')
 
-router.route('/').get(getAllActs)
+const { protect, admin } = require('../middleware/authMiddleware.js')
 
-router.route('/reports/:date').get(getActsByMonth)
+router.route('/').get(protect, getAllActs)
+router.route('/:registryId').post(protect, createAct)
+router.route('/:actId').get(protect, getAct).put(protect, editAct)
 
-router.route('/:actId').get(getAct).put(editAct)
-
-router.route('/:registryId').post(createAct)
-
-router.route('/:registryId/:actId').delete(deleteAct)
+router.route('/:registryId/:actId').delete(admin, deleteAct)
+router.route('/reports/:date').get(admin, getActsByMonth)
 
 module.exports = router

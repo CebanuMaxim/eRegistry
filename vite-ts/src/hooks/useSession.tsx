@@ -1,44 +1,42 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-export const useSession = () => {
+import axios from '../api/axios'
+import { isAxiosError } from 'axios'
+export default function useSession(page: string) {
   const navigate = useNavigate()
-  const logoutUser = async () => {
-    try {
-      await axios.post('/api/users/logout') // Log out the user by clearing the cookie
-      window.location.href = '/login' // Redirect to login page
-    } catch (error) {
-      console.error('Logout failed:', error)
-    }
-  }
 
   useEffect(() => {
+    const logoutUser = async () => {
+      try {
+        await axios.post('/users/logout')
+        localStorage.clear()
+        navigate('/')
+        alert('Your session has expired. Please log in again.')
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
     const checkSession = async () => {
       try {
-        const res = await axios.get('/registries')
-        console.log('RESPONSE: ', res)
+        await axios.get('/registries')
       } catch (error) {
-        console.log('ERROR', error)
-        if (axios.isAxiosError(error)) {
-          console.log('asdasdasd')
+        console.error(error)
+        if (isAxiosError(error)) {
           if (
             error.response?.status === 401 &&
             error.response?.data?.message ===
               'Session expired. Please log in again.'
           ) {
-            console.log('Your session has expired. Please log in again.')
             logoutUser()
-            alert('Your session has expired. Please log in again.')
-            navigate('/login')
           }
         } else {
           console.error('An unexpected error occurred:', error)
         }
       }
-      console.log('LOGGG')
     }
     checkSession()
-    const interval = setInterval(checkSession, 5 * 60 * 1000) // Check session every 5 minutes
+    const interval = setInterval(checkSession, 1 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [navigate])
+  }, [navigate, page])
 }

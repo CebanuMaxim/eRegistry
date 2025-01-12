@@ -3,6 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap'
 import inputValidation from '../validation/inputValidation'
 import { errorStyle } from './Styles'
 import { Act, ActItemProps } from '../types'
+import { isUserAdmin } from '../utils'
 
 const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
   const [show, setShow] = useState(false)
@@ -100,12 +101,16 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
         </Modal>
       </td>
       <td>
-        <div
-          style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteAct(act._id as string, act.actId, act.registry)}
-        >
-          x
-        </div>
+        {isUserAdmin()(
+          <div
+            style={{ color: 'red', cursor: 'pointer' }}
+            onClick={() =>
+              deleteAct(act._id as string, act.actId, act.registry)
+            }
+          >
+            x
+          </div>
+        )}
       </td>
     </tr>
   )

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import inputValidation from '../validation/inputValidation'
 import { errorStyle } from './Styles'
 import { RegistryItemProps } from '../types'
+import { isUserAdmin } from '../utils'
 
 const RegistryItem: React.FC<RegistryItemProps> = ({
   registry,
@@ -110,12 +111,14 @@ const RegistryItem: React.FC<RegistryItemProps> = ({
         </Modal>
       </td>
       <td>
-        <div
-          style={{ color: 'red', cursor: 'pointer' }}
-          onClick={() => deleteRegistry(registry._id, registry.registryId)}
-        >
-          x
-        </div>
+        {isUserAdmin() && (
+          <div
+            style={{ color: 'red', cursor: 'pointer' }}
+            onClick={() => deleteRegistry(registry._id, registry.registryId)}
+          >
+            x
+          </div>
+        )}
       </td>
     </tr>
   )

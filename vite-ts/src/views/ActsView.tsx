@@ -13,9 +13,11 @@ import {
   deleteActService,
   editActService,
 } from '../services/actServices'
+import useSession from '../hooks/useSession'
 
 const Acts = () => {
-  // Existing state variables
+  useSession('ActsView')
+
   const [acts, setActs] = useState<Act[]>([])
   const { setFilteredActs } = useContext(FilteredActsContext)
   const [typographyId, setTypographyId] = useState('')

@@ -7,14 +7,14 @@ const {
   deleteRegistry,
 } = require('../controllers/registryController')
 
-const { protect } = require('../middleware/authMiddleware.js')
+const { protect, admin } = require('../middleware/authMiddleware.js')
 
 router.route('/').get(protect, getRegistries).post(protect, createRegistry)
 
 router
   .route('/:id')
   .put(protect, editRegistry)
-  .delete(protect, deleteRegistry)
   .get(protect, getRegistryById)
+  .delete(admin, deleteRegistry)
 
 module.exports = router

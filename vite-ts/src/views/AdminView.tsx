@@ -17,6 +17,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import Reports from '../components/Reports'
+import useSession from '../hooks/useSession'
 
 // Define interfaces and types
 interface ChartDataPoint {
@@ -32,7 +33,8 @@ interface TimeRangeOption {
 }
 
 const Admin: React.FC = () => {
-  // State variables with explicit types
+  useSession('AdminView')
+
   const [acts, setActs] = useState<Act[]>([])
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
