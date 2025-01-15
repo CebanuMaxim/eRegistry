@@ -101,7 +101,7 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
         </Modal>
       </td>
       <td>
-        {isUserAdmin()(
+        {isUserAdmin() && (
           <div
             style={{ color: 'red', cursor: 'pointer' }}
             onClick={() =>

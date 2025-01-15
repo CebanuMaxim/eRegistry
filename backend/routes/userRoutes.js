@@ -13,16 +13,19 @@ const {
 
 const router = express.Router()
 const { protect, admin } = require('../middleware/authMiddleware.js')
-
+app.use(protect)
 router.route('/login').post(loginUser)
 
-router.route('/logout').post(protect, logoutUser)
+router.route('/logout').post(logoutUser)
 
-router.route('/').post(admin, registerUser).get(admin, getUsers)
+router
+  .route('/')
+  .post(protect, admin, registerUser)
+  .get(protect, admin, getUsers)
 router
   .route('/:id')
-  .put(admin, updateUser)
-  .delete(admin, deleteUser)
-  .get(admin, getUserById)
+  .put(protect, admin, updateUser)
+  .delete(protect, admin, deleteUser)
+  .get(protect, admin, getUserById)
 
 module.exports = router

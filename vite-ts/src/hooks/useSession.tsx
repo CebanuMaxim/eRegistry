@@ -11,7 +11,6 @@ export default function useSession(page: string) {
         await axios.post('/users/logout')
         localStorage.clear()
         navigate('/')
-        alert('Your session has expired. Please log in again.')
       } catch (error) {
         console.log(error)
       }
@@ -29,6 +28,7 @@ export default function useSession(page: string) {
               'Session expired. Please log in again.'
           ) {
             logoutUser()
+            alert('Your session has expired. Please log in again.')
           }
         } else {
           console.error('An unexpected error occurred:', error)
@@ -36,7 +36,7 @@ export default function useSession(page: string) {
       }
     }
     checkSession()
-    const interval = setInterval(checkSession, 1 * 60 * 1000)
+    const interval = setInterval(checkSession, 1 * 60 * 60 * 1000)
     return () => clearInterval(interval)
   }, [navigate, page])
 }

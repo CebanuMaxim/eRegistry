@@ -16,9 +16,9 @@ const Reports: React.FC<ReportsProps> = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     try {
       const res = await axios.get(`/acts/reports/${date}`)
+
       setFilteredActs(res.data)
 
       navigate(`/reports`)

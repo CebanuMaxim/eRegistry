@@ -25,11 +25,8 @@ const Header = () => {
     <header style={headerStyle}>
       <div>
         {
-          <Button
-            className='btn btn-light my-3'
-            onClick={() => navigate('/registries')}
-          >
-            Home
+          <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
+            Back
           </Button>
         }
       </div>
