@@ -98,6 +98,7 @@ const Admin: React.FC = () => {
   // Updated generateData function to aggregate data per day
   const generateData = async (): Promise<ChartDataPoint[]> => {
     const response = await axios.get<Act[]>('/acts')
+
     setActs(response.data)
 
     // Object to hold aggregated data per day
@@ -229,7 +230,6 @@ const Admin: React.FC = () => {
       result.push({ date: weekStartDateStr, value })
       currentDate.setDate(currentDate.getDate() + 7)
     }
-
     return result
   }
 
