@@ -13,7 +13,8 @@ export const addActService = async (
     setActs((prevActs) => [res.data, ...prevActs])
   } catch (err: unknown) {
     console.log(err)
-    alert(err.response.data)
+    alert(err.response)
+    toast.error(err.response.data)
 
     if (typeof err === 'object' && err !== null && 'response' in err) {
       const axiosError = err as { response: { data: string } }
