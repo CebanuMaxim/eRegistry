@@ -5,20 +5,24 @@ import { toast } from 'react-toastify'
 export const addActService = async (
   act: Act,
   setActs: React.Dispatch<React.SetStateAction<Act[]>>,
-  id: string
+  id: string,
+  navigate: (path: string) => void
 ) => {
   try {
     const res = await axios.post(`/acts/${id}`, act)
 
     setActs((prevActs) => [res.data, ...prevActs])
   } catch (err: unknown) {
-    console.log(err.response.data)
-    alert(err.response.data)
+    console.log(err.response?.data?.message)
+    alert(err.response?.data?.message)
 
     if (typeof err === 'object' && err !== null && 'response' in err) {
-      const axiosError = err as { response: { data: string } }
-      toast.error(axiosError.response.data)
+      const axiosError = err as { response: { data: { message: string } } }
+      toast.error(axiosError.response.data.message)
     }
+
+    // Navigate to '/' after handling the error
+    navigate('/')
   }
 }
 

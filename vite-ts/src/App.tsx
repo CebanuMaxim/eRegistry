@@ -8,8 +8,10 @@ import {
   ActValidationProvider,
   FilteredActsProvider,
 } from './context/Provider'
+import useSession from './hooks/useSession'
 
 const App = () => {
+  useSession('App')
   const loginView = useLocation().pathname === '/'
 
   return (
