@@ -8,11 +8,11 @@ import {
 export const ActValidationContext = createContext<ActValidationContextType>({
   act: {
     actId: '',
-    date: '',
-    actName: '',
     lastname: '',
     firstname: '',
     idnp: '',
+    date: '',
+    actName: '',
     stateFee: Number(''),
     notaryFee: Number(''),
     registry: '',

@@ -43,12 +43,24 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
       .catch((error) => console.log('error.response: ', error.response))
   }
 
+  // Define the desired order of fields
+  const fieldOrder = [
+    'actId',
+    'lastname',
+    'firstname',
+    'idnp',
+    'actName',
+    'stateFee',
+    'notaryFee',
+    'date',
+  ]
+
   return (
     <tr className='border-bottom p-3'>
-      {Object.entries(act).map(([key, value], index) => {
-        if (['_id', 'registry', '__v', 'createdAt', 'updatedAt'].includes(key))
-          return null
-        return <td key={index}>{value}</td>
+      {/* Render table cells in the desired order */}
+      {fieldOrder.map((key, index) => {
+        if (!Object.keys(act).includes(key)) return null
+        return <td key={index}>{act[key]}</td>
       })}
 
       <td>
@@ -58,23 +70,20 @@ const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
 
         <Modal show={show} onHide={handleCloseModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>Edit Act</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={onSubmit}>
-              {Object.keys(act).map((key, index) => {
-                if (
-                  ['_id', 'registry', '__v', 'createdAt', 'updatedAt'].includes(
-                    key
-                  )
-                )
-                  return null
+              {/* Render form fields in the desired order */}
+              {fieldOrder.map((key, index) => {
+                if (!Object.keys(act).includes(key)) return null
                 return (
                   <Form.Group
                     key={index}
                     className='mb-3'
-                    controlId='exampleForm.ControlInput1'
+                    controlId={`form-${key}`}
                   >
+                    <Form.Label>{key}</Form.Label>
                     <Form.Control
                       name={key}
                       value={

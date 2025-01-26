@@ -3,11 +3,11 @@ import { Dispatch, SetStateAction } from 'react'
 export interface Act {
   [key: string]: string | number | boolean | undefined
   actId: string
-  date: string
-  actName: string
   lastname: string
   firstname: string
   idnp: string
+  date: string
+  actName: string
   stateFee: number | string
   notaryFee: number | string
   registry: string

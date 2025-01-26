@@ -44,12 +44,29 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
     }
   }
 
+  // Define desired order of fields
+  const fieldOrder = [
+    'actId',
+    'firstname',
+    'lastname',
+    'idnp',
+    'actName', // Move 'actName' here after 'date'
+    'stateFee',
+    'notaryFee',
+    'date', // Move 'date' here after 'lastname'
+  ]
+
+  // Sort fields based on the desired order
+  const sortedFields = Object.entries(act).sort(
+    ([a], [b]) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b)
+  )
+
   return (
     <Card className='mt-5 mb-3'>
       <Card.Body>
         <Form onSubmit={onSubmit}>
           <Row className='my-3'>
-            {Object.entries(act).map(([key, value], index) => {
+            {sortedFields.map(([key, value], index) => {
               if (key === '_id' || key === 'registry' || key === '__v')
                 return null
               if (key === 'actId') {

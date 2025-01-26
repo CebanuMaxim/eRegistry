@@ -10,14 +10,6 @@ const Act = mongoose.model(
         type: String,
         required: true,
       },
-      date: {
-        type: String,
-        required: true,
-      },
-      actName: {
-        type: String,
-        required: true,
-      },
       lastname: {
         type: String,
         required: true,
@@ -27,6 +19,14 @@ const Act = mongoose.model(
         required: true,
       },
       idnp: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: String,
+        required: true,
+      },
+      actName: {
         type: String,
         required: true,
       },
@@ -61,13 +61,6 @@ const customDateValidator = (value, helpers) => {
 function validateAct(act) {
   const schema = Joi.object({
     actId: Joi.string().pattern(/^\d+$/).required(),
-    date: Joi.string()
-      .custom(customDateValidator, 'custom date validation')
-      .required()
-      .messages({
-        'date.format': '{{#label}} must be a valid date in DD.MM.YYYY format',
-      }),
-    actName: Joi.string().required(),
     lastname: Joi.string()
       .pattern(/^[\p{L}\p{M}-]+$/u)
       .messages({
@@ -87,6 +80,13 @@ function validateAct(act) {
         'any.required': 'idnp is required',
       }),
     stateFee: Joi.number().required(),
+    date: Joi.string()
+      .custom(customDateValidator, 'custom date validation')
+      .required()
+      .messages({
+        'date.format': '{{#label}} must be a valid date in DD.MM.YYYY format',
+      }),
+    actName: Joi.string().required(),
     notaryFee: Joi.number().required(),
     registry: Joi.string(),
     _id: Joi.string(),

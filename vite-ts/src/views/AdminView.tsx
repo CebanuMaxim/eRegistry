@@ -133,7 +133,9 @@ const Admin: React.FC = () => {
     dates = dates.sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
 
     const startDate = new Date(dates[0])
-    const endDate = new Date(dates[dates.length - 1])
+    const firstEndDate = new Date(dates[dates.length - 1])
+    firstEndDate.setDate(firstEndDate.getDate() + 1)
+    const endDate = firstEndDate
 
     // Fill in missing dates with zero values
     const data: ChartDataPoint[] = fillMissingDays(
@@ -141,6 +143,9 @@ const Admin: React.FC = () => {
       endDate,
       aggregatedData
     )
+    // console.log(fillMissingDays(startDate, endDate, aggregatedData))
+    // endDate.setDate(endDate.getDate() + 1)
+    // console.log(endDate)
 
     return data
   }

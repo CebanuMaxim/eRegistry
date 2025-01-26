@@ -97,6 +97,7 @@ const Acts = () => {
   }, [acts, toggle])
 
   const toggleSort = () => {
+    console.log(sortedActs)
     setActs(sortedActs)
     setToggle(!toggle)
   }
@@ -163,13 +164,13 @@ const Acts = () => {
                   onClick={toggleSort}
                 />
               </td>
-              <td>Data</td>
-              <td>Denumirea actului</td>
               <td>Nume</td>
               <td>Prenume</td>
               <td>IDNP/CNP</td>
+              <td>Denumirea actului</td>
               <td>Taxa de stat</td>
               <td>Taxa notarială</td>
+              <td>Data</td>
               <td></td>
             </tr>
           </thead>
