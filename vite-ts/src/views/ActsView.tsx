@@ -97,7 +97,6 @@ const Acts = () => {
   }, [acts, toggle])
 
   const toggleSort = () => {
-    console.log(sortedActs)
     setActs(sortedActs)
     setToggle(!toggle)
   }

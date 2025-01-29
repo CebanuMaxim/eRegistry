@@ -131,11 +131,9 @@ const Admin: React.FC = () => {
 
     // Sort the dates
     dates = dates.sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
-
     const startDate = new Date(dates[0])
-    const firstEndDate = new Date(dates[dates.length - 1])
-    firstEndDate.setDate(firstEndDate.getDate() + 1)
-    const endDate = firstEndDate
+    const endDate = new Date(dates[dates.length - 1])
+    endDate.setDate(endDate.getDate() + 1)
 
     // Fill in missing dates with zero values
     const data: ChartDataPoint[] = fillMissingDays(
@@ -143,9 +141,6 @@ const Admin: React.FC = () => {
       endDate,
       aggregatedData
     )
-    // console.log(fillMissingDays(startDate, endDate, aggregatedData))
-    // endDate.setDate(endDate.getDate() + 1)
-    // console.log(endDate)
 
     return data
   }
@@ -196,6 +191,42 @@ const Admin: React.FC = () => {
         aggregatedData[weekStartDate] += item.value
       } else {
         aggregatedData[weekStartDate] = item.value
+      }
+    })
+
+    // Convert aggregated data to ChartDataPoint[]
+    const result: ChartDataPoint[] = Object.entries(aggregatedData).map(
+      ([date, value]) => ({
+        date,
+        value,
+      })
+    )
+
+    // Sort the result by date
+    result.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    )
+
+    return result
+  }
+
+  // Function to get the start of the month
+  const getStartOfMonth = (date: Date): string => {
+    const newDate = new Date(date.getFullYear(), date.getMonth(), 1)
+    return formatDate(newDate)
+  }
+
+  // Function to group data by month
+  const groupDataByMonth = (data: ChartDataPoint[]): ChartDataPoint[] => {
+    const aggregatedData: { [monthStartDate: string]: number } = {}
+
+    data.forEach((item) => {
+      const date = new Date(item.date)
+      const monthStartDate = getStartOfMonth(date)
+      if (aggregatedData[monthStartDate]) {
+        aggregatedData[monthStartDate] += item.value
+      } else {
+        aggregatedData[monthStartDate] = item.value
       }
     })
 
@@ -292,8 +323,11 @@ const Admin: React.FC = () => {
     // Determine whether to aggregate per week or per day
     let aggregatedData: ChartDataPoint[]
 
-    if (range === '6months' || range === 'year' || range === 'all') {
-      // Aggregate per week
+    if (range === 'all') {
+      // Aggregate per month for 'all' range
+      aggregatedData = groupDataByMonth(filteredData)
+    } else if (range === '6months' || range === 'year') {
+      // Aggregate per week for '6months' or 'year'
       const groupedData = groupDataByWeek(filteredData)
       aggregatedData = fillMissingWeeks(startDate, now, groupedData)
     } else {
@@ -343,16 +377,20 @@ const Admin: React.FC = () => {
   // Optional: Format Tooltip labels
   const formatTooltipLabel = (value: string): string => {
     const date = new Date(value)
-    if (
-      selectedRange === '6months' ||
-      selectedRange === 'year' ||
-      selectedRange === 'all'
-    ) {
+
+    if (selectedRange === '6months' || selectedRange === 'year') {
       // Show date range for the week
       const endDate = new Date(date)
       endDate.setDate(endDate.getDate() + 6)
       return `Week: ${date.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+    } else if (selectedRange === 'all') {
+      // Show the month for the 'all' case
+      return `Month: ${date.toLocaleDateString(undefined, {
+        month: 'long',
+        year: 'numeric',
+      })}`
     } else {
+      // Default to showing the exact date
       return `Date: ${date.toLocaleDateString()}`
     }
   }

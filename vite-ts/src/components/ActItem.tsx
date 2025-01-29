@@ -3,7 +3,7 @@ import { Button, Modal, Form } from 'react-bootstrap'
 import inputValidation from '../validation/inputValidation'
 import { errorStyle } from './Styles'
 import { Act, ActItemProps } from '../types'
-import { isUserAdmin } from '../utils'
+import { isUserAdmin } from '../utils/index'
 
 const ActItem: React.FC<ActItemProps> = ({ act, editAct, deleteAct }) => {
   const [show, setShow] = useState(false)

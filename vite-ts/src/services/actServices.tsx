@@ -1,6 +1,7 @@
-import axios from '../api/axios'
+import axiosAPI from '../api/axios'
 import { Act } from '../types'
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
 export const addActService = async (
   act: Act,
@@ -9,16 +10,15 @@ export const addActService = async (
   navigate: (path: string) => void
 ) => {
   try {
-    const res = await axios.post(`/acts/${id}`, act)
-
+    const res = await axiosAPI.post(`/acts/${id}`, act)
     setActs((prevActs) => [res.data, ...prevActs])
   } catch (err: unknown) {
-    console.log(err.response?.data?.message)
-    alert(err.response?.data?.message)
-
-    if (typeof err === 'object' && err !== null && 'response' in err) {
-      const axiosError = err as { response: { data: { message: string } } }
-      toast.error(axiosError.response.data.message)
+    if (axios.isAxiosError(err)) {
+      console.log(err.response?.data?.message)
+      alert(err.response?.data?.message)
+      toast.error(err.response?.data?.message)
+    } else {
+      console.error('Unexpected error', err)
     }
 
     // Navigate to '/' after handling the error
@@ -35,13 +35,17 @@ export const editActService = async (updatedAct: Act, acts: Act[]) => {
   }
 
   for (const [key, value] of Object.entries(updatedAct)) {
-    if (value) act[key] = value
+    if (value) (act as Act)[key] = value
   }
 
   try {
     await axios.put(`/acts/${act._id}`, act)
-  } catch (err) {
-    console.error(err)
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      console.error('Axios error:', err.response?.data?.message)
+    } else {
+      console.error('Unexpected error:', err)
+    }
   }
 }
 
@@ -58,8 +62,12 @@ export const deleteActService = async (
     setActs(acts.filter((item) => item._id !== _id))
     try {
       await axios.delete(`/acts/${registryId}/${_id}`)
-    } catch (err) {
-      console.error(err)
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error('Axios error:', err.response?.data?.message)
+      } else {
+        console.error('Unexpected error:', err)
+      }
     }
   } else {
     alert('Wrong id')

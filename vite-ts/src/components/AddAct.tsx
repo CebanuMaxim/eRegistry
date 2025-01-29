@@ -47,13 +47,13 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
   // Define desired order of fields
   const fieldOrder = [
     'actId',
-    'firstname',
     'lastname',
+    'firstname',
     'idnp',
-    'actName', // Move 'actName' here after 'date'
+    'actName',
     'stateFee',
     'notaryFee',
-    'date', // Move 'date' here after 'lastname'
+    'date',
   ]
 
   // Sort fields based on the desired order
