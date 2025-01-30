@@ -152,7 +152,7 @@ const Acts = () => {
           Confirmări
         </Button>
       </div>
-      <div style={{ height: '500px', overflowY: 'auto' }}>
+      <div>
         <Table striped>
           <thead>
             <tr className='border-bottom p-3 fw-bolder'>

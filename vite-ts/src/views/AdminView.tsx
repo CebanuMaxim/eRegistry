@@ -18,6 +18,7 @@ import {
 } from 'recharts'
 import Reports from '../components/Reports'
 import useSession from '../hooks/useSession'
+import LightweightChart from '../components/LightweightChart'
 
 // Define interfaces and types
 interface ChartDataPoint {
@@ -434,6 +435,7 @@ const Admin: React.FC = () => {
       {/* Chart and time range selection */}
       <div>
         <h2 style={{ padding: '20px 10px' }}>Notary Fees Over Time</h2>
+        {/* <LightweightChart /> */}
         <div style={{ marginBottom: '20px' }}>
           {timeRanges.map((range: TimeRangeOption) => (
             <button
