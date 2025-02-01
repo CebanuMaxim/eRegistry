@@ -39,7 +39,7 @@ export const editActService = async (updatedAct: Act, acts: Act[]) => {
   }
 
   try {
-    await axios.put(`/acts/${act._id}`, act)
+    await axiosAPI.put(`/acts/${act._id}`, act)
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
       console.error('Axios error:', err.response?.data?.message)
@@ -61,7 +61,7 @@ export const deleteActService = async (
   if (checkActNumber === actNumber) {
     setActs(acts.filter((item) => item._id !== _id))
     try {
-      await axios.delete(`/acts/${registryId}/${_id}`)
+      await axiosAPI.delete(`/acts/${registryId}/${_id}`)
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error('Axios error:', err.response?.data?.message)

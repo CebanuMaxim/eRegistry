@@ -62,6 +62,7 @@ const createAct = asyncHandler(async (req, res) => {
 // @route     PUT /api/acts/:actId
 const editAct = asyncHandler(async (req, res) => {
   const { error } = validateAct(req.body)
+
   if (error) return res.status(400).send(error.details[0].message)
 
   const act = await Act.findByIdAndUpdate(req.params.actId, req.body, {
