@@ -72,7 +72,7 @@ export default function actValidation(
       checkInput(name, /^[\d.]+$/, 'only digits are allowed')
       break
     case 'notaryFee':
-      checkInput(name, /^[\d]+$/, 'only digits are allowed')
+      checkInput(name, /^[\d.]+$/, 'only digits are allowed')
       break
     case 'actName':
     default:

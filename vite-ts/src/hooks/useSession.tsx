@@ -39,7 +39,7 @@ export default function useSession(page: string) {
     }
 
     const checkSession = async () => {
-      console.log(page, ' : ', formatter.format(currentDate))
+      // console.log(page, ' : ', formatter.format(currentDate))
 
       try {
         await axios.get('/registries')
