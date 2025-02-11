@@ -18,7 +18,6 @@ import {
 } from 'recharts'
 import Reports from '../components/Reports'
 import useSession from '../hooks/useSession'
-import LightweightChart from '../components/LightweightChart'
 
 // Define interfaces and types
 interface ChartDataPoint {

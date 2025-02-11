@@ -40,7 +40,7 @@ const Login = () => {
       toast.error(
         axiosError.response?.data?.message || 'An unexpected error occurred'
       )
-      console.error(err)
+      console.error('AXIOS_ERROR: ', axiosError)
     }
   }
 
