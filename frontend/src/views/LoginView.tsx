@@ -36,6 +36,8 @@ const Login = () => {
 
       navigate('/registries')
     } catch (err) {
+      console.log(err)
+
       const axiosError = err as AxiosError<{ message: string }>
       toast.error(
         axiosError.response?.data?.message || 'An unexpected error occurred'

@@ -18,6 +18,9 @@ import {
 } from 'recharts'
 import Reports from '../components/Reports'
 import useSession from '../hooks/useSession'
+import NormalDistributionChart from '../components/NormalDistributionChart'
+
+// Вставьте в JSX
 
 // Define interfaces and types
 interface ChartDataPoint {
@@ -466,6 +469,7 @@ const Admin: React.FC = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+      <NormalDistributionChart data={filteredChartData} />
 
       <Table striped>
         <thead>
