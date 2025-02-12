@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react'
 import axios from '../api/axios'
-import { Form, Button, Table } from 'react-bootstrap'
+import { Form, Button, Table, Accordion } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import { toast } from 'react-toastify'
 import { User, Act } from '../types'
@@ -435,41 +435,45 @@ const Admin: React.FC = () => {
     <>
       <Reports acts={acts} />
       {/* Chart and time range selection */}
-      <div>
-        <h2 style={{ padding: '20px 10px' }}>Notary Fees Over Time</h2>
-        {/* <LightweightChart /> */}
-        <div style={{ marginBottom: '20px' }}>
-          {timeRanges.map((range: TimeRangeOption) => (
-            <button
-              key={range.value}
-              onClick={() => setSelectedRange(range.value)}
-              style={{
-                marginRight: '5px',
-                padding: '10px',
-                backgroundColor:
-                  selectedRange === range.value ? '#8884d8' : '#eee',
-                color: selectedRange === range.value ? '#fff' : '#000',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
-            >
-              {range.label}
-            </button>
-          ))}
-        </div>
-        <ResponsiveContainer width='100%' height={300}>
-          <BarChart data={filteredChartData}>
-            <CartesianGrid strokeDasharray='3 3' />
-            <XAxis dataKey='date' tickFormatter={formatXAxis} />
-            <YAxis />
-            <Tooltip labelFormatter={formatTooltipLabel} />
-            <Legend />
-            <Bar dataKey='value' name='Total Notary Fees' fill='#8884d8' />
-          </BarChart>
-        </ResponsiveContainer>
+      <div style={{ marginBottom: '20px' }}>
+        {timeRanges.map((range: TimeRangeOption) => (
+          <button
+            key={range.value}
+            onClick={() => setSelectedRange(range.value)}
+            style={{
+              marginRight: '5px',
+              padding: '10px',
+              backgroundColor:
+                selectedRange === range.value ? '#8884d8' : '#eee',
+              color: selectedRange === range.value ? '#fff' : '#000',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            {range.label}
+          </button>
+        ))}
       </div>
-      <NormalDistributionChart data={filteredChartData} />
+      <Accordion>
+        <Accordion.Item eventKey='0'>
+          <Accordion.Header>Notary Fees Over Time</Accordion.Header>
+
+          <Accordion.Body>
+            <ResponsiveContainer width='100%' height={300}>
+              <BarChart data={filteredChartData}>
+                <CartesianGrid strokeDasharray='3 3' />
+                <XAxis dataKey='date' tickFormatter={formatXAxis} />
+                <YAxis />
+                <Tooltip labelFormatter={formatTooltipLabel} />
+                <Legend />
+                <Bar dataKey='value' name='Total Notary Fees' fill='#8884d8' />
+              </BarChart>
+            </ResponsiveContainer>
+          </Accordion.Body>
+        </Accordion.Item>
+        <NormalDistributionChart data={filteredChartData} />
+      </Accordion>
 
       <Table striped>
         <thead>
