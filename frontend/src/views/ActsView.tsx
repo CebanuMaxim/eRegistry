@@ -46,7 +46,18 @@ const Acts = () => {
         }
         setActs(
           res.data.acts
-            .sort((a: Act, b: Act) => Number(a.date) - Number(b.date))
+            .sort((a: Act, b: Act) => {
+              // a.date and b.date are "dd.mm.yyyy" strings
+              const [dayA, monthA, yearA] = a.date.split('.')
+              const [dayB, monthB, yearB] = b.date.split('.')
+
+              // Create actual date objects (month is 0-indexed)
+              const dateA = new Date(+yearA, +monthA - 1, +dayA)
+              const dateB = new Date(+yearB, +monthB - 1, +dayB)
+
+              // Compare timestamps
+              return dateA.getTime() - dateB.getTime()
+            })
             .reverse()
         )
       } catch (err) {

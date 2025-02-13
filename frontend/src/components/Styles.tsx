@@ -62,7 +62,7 @@ export const confirmationStyles = StyleSheet.create({
   },
   footer: {
     fontFamily: 'RobotoMedium',
-    marginTop: 70,
+    marginTop: 50,
   },
 })
 

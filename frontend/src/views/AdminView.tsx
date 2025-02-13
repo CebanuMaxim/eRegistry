@@ -458,7 +458,6 @@ const Admin: React.FC = () => {
       <Accordion>
         <Accordion.Item eventKey='0'>
           <Accordion.Header>Notary Fees Over Time</Accordion.Header>
-
           <Accordion.Body>
             <ResponsiveContainer width='100%' height={300}>
               <BarChart data={filteredChartData}>

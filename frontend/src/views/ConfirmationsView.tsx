@@ -63,6 +63,18 @@ const reduceObjectByProperty = (array: Act[], id: string): Act[] => {
 const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
   const { typographyId, registryId } = useParams()
+  // console.log(
+  //   +filteredActs[0].actId < +filteredActs[filteredActs.length - 1].actId
+  // )
+
+  // Convert `actId` to number if it's stored as string.
+  const firstId = +filteredActs[0].actId
+  const lastId = +filteredActs[filteredActs.length - 1].actId
+
+  // If first is bigger than last, the array is descending → reverse it.
+  if (firstId > lastId) {
+    filteredActs.reverse()
+  }
 
   // Using the updated reduction function
   const newFilteredActs = reduceObjectByProperty(filteredActs, 'idnp')
