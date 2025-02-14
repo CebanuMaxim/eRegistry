@@ -11,8 +11,8 @@
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
     "git": "git add . && git commit -m \"'\" && git push",
-    "backup": "mongodump --uri=\"mongodb://localhost:27017/registryapi\" --out=\"F:/backup/\"",
-    "restore": "mongorestore --uri=\"mongodb://localhost:27017/registryapi\" --dir=\"F:/backup/\""
+    "backup": "mongodump --uri=\"mongodb://localhost:27017/registryapi\" --out=\"C:/backup/\"",
+    "restore": "mongorestore --uri=\"mongodb://localhost:27017/registryapi\" --dir=\"C:/backup/\""
   },
   "keywords": [],
   "author": "",
