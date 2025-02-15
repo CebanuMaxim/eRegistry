@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-// eslint-disable-next-line react-refresh/only-export-components
-export default axios.create({
-  // Need to switch to registru in production
-  baseURL: 'http://localhost:5000/api',
-  // baseURL: 'http://registru/api',
-  withCredentials: true, // Send cookies with cross-origin requests
+const api = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_URL,
+  withCredentials: true,
 })
+
+export default api

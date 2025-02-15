@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from '../api/axios'
-import { isAxiosError } from 'axios'
+import axiosAPI from '../api/axios'
+import axios, { isAxiosError } from 'axios'
 
 export default function useSession(page: string) {
   const navigate = useNavigate()
@@ -19,10 +19,11 @@ export default function useSession(page: string) {
 
     const checkSession = async () => {
       try {
-        await axios.get('/registries')
-      } catch (error) {
-        console.error(error)
+        await axiosAPI.get('/registries')
+      } catch (error: unknown) {
         if (isAxiosError(error)) {
+          console.error(error.response?.data?.message)
+
           if (
             error.response?.status === 401 &&
             error.response?.data?.message ===
@@ -32,6 +33,7 @@ export default function useSession(page: string) {
             alert('Your session has expired. Please log in again.')
           }
         } else {
+          // Handle non-Axios errors
           console.error('An unexpected error occurred:', error)
         }
       }
