@@ -30,6 +30,8 @@ export default function useSession(page: string) {
               'Session expired. Please log in again.'
           ) {
             logoutUser()
+            localStorage.clear()
+            navigate('/')
             alert('Your session has expired. Please log in again.')
           }
         } else {
