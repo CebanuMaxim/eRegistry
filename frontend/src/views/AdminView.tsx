@@ -17,7 +17,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import Reports from '../components/Reports'
-import useSession from '../hooks/useSession'
+import { useSession } from '../hooks/useSession'
 import NormalDistributionChart from '../components/NormalDistributionChart'
 
 // Вставьте в JSX

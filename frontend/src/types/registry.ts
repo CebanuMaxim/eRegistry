@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 
 export interface Registry {
+  registryIndex: string
   typographyId: string
   registryId: string
   startDate: string

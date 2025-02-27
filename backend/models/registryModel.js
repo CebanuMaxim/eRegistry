@@ -5,6 +5,10 @@ const moment = require('moment')
 const Registry = mongoose.model(
   'Registry',
   new mongoose.Schema({
+    registryIndex: {
+      type: String,
+      required: true,
+    },
     typographyId: {
       type: String,
       required: true,
@@ -43,6 +47,7 @@ function validateRegistry(registry) {
   let schema = {}
 
   schema = Joi.object({
+    registryIndex: Joi.string().pattern(/^\d+$/).required(),
     typographyId: Joi.string()
       .pattern(/^\d{7}$/)
       .required()

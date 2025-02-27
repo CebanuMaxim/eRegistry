@@ -13,7 +13,7 @@ import {
   deleteActService,
   editActService,
 } from '../services/actServices'
-import useSession from '../hooks/useSession'
+import { useSession } from '../hooks/useSession'
 
 const Acts = () => {
   useSession('ActsView')
@@ -131,11 +131,6 @@ const Acts = () => {
   const prevPage = () => {
     if (currentPage > 1) setCurrentPage((prevPage) => prevPage - 1)
   }
-
-  // DO NOT DELETE !!!
-  // const goToPage = (page: number) => {
-  //   if (page >= 1 && page <= totalPages) setCurrentPage(page)
-  // }
 
   // Service functions
   const addAct = (act: Act) =>

@@ -26,13 +26,20 @@ export const ActValidationContext = createContext<ActValidationContextType>({
 export const RegistryValidationContext =
   createContext<RegistryValidationContextType>({
     registry: {
+      registryIndex: '',
       typographyId: '',
       registryId: '',
       startDate: '',
       endDate: '',
     },
     setRegistry: () => {},
-    errors: { typographyId: '', registryId: '', startDate: '', endDate: '' },
+    errors: {
+      registryIndex: '',
+      typographyId: '',
+      registryId: '',
+      startDate: '',
+      endDate: '',
+    },
     setErrors: () => {},
   })
 

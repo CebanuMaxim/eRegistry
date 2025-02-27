@@ -57,6 +57,7 @@ const RegistryItem: React.FC<RegistryItemProps> = ({
 
   return (
     <tr key={registry.registryId} className='border-bottom p-3'>
+      <td>{registry.registryIndex}</td>
       <td>
         {registry.typographyId} / {registry.registryId}
       </td>
