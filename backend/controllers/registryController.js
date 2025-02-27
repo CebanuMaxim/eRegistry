@@ -18,7 +18,7 @@ const createRegistry = asyncHandler(async (req, res) => {
 // @desc      Fetch all registries
 // @route     GET /api/registries/
 const getRegistries = asyncHandler(async (req, res) => {
-  const foundRegistries = await Registry.find()
+  const foundRegistries = await Registry.find({}, { acts: 0 })
 
   if (!foundRegistries || foundRegistries.length === 0) {
     return res.status(204).send({ message: 'No registries' })

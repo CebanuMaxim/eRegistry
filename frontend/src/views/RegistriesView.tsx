@@ -9,7 +9,7 @@ import {
   editRegistryService,
   deleteRegistryService,
 } from '../services/registryServices'
-import useSession from '../hooks/useSession'
+import { useSession } from '../hooks/useSession'
 
 const Registries = () => {
   useSession('RegistriesView')
@@ -19,7 +19,6 @@ const Registries = () => {
     async function getRegistries() {
       try {
         const response = await axios.get('/registries')
-
         if (response.data === '') {
           console.log(response.statusText)
           return
@@ -51,6 +50,7 @@ const Registries = () => {
       <Table striped>
         <thead>
           <tr className='border-bottom p-3 fw-bolder'>
+            <td>Index</td>
             <td>Registry Number</td>
             <td>Start date</td>
             <td>End date</td>

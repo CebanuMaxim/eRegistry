@@ -17,6 +17,10 @@ const customDateValidator = (
 }
 
 const RegistrySchema = yup.object().shape({
+  registryIndex: yup
+    .string()
+    .matches(/^\d+$/, 'typographyId must be a digit number')
+    .required('Registry Index is required'),
   typographyId: yup
     .string()
     .matches(/^\d{7}$/, 'typographyId must be a 7-digit number')

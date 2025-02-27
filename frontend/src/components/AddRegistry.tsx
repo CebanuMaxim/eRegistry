@@ -17,6 +17,7 @@ import { errorStyle } from './Styles'
 const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
   const { registry, setRegistry, errors, setErrors } =
     useContext<RegistryValidationContextType>(RegistryValidationContext)
+  console.log(registry)
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -48,7 +49,7 @@ const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
         <Form onSubmit={onSubmit}>
           <Row className='my-3'>
             {Object.keys(registry).map((key, index) => {
-              if (['_id', 'typography', '__v'].includes(key)) return null
+              if (['_id', '__v'].includes(key)) return null
 
               return (
                 <Col key={index}>
