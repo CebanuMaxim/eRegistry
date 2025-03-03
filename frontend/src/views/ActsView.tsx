@@ -203,15 +203,6 @@ const Acts = () => {
         >
           <strong>&lt;</strong>
         </Button>
-        {/* {[...Array(totalPages)].map((_, index) => (
-          <Button
-            key={index}
-            variant={currentPage === index + 1 ? 'primary' : 'light'}
-            onClick={() => goToPage(index + 1)}
-          >
-            {index + 1}
-          </Button>
-        ))} */}
         <Button
           className='btn btn-secondary my-3'
           disabled={currentPage === totalPages}

@@ -63,6 +63,7 @@ const reduceObjectByProperty = (array: Act[], id: string): Act[] => {
 const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
   const { typographyId, registryId } = useParams()
+
   // console.log(
   //   +filteredActs[0].actId < +filteredActs[filteredActs.length - 1].actId
   // )
