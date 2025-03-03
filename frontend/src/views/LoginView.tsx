@@ -58,7 +58,6 @@ const Login = () => {
             autoFocus
             type='text'
             autoComplete='off'
-            placeholder='username'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -77,7 +76,6 @@ const Login = () => {
         >
           <Form.Control
             type='password'
-            placeholder='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

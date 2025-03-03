@@ -17,7 +17,6 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import Reports from '../components/Reports'
-import { useSession } from '../hooks/useSession'
 import NormalDistributionChart from '../components/NormalDistributionChart'
 
 // Вставьте в JSX
@@ -36,8 +35,6 @@ interface TimeRangeOption {
 }
 
 const Admin: React.FC = () => {
-  useSession('AdminView')
-
   const [acts, setActs] = useState<Act[]>([])
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')

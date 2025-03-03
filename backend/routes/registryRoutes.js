@@ -15,6 +15,6 @@ router
   .route('/:id')
   .put(protect, editRegistry)
   .get(protect, getRegistryById)
-  .delete(admin, deleteRegistry)
+  .delete(protect, admin, deleteRegistry)
 
 module.exports = router

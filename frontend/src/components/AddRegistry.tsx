@@ -17,7 +17,6 @@ import { errorStyle } from './Styles'
 const AddRegistry: React.FC<AddRegistryProps> = ({ addRegistry }) => {
   const { registry, setRegistry, errors, setErrors } =
     useContext<RegistryValidationContextType>(RegistryValidationContext)
-  console.log(registry)
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

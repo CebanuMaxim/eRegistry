@@ -54,6 +54,7 @@ export const RegistryValidationProvider: React.FC<ProviderProps> = ({
   children,
 }) => {
   const [registry, setRegistry] = useState<Registry>({
+    registryIndex: '',
     typographyId: '',
     registryId: '',
     startDate: '',

@@ -9,10 +9,8 @@ import {
   editRegistryService,
   deleteRegistryService,
 } from '../services/registryServices'
-import { useSession } from '../hooks/useSession'
 
 const Registries = () => {
-  useSession('RegistriesView')
   const [registries, setRegistries] = useState<Registry[]>([])
 
   useEffect(() => {
