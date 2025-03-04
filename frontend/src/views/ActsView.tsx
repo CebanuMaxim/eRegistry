@@ -19,6 +19,7 @@ const Acts = () => {
   const { setFilteredActs } = useContext(FilteredActsContext)
   const [typographyId, setTypographyId] = useState('')
   const [registryId, setRegistryId] = useState('')
+  const [registryIndex, setRegistryIndex] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [actKey, setActKey] = useState('')
   const [toggle, setToggle] = useState(true)
@@ -37,6 +38,7 @@ const Acts = () => {
 
         setTypographyId(res.data.typographyId)
         setRegistryId(res.data.registryId)
+        setRegistryIndex(res.data.registryIndex)
 
         if (!res.data.acts) {
           return
@@ -149,7 +151,9 @@ const Acts = () => {
         <Button
           className='btn btn-light my-3'
           onClick={() =>
-            navigate(`/confirmations/${id}/${typographyId}/${registryId}`)
+            navigate(
+              `/confirmations/${id}/${typographyId}/${registryId}/${registryIndex}`
+            )
           }
         >
           Confirmări

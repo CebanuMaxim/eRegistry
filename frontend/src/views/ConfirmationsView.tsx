@@ -62,11 +62,7 @@ const reduceObjectByProperty = (array: Act[], id: string): Act[] => {
 
 const Confirmations = () => {
   const { filteredActs } = useContext(FilteredActsContext)
-  const { typographyId, registryId } = useParams()
-
-  // console.log(
-  //   +filteredActs[0].actId < +filteredActs[filteredActs.length - 1].actId
-  // )
+  const { typographyId, registryId, registryIndex } = useParams()
 
   // Convert `actId` to number if it's stored as string.
   const firstId = +filteredActs[0].actId
@@ -87,7 +83,12 @@ const Confirmations = () => {
           .slice()
           // .reverse()
           .map((act) => {
-            return Confirmation(act, typographyId ?? '', registryId ?? '')
+            return Confirmation(
+              act,
+              typographyId ?? '',
+              registryId ?? '',
+              registryIndex ?? ''
+            )
           })}
       </Document>
     </PDFViewer>

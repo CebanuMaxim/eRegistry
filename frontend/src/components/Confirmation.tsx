@@ -2,7 +2,12 @@ import { Act } from '../types'
 import { Page, Text, View } from '@react-pdf/renderer'
 import { confirmationStyles as styles } from './Styles'
 
-const Confirmation = (act: Act, typographyId: string, registryId: string) => {
+const Confirmation = (
+  act: Act,
+  typographyId: string,
+  registryId: string,
+  registryIndex: string
+) => {
   const totalFee = Number(act.stateFee) + Number(act.notaryFee)
 
   const indentation = (text: string) => (
@@ -32,9 +37,11 @@ const Confirmation = (act: Act, typographyId: string, registryId: string) => {
           {indentation('_____')}Prin prezenta se confirmă, că la data de{' '}
           <Text style={{ color: 'red' }}>{act.date}</Text>, pentru acordarea
           asistenței notariale cu nr. de înregistrare{' '}
-          <Text style={styles.underline}>2-{act.actId}</Text> din registrul
-          actelor notariale nr. {typographyId}/{registryId}, a fost achitată
-          plata pentru asistență notarială{' '}
+          <Text style={styles.underline}>
+            {registryIndex}-{act.actId}
+          </Text>{' '}
+          din registrul actelor notariale nr. {typographyId}/{registryId}, a
+          fost achitată plata pentru asistență notarială{' '}
           <Text style={styles.underline}>{act.notaryFee}</Text> lei și taxa de
           stat {act.stateFee} lei, în total {totalFee} lei, achitați de cet.{' '}
           <Text style={styles.underline}>

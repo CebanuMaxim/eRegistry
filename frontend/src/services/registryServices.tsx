@@ -44,8 +44,6 @@ export const deleteRegistryService = async (
   setRegistries: React.Dispatch<React.SetStateAction<Registry[]>>
 ) => {
   const check = prompt('Enter registry id:')
-  console.log(check, registryId, _id)
-
   if (check === registryId) {
     try {
       await axios.delete(`/registries/${_id}`)

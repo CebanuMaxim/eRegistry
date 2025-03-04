@@ -28,7 +28,7 @@ const router = createBrowserRouter(
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin' element={<Admin />} />
         <Route
-          path='/confirmations/:id/:typographyId/:registryId'
+          path='/confirmations/:id/:typographyId/:registryId/:registryIndex'
           element={<Confirmations />}
         />
         <Route path='/reports' element={<Reports />} />
