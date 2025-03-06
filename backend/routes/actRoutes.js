@@ -18,6 +18,6 @@ router.route('/:registryId').post(protect, createAct)
 router.route('/:actId').get(protect, getAct).put(protect, editAct)
 
 router.route('/:registryId/:actId').delete(protect, admin, deleteAct)
-router.route('/reports/:date').get(getActsByMonth)
+router.route('/reports/:date').get(protect, admin, getActsByMonth)
 
 module.exports = router

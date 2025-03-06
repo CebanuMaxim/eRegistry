@@ -13,9 +13,8 @@ const {
 
 const router = express.Router()
 const { protect, admin } = require('../middleware/authMiddleware.js')
-app.use(protect)
-router.route('/login').post(loginUser)
 
+router.route('/login').post(loginUser)
 router.route('/logout').post(logoutUser)
 
 router
