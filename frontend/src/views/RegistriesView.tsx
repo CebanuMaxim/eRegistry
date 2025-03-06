@@ -45,7 +45,7 @@ const Registries = () => {
       }
     }
     getRegistries()
-  }, [])
+  }, [navigate])
 
   const addRegistry = (registry: Registry) =>
     addRegistryService(registry, setRegistries)

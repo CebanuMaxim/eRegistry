@@ -75,7 +75,7 @@ const Acts = () => {
     }
 
     getActs()
-  }, [id])
+  }, [id, navigate])
 
   // Memoized filtered acts based on search term and actKey
   const filteredActsMemo = useMemo(() => {
