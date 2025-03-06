@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from '../api/axios'
+import { isAxiosError } from 'axios'
 import { Table } from 'react-bootstrap'
 import RegistryItem from '../components/RegistryItem'
 import AddRegistry from '../components/AddRegistry'
@@ -9,9 +10,11 @@ import {
   editRegistryService,
   deleteRegistryService,
 } from '../services/registryServices'
+import { useNavigate } from 'react-router-dom'
 
 const Registries = () => {
   const [registries, setRegistries] = useState<Registry[]>([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function getRegistries() {
@@ -28,8 +31,17 @@ const Registries = () => {
             })
             .reverse()
         )
-      } catch (err) {
-        console.error(err)
+      } catch (err: unknown) {
+        if (isAxiosError(err)) {
+          console.log('ERROR! RegistriesView.36: ', err.response?.data?.message)
+          alert(err.response?.data?.message || 'An unknown error occurred.')
+          await axios.post('/users/logout')
+          localStorage.clear()
+          navigate('/')
+        } else {
+          console.log('Unexpected error: ', err)
+          alert('An unexpected error occurred.')
+        }
       }
     }
     getRegistries()

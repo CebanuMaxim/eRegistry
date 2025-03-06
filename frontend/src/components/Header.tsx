@@ -26,7 +26,7 @@ const Header = () => {
       <div>
         {
           <Button className='btn btn-light my-3' onClick={() => navigate(-1)}>
-            Back
+            Înapoi
           </Button>
         }
       </div>

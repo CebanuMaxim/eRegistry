@@ -13,6 +13,7 @@ import {
   deleteActService,
   editActService,
 } from '../services/actServices'
+import { isAxiosError } from 'axios'
 
 const Acts = () => {
   const [acts, setActs] = useState<Act[]>([])
@@ -59,8 +60,17 @@ const Acts = () => {
             })
             .reverse()
         )
-      } catch (err) {
-        console.error(err)
+      } catch (err: unknown) {
+        if (isAxiosError(err)) {
+          console.log('ERROR! ActsView.65: ', err.response?.data?.message)
+          alert(err.response?.data?.message || 'An unknown error occurred.')
+          await axios.post('/users/logout')
+          localStorage.clear()
+          navigate('/')
+        } else {
+          console.log('Unexpected error: ', err)
+          alert('An unexpected error occurred.')
+        }
       }
     }
 
