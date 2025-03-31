@@ -4,6 +4,7 @@ import { Form, Button, Table, Accordion } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import { toast } from 'react-toastify'
 import { User, Act } from '../types'
+import { useNavigate } from 'react-router-dom'
 
 // Import Recharts components
 import {
@@ -18,6 +19,7 @@ import {
 } from 'recharts'
 import Reports from '../components/Reports'
 import NormalDistributionChart from '../components/NormalDistributionChart'
+import { isAxiosError } from 'axios'
 
 // Вставьте в JSX
 
@@ -46,6 +48,8 @@ const Admin: React.FC = () => {
   const [chartData, setChartData] = useState<ChartDataPoint[]>([])
   const [selectedRange, setSelectedRange] = useState<TimeRangeValue>('month')
 
+  const navigate = useNavigate()
+
   // Time range options
   const timeRanges: TimeRangeOption[] = [
     { label: '1 Week', value: 'week' },
@@ -60,8 +64,17 @@ const Admin: React.FC = () => {
       try {
         const response = await axios.get<User[]>('/users')
         setUsers(response.data)
-      } catch (err) {
-        console.error(err)
+      } catch (err: unknown) {
+        if (isAxiosError(err)) {
+          console.log('ERROR! ActsView.65: ', err.response?.data?.message)
+          alert(err.response?.data?.message || 'An unknown error occurred.')
+          await axios.post('/users/logout')
+          localStorage.clear()
+          navigate('/')
+        } else {
+          console.log('Unexpected error: ', err)
+          alert('An unexpected error occurred.')
+        }
       }
     }
     getUsers()
