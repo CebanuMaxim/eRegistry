@@ -21,8 +21,6 @@ import Reports from '../components/Reports'
 import NormalDistributionChart from '../components/NormalDistributionChart'
 import { isAxiosError } from 'axios'
 
-// Вставьте в JSX
-
 // Define interfaces and types
 interface ChartDataPoint {
   date: string // Format: 'yyyy-mm-dd'
