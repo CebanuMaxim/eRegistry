@@ -37,7 +37,7 @@ const ActSchema = yup.object().shape({
   idnp: yup
     .string()
     .matches(
-      /^\d{13}$|^[A-Z]{3}-[A-Z]{1,2}-\d{1,8}$/,
+      /^(?:\d{13}|[A-Z]{3}-[A-Z]{1,2}-\d{1,8}|[A-Z]{3}-\d{9})$/,
       'IDNP must be a 13-digit number'
     ),
   stateFee: yup.number().required(),

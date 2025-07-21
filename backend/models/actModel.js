@@ -74,7 +74,7 @@ function validateAct(act) {
         'any.required': 'firstname is required',
       }),
     idnp: Joi.string()
-      .pattern(/^\d{13}$|^[A-Z]{3}-[A-Z]{1,2}-\d{1,8}$/)
+      .pattern(/^(?:\d{13}|[A-Z]{3}-[A-Z]{1,2}-\d{1,8}|[A-Z]{3}-\d{9})$/)
       .messages({
         'string.pattern.base': 'idnp must be a 13-digit number',
         'any.required': 'idnp is required',
