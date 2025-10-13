@@ -56,10 +56,10 @@ function validateRegistry(registry) {
         'any.required': 'typographyId is required',
       }),
     registryId: Joi.string()
-      .pattern(/^\d{4}$/)
+      .pattern(/^\d{3,4}$/)
       .required()
       .messages({
-        'string.pattern.base': 'registryId must be a 4-digit number',
+        'string.pattern.base': 'registryId must be a 3 or 4-digit number',
         'any.required': 'registryId is required',
       }),
     startDate: Joi.string()

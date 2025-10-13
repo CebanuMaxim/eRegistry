@@ -27,7 +27,7 @@ const RegistrySchema = yup.object().shape({
     .required('Typography Id is required'),
   registryId: yup
     .string()
-    .matches(/^\d{4}$/, 'typographyId must be a 4-digit number')
+    .matches(/^\d{3,4}$/, 'registryId must be a 3 or 4-digit number')
     .required('Registry Id is required'),
   startDate: yup
     .string()

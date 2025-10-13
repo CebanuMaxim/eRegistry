@@ -20,7 +20,7 @@ export default function actValidation(
       checkInput(name, /^\d{7}$/, 'typographyId must be 7-digits string')
       break
     case 'registryId':
-      checkInput(name, /^\d{4}$/, 'registryId must be 4-digits string')
+      checkInput(name, /^\d{3,4}$/, 'registryId must be 3 or 4 digits string')
       break
     case 'startDate':
       checkInput(
