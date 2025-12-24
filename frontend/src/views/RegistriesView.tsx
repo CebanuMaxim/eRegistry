@@ -24,12 +24,19 @@ const Registries = () => {
           console.log(response.statusText)
           return
         }
+
         setRegistries(
-          response.data
-            .sort(function (a: Registry, b: Registry) {
-              return Number(a.registryId) - Number(b.registryId)
-            })
-            .reverse()
+          response.data.sort((a: Registry, b: Registry) => {
+            const aHasTopPriorityIndex = Number(a.registryIndex) === 1
+            const bHasTopPriorityIndex = Number(b.registryIndex) === 1
+
+            // Правило №1: записи с registryIndex === 1 всегда должны быть сверху списка
+            if (aHasTopPriorityIndex && !bHasTopPriorityIndex) return -1
+            if (!aHasTopPriorityIndex && bHasTopPriorityIndex) return 1
+
+            // Правило №2: внутри одной "группы" сортировка как раньше — по registryId по убыванию
+            return Number(b.registryId) - Number(a.registryId)
+          })
         )
       } catch (err: unknown) {
         if (isAxiosError(err)) {
