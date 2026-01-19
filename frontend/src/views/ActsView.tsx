@@ -58,7 +58,7 @@ const Acts = () => {
               // Compare timestamps
               return dateA.getTime() - dateB.getTime()
             })
-            .reverse()
+            .reverse(),
         )
       } catch (err: unknown) {
         if (isAxiosError(err)) {
@@ -112,7 +112,7 @@ const Acts = () => {
     return [...acts].sort((a, b) =>
       toggle
         ? Number(a.actId) - Number(b.actId)
-        : Number(b.actId) - Number(a.actId)
+        : Number(b.actId) - Number(a.actId),
     )
   }, [acts, toggle])
 
@@ -162,7 +162,7 @@ const Acts = () => {
           className='btn btn-light my-3'
           onClick={() =>
             navigate(
-              `/confirmations/${id}/${typographyId}/${registryId}/${registryIndex}`
+              `/confirmations/${id}/${typographyId}/${registryId}/${registryIndex}`,
             )
           }
         >
