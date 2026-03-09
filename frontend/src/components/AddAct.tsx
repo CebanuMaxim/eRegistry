@@ -58,7 +58,7 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
 
   // Sort fields based on the desired order
   const sortedFields = Object.entries(act).sort(
-    ([a], [b]) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b)
+    ([a], [b]) => fieldOrder.indexOf(a) - fieldOrder.indexOf(b),
   )
 
   return (
@@ -95,6 +95,9 @@ const AddAct: React.FC<AddActProps> = ({ addAct }) => {
                       <option value='0'>Select act</option>
                       <option value='Act autentificat'>Act autentificat</option>
                       <option value='Act legalizat'>Act legalizat</option>
+                      <option value='Certificat'>Certificat</option>
+                      <option value='Contract'>Contract</option>
+                      <option value='Duplicat'>Duplicat</option>
                       <option value='Alte acte'>Alte acte</option>
                     </Form.Control>
                     {errors[key] && <div style={errorStyle}>{errors[key]}</div>}
